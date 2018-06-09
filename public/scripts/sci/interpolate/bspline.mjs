@@ -1,4 +1,4 @@
-﻿import {solve} from "../solve/index.mjs"
+﻿import * as solve from "../solve/index.mjs"
 
 const search = (knots,order, x)=>{
   const index= knots.slice(0, -order)
