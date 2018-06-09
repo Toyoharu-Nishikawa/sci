@@ -16,6 +16,92 @@ Usage
 
 ### matrix
 
+#### `matrix.mulScalarVec(a, u)`
+
+returns `array`
+
+scalar multipulation of vector, a*u
+* a : type of float , scalar 
+* v : type of array , vector
+
+#### `matrix.addVecVec(u, v)`
+
+returns `array`
+
+addition of two vectors,  u + v
+* u : type of array , vector 
+* v : type of array , vector
+
+#### `matrix.subVecVec(u, v)`
+
+returns `array`
+
+subtractions of two vectors, u - v
+* u : type of array , vector 
+* v : type of array , vector
+
+#### `matrix.absVec(u)`
+
+returns `float`
+
+absolution of vector, |u|
+* u : type of array , vector 
+
+#### `matrix.innerProductVec(u, v)`
+
+returns `float`
+
+inner product of two vectors, (u,v)
+* u : type of array , vector 
+* v : type of array , vector 
+
+#### `matrix.transpose(A)`
+
+returns `double array`
+
+transpose matrix, AT
+* A : type of double array , matrix 
+
+#### `matrix.mulScalarMat(a, A)`
+
+returns `double array`
+
+slacar multipulation of matrix, a*A
+* a : type of float , scalar 
+* A : type of double array , matrix 
+
+#### `matrix.addMatMat(A, B)`
+
+returns `double array`
+
+addtion of tow matrix, A + B
+* A : type of double array , matrix 
+* B : type of double array , matrix 
+
+#### `matrix.subMatMat(A, B)`
+
+returns `double array`
+
+subtraction of tow matrix, A - B
+* A : type of double array , matrix 
+* B : type of double array , matrix 
+
+#### `matrix.mulMatMat(A, B)`
+
+returns `double array`
+
+multipulation of tow matrix, AB
+* A : type of double array , matrix 
+* B : type of double array , matrix 
+
+#### `matrix.mulMatVec(A, u)`
+
+returns `array`
+
+multipulation of matrix and column vector, Av
+* A : type of double array , matrix 
+* v : type of double array , column vector 
+
 
 ### interpolate
 
