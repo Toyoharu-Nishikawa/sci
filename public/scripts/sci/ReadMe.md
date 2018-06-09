@@ -15,6 +15,7 @@ Usage
 ------
 
 ### matrix
+------
 
 #### `matrix.mulScalarVec(a, u)`
 
@@ -104,6 +105,7 @@ multipulation of matrix and column vector, Av
 
 
 ### interpolate
+------
 
 #### `interpolate.linear(x, y)`
 
@@ -145,6 +147,7 @@ k.length must be equal to sum of x.length + degree +1
 
 
 ### solve
+------
 
 #### `solve.linEqGauss(A, v)`
 
