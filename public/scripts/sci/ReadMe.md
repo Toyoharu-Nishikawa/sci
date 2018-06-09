@@ -60,4 +60,36 @@ k.length must be equal to sum of x.length + degree +1
 
 ### solve
 
+#### `solve.linEqGauss(A, v)`
 
+returns `array`
+
+solve simultaneous linear equations by Gauss elimination method 
+* A : type of double array , coefficient matrix 
+* v : type of array , constant term column vector
+
+#### `solve.newtonMethod(x0, f, invJ, maxIteration, tolerance)`
+
+returns `array`
+
+solve nonlinear simultaneous equation by Newton method 
+* x0 : type of array , initial value vector 
+* f : type of function , nonlinear simultaneous equation
+* invJ: type of function, inverse function of Jacob matrix
+* maxIteration: type of integer, max number of iteration
+* tolerance: type of float, solver torelance of residual sum of squares
+
+#### `solve.broydenMethod(x0, f, invB0, maxIteration, tolerance)`
+
+returns `array`
+
+solve nonlinear simultaneous equation by Broyden method 
+* x0 : type of array , initial value vector 
+* f : type of function , nonlinear simultaneous equation
+* invB0: type of double array, initial inverse of Broyden matrix
+* maxIteration: type of integer, max number of iteration
+* tolerance: type of float, solver torelance of residual sum of squares
+
+initial inverse of Broyden matrix must be suggegested in some way
+
+you have to know general behavior of equation or calculate inverse of Jacob matrix initally
