@@ -1,4 +1,6 @@
-import {interpolate} from "./interpolate/index.mjs"
-import {solve} from "./solve/index.mjs"
+import * as interpolate from "./interpolate/index.mjs"
+import * as solve from "./solve/index.mjs"
+import * as matrix from "./matrix/index.mjs"
 
-export {interpolate, solve}
+export {interpolate, solve, matrix}
+
