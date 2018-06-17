@@ -59,31 +59,70 @@
     return pre
   }, [])
   M.reverse()
-  return (x0)=>{
-    const index = x.reduce((pre,current,i)=>current <= x0 ? i: pre,0) 
-    const i = index <x.length-1 ? index : x.length-2
-    
-    if(differentiation===0){
+
+  if(differentiation ===-1){
+    const F = (i, x0)=>{
+      const y0= M[i]* (-((x[i+1]-x0)**4)/(24*h[i+1]) + (x[i+1]-x0)**2/12*h[i+1] ) 
+        + M[i+1]* ( (x0 - x[i])**4/(24*h[i+1]) - (x0-x[i])**2/12*h[i+1] )
+        - (x[i+1]-x0)**2/(2*h[i+1])*y[i]
+        + (x0-x[i])**2/(2*h[i+1])*y[i+1]
+      return y0
+    }
+    const Fs = (i)=>{
+      return M[i]/24*h[i+1]**3 - h[i+1]/2*y[i]
+    }
+    const Fe =(i)=> {
+      return -M[i+1]/24*h[i+1]**3 + h[i+1]/2*y[i+1]
+    }
+    const Fi = (i)=>{
+      return Fe(i)-Fs(i)
+    }
+    return (x0, x1)=>{
+      const index = x.reduce((pre,current,i)=>current <= x0 ? i: pre,0) 
+      const i = index <x.length-1 ? index : x.length-2
+
+      const jndex = x.reduce((pre,current,j)=>current <= x1 ? j: pre,0) 
+      const j = jndex <x.length-1 ? jndex : x.length-2
+
+      const y0 = i+1<j ? Fe(i)-F(i,x0) + [...Array(j-i-1)].map((v,k)=>Fi(i+1+k)).reduce((pre,current)=>pre+current,0)+F(j,x1)-Fs(j):
+        i+1===j ? Fe(i)-F(i,x0)+F(j, x1)-Fs(j):
+        i===j ? F(j,x1) -F(i, x0):
+        F(j,x1) -F(i, x0)
+      return y0
+    }
+  }
+  else if(differentiation===0){
+    return (x0)=>{
+      const index = x.reduce((pre,current,i)=>current <= x0 ? i: pre,0) 
+      const i = index <x.length-1 ? index : x.length-2
       const y0= M[i]* ( (x[i+1]-x0)**3/(6*h[i+1]) - (x[i+1]-x0)/6*h[i+1] ) 
         + M[i+1]* ( (x0 - x[i])**3/(6*h[i+1]) - (x0-x[i])/6*h[i+1] )
         + (x[i+1]-x0)/h[i+1]*y[i]
         + (x0-x[i])/h[i+1]*y[i+1]
       return y0
     }
-    else if(differentiation===1){
+  }
+  else if(differentiation===1){
+    return (x0)=>{
+      const index = x.reduce((pre,current,i)=>current <= x0 ? i: pre,0) 
+      const i = index <x.length-1 ? index : x.length-2
       const y0d = M[i]* ( -1*(x[i+1]-x0)**2/(2*h[i+1]) + h[i+1]/6)
         + M[i+1]* ( (x0-x[i])**2/(2*h[i+1]) - h[i+1]/6)
         + (y[i+1]-y[i])/h[i+1]
       return y0d
     }
-    else if(differentiation===2){
+  }
+  else if(differentiation===2){
+    return (x0)=>{
+      const index = x.reduce((pre,current,i)=>current <= x0 ? i: pre,0) 
+      const i = index <x.length-1 ? index : x.length-2
       const y0d2 = M[i]* (x[i+1]-x0)/h[i+1]
         + M[i+1]* (x0 - x[i])/h[i+1]
       return y0d2
     }
-    else{
-      return null 
-    }
+  }
+  else{
+    return null 
   }
 }
 
