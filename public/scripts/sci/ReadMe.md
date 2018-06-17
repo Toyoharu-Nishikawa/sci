@@ -130,6 +130,11 @@ a0=0, an=0, method="M" is natural cubic spline
 * method: type of string , edge condition option , "M" or "m" , default = "M"
 * differentiation: type of integer , differentiation , 0, 1 or 2, default = 0
 
+    + 0: spline at x0
+    + 1: first differentiation of spline at x0
+    + 2: second differentiation of spline at x0
+    + -1: integration of spline from x0 to x1
+
 #### `interpolate.bspline(x, y [,degree=3, k])`
 
 returns `function`
