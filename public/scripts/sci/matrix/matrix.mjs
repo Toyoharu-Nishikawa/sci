@@ -28,6 +28,21 @@ export const innerProductVec=(x0,x1)=>{
 }
 
 //matrix
+export const unitMat = (n)=> [...Array(n)].map((v,i)=> 
+  [...Array(n)].map((u,j)=>i===j?1:0))
+
+export const mulMatMat= (A,B)=>{
+  const BT = transpose(B)
+  const C = A.map(
+    column=>BT.map(
+      row=>row.reduce(
+        (pre,current,k)=>pre+current*column[k],0
+      )
+    )
+  )
+  return C 
+}
+
 export const transpose = A=>A[0].map((k,i)=>A.map((v)=>v[i]))
 
 export const mulScalarMat=(a, A)=>{
@@ -45,16 +60,41 @@ export const subMatMat = (A,B)=>{
   return C 
 }
 
-export const mulMatMat = (A,B)=>{
-  const BT = transpose(B)
-  const C = A.map(
-    column=>BT.map(
-      row=>row.reduce(
-        (pre,current,k)=>pre+current*column[k],0
-      )
-    )
-  )
-  return C 
+export const invMat = (A)=>{
+  let temp, div, unko, sum;
+  const nrc = A.length
+  const m = A.map(a=>[].concat(a))
+  const minv =  unitMat(nrc)
+  
+  for (let i=0;i<nrc;i++){
+    for(let j=i+1;j<nrc;j++){ 
+      if(m[i][i]*m[i][i]<m[j][i]*m[j][i]){
+        for(let k=0;k<nrc;k++){
+          temp = m[i][k];
+          m[i][k] = m[j][k];
+          m[j][k] = temp;
+          temp = minv[i][k];
+          minv[i][k] = minv[j][k];
+          minv[j][k] = temp;
+        }
+      }
+    }
+    div = m[i][i];
+    for(let j=0;j<nrc;j++){
+      m[i][j] /= div;
+      minv[i][j] /= div;
+    }
+    for(let j=0;j<nrc;j++){ 
+      if(j!=i){
+        unko = m[j][i];
+        for(let k=0;k<nrc;k++){
+          m[j][k] -= unko*m[i][k];
+          minv[j][k] -= unko*minv[i][k];
+        }
+      }
+    }
+  }
+  return minv
 }
 
 //matrix and vector
@@ -62,11 +102,3 @@ export const mulMatVec = (A,u)=>{
   const v = A.map(column=>column.reduce((pre,current,i)=>pre+current*u[i],0))
   return v
 }
-
-
-
-
-
-
-
-
