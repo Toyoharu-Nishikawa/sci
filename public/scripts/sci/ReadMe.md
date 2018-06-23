@@ -63,6 +63,13 @@ returns `double array`
 transpose matrix, AT
 * A : type of double array , matrix 
 
+#### `matrix.unitMat(n)`
+
+returns `double array`
+
+make unit matrix, E
+* n : type of integer , length of unit matrix 
+
 #### `matrix.mulScalarMat(a, A)`
 
 returns `double array`
@@ -94,6 +101,13 @@ returns `double array`
 multipulation of tow matrix, AB
 * A : type of double array , matrix 
 * B : type of double array , matrix 
+
+#### `matrix.invMat(A)`
+
+returns `double array`
+
+inverse matrix, invA
+* A : type of double array , matrix 
 
 #### `matrix.mulMatVec(A, u)`
 
@@ -167,9 +181,9 @@ solve simultaneous linear equations by Gauss elimination method
 returns `float`
 
 solve nonlinear equation by line split method 
-* x0 : type of float , initial value vector 
+* x0 : type of float , initial value
 * f : type of function , nonlinear simultaneous equation
-* dfdx0: type of float, differentiation of x0
+* dfdx0: type of float, first differentiation at x0
 * maxIteration: type of integer, max number of iteration
 * tolerance: type of float, solver torelance of residual sum of squares
 
