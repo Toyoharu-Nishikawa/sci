@@ -162,6 +162,18 @@ solve simultaneous linear equations by Gauss elimination method
 * A : type of double array , coefficient matrix 
 * v : type of array , constant term column vector
 
+#### `solve.lineSplitMethod(x0, f, dfdx0, maxIteration, tolerance)`
+
+returns `float`
+
+solve nonlinear equation by line split method 
+* x0 : type of float , initial value vector 
+* f : type of function , nonlinear simultaneous equation
+* dfdx0: type of float, differentiation of x0
+* maxIteration: type of integer, max number of iteration
+* tolerance: type of float, solver torelance of residual sum of squares
+
+
 #### `solve.newtonMethod(x0, f, invJ, maxIteration, tolerance)`
 
 returns `array`
