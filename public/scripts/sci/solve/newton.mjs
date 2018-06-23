@@ -2,6 +2,32 @@
 
 "use strict"
 
+export const lineSplitMethod = (x0,f,dfdx0,maxIteration,tolerance)=>{
+  let x=x0
+  let y = f(x)
+  let dfdx = dfdx0
+  let count=0
+  while(count<maxIteration){
+    const dx = -y/dfdx
+    x +=dx
+    const tempY = f(x)
+    const dy = tempY-y
+    y=tempY
+    if(Math.abs(y)<tolerance){
+      break
+    }
+    dfdx =  dy/dx
+    count++
+  }
+  if(count>maxIteration-1){
+    console.log(`lineSplitMethod diverged over ${count} iterations`)
+  }
+  else{
+    console.log(`lineSplitMethod converged in ${count} iterations`)
+  }
+  return x
+}
+
 export const newtonMethod = (x0, f, invJ, maxIteration,torelance)=>{
   let dx = [0,0] 
   let x = x0
