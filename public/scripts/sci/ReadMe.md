@@ -178,7 +178,15 @@ solve simultaneous linear equations by Gauss elimination method
 
 #### `solve.lineSplitMethod(x0, f, dfdx0, maxIteration, tolerance)`
 
-returns `float`
+returns `objcct`
+```javascript
+{
+    converged: "boolean", // true means converged and false means diverged
+    error: "float", // the last error of convergence iteration
+    count: "integer", // the last iteration count
+    value: "array", //a result of comvergence method
+}
+```
 
 solve nonlinear equation by line split method 
 * x0 : type of float , initial value
@@ -190,7 +198,15 @@ solve nonlinear equation by line split method
 
 #### `solve.newtonMethod(x0, f, invJ, maxIteration, tolerance)`
 
-returns `array`
+returns `objcct`
+```javascript
+{
+    converged: "boolean", // true means converged and false means diverged
+    error: "float", // the last error of convergence iteration
+    count: "integer", // the last iteration count
+    value: "array", //a result of comvergence method
+}
+```
 
 solve nonlinear simultaneous equation by Newton method 
 * x0 : type of array , initial value vector 
@@ -201,7 +217,15 @@ solve nonlinear simultaneous equation by Newton method
 
 #### `solve.broydenMethod(x0, f, invB0, maxIteration, tolerance)`
 
-returns `array`
+returns `objcct`
+```javascript
+{
+    converged: "boolean", // true means converged and false means diverged
+    error: "float", // the last error of convergence iteration
+    count: "integer", // the last iteration count
+    value: "array", //a result of comvergence method
+}
+```
 
 solve nonlinear simultaneous equation by Broyden method 
 * x0 : type of array , initial value vector 
