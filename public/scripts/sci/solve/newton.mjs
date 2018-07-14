@@ -19,13 +19,19 @@ export const lineSplitMethod = (x0,f,dfdx0,maxIteration,tolerance)=>{
     dfdx =  dy/dx
     count++
   }
-  if(count>maxIteration-1){
-    console.log(`lineSplitMethod diverged over ${count} iterations`)
-  }
-  else{
+  if(count<maxIteration){
     console.log(`lineSplitMethod converged in ${count} iterations`)
   }
-  return x
+  else{
+    console.log(`lineSplitMethod diverged over ${count} iterations`)
+  }
+  const result = {
+    converged: count < maxIteration ? true: false,
+    error : Math.abs(y),
+    count :count,
+    value: x,
+  }
+  return result 
 }
 
 export const newtonMethod = (x0, f, invJ, maxIteration,torelance)=>{
@@ -44,11 +50,21 @@ export const newtonMethod = (x0, f, invJ, maxIteration,torelance)=>{
     }
     count++
   }
-  if(count>=maxIteration){
-    console.log("newton  method is not converged") 
+  if(count<maxIteration){
+    console.log(`Newton Method converged in ${count} iterations`)
+  }
+  else{
+    console.log(`Newton Method diverged over ${count} iterations`)
   }
 
-  return x 
+  const result = {
+    converged: count < maxIteration ? true: false,
+    error : Math.abs(y),
+    count :count,
+    value: x,
+  }
+  return result 
+
 }
 
 const calcDeltaB = (dx,dy,invB)=>{
@@ -86,11 +102,22 @@ export const broydenMethod= (x0, f, invB0, maxIteration, torelance)=>{
     }
     count++
   }
-  if(count>=maxIteration){
-    console.log("broyden  method is not converged") 
+
+  if(count<maxIteration){
+    console.log(`Newton Method converged in ${count} iterations`)
+  }
+  else{
+    console.log(`Newton Method diverged over ${count} iterations`)
   }
 
-  return x 
+  const result = {
+    converged: count < maxIteration ? true: false,
+    error : Math.abs(y),
+    count :count,
+    value: x,
+  }
+  return result 
+
 }
 
 
