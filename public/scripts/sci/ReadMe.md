@@ -237,3 +237,22 @@ solve nonlinear simultaneous equation by Broyden method
 initial inverse of Broyden matrix must be suggegested in some way
 
 you have to know general behavior of equation or calculate inverse of Jacob matrix initally
+
+
+### optimize
+------
+
+#### `optimize.gradientDescent(x0, f, dfdx0, alpha, tolerance, maxIteration)`
+
+returns `object`
+```javascript
+{
+    converged: "boolean", // true means converged and false means diverged
+    history: "double array", // [[x0,f(x0)], [x1,f(x1)], ..., [xn, f(xn)]]
+    value: "float", //the result of convergence method
+}
+```
+
+solve simultaneous linear equations by Gauss elimination method 
+* A : type of double array , coefficient matrix 
+* v : type of array , constant term column vector
