@@ -8,6 +8,7 @@ export const gradientDescent = (x0, f, dfdx0, alpha, tolerance, maxIteration) =>
   let f2 = f(x)
   let dfdx = (f2-f1)/dx
   let count = 0
+  const history=[]
   while(count < maxIteration){
     const tempX =  x -alpha*dfdx 
     const tempF = f(tempX)
@@ -16,14 +17,15 @@ export const gradientDescent = (x0, f, dfdx0, alpha, tolerance, maxIteration) =>
     f1 = f2
     f2 = tempF
     dfdx = (f2-f1)/dx
-    console.log(count, dfdx)
+    history.push([x, f2])
     if(Math.abs(dfdx)<tolerance)break 
     count++
   }
   const flag = count < maxIteration ? true:false
   return {
     converged:flag,
-    value: x
+    value: x,
+    history:history,
   }
 }
 
