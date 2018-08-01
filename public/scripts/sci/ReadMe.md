@@ -149,6 +149,21 @@ a0=0, an=0, method="M" is natural cubic spline
     + 2: second differentiation of spline at x0
     + -1: integration of spline from x0 to x1
 
+#### `interpolate.cubicsplineLinear(x, y [,a0=0, an=0, method="M"])`
+
+returns `function`
+
+interpolates coordinate of y0 from coordinate of x0 by cubic spline and linear interpolate
+using spline in range of x and using linear interpolate out range of x
+
+a0=0, an=0, method="M" is natural cubic spline
+
+* x : type of array , coordinate of x 
+* y : type of array , coordinate of y
+* a0 : type of float , start edge condition, default = 0
+* an : type of float ,  end edge condition, default=0
+* method: type of string , edge condition option , "M" or "m" , default = "M"
+
 #### `interpolate.bspline(x, y [,degree=3, k])`
 
 returns `function`
