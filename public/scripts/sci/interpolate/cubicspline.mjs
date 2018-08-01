@@ -1,4 +1,5 @@
-﻿export const cubicspline = (x, y, a0=0, an=0, method="M", differentiation=0) =>{
+﻿
+export const cubicspline = (x, y, a0=0, an=0, method="M", differentiation=0) =>{
   try{
     if(x.length !== y.length){
       throw new RangeError("length of x must be equal to length of y") 
@@ -126,3 +127,22 @@
   }
 }
 
+
+export const cubicsplineLinear = (x, y, a0=0, an=0, method="M")=>{
+  const spline = cubicspline(x, y, a0, an, method, 0) 
+  const splineDiff1 = cubicspline(x, y, a0, an, method,1) 
+  const x0 = x[0]
+  const xN = x[x.length-1]
+
+  const y0 = y[0]
+  const yN = y[y.length-1]
+
+  const diff0 = splineDiff1(x0)
+  const diffN = splineDiff1(xN)
+
+  const minX = Math.min(...x)
+  const maxX = Math.max(...x)
+  return x1 => x1  < minX ? (x1-x0)*diff0+y0:
+    x1 > maxX ? (x1-xN)*diffN+yN:
+    spline(x1)
+}
