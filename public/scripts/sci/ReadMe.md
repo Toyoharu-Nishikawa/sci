@@ -154,7 +154,8 @@ a0=0, an=0, method="M" is natural cubic spline
 returns `function`
 
 interpolates coordinate of y0 from coordinate of x0 by cubic spline and linear interpolate
-using spline in range of x and using linear interpolate out range of x
+
+using spline in range of x and using linear interpolate out range of x (first differentiation is continuous)
 
 a0=0, an=0, method="M" is natural cubic spline
 
