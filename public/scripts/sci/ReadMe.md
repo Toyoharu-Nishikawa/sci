@@ -142,6 +142,9 @@ a0=0, an=0, method="M" is natural cubic spline
 * a0 : type of float , start edge condition, default = 0
 * an : type of float ,  end edge condition, default=0
 * method: type of string , edge condition option , "M" or "m" , default = "M"
+  + "m" : specify first-order differentiation at the start and end points
+  + "M" : specify second-order differentiation at the start and end points
+
 * differentiation: type of integer , differentiation , 0, 1 or 2, default = 0
 
     + 0: spline at x0
@@ -164,6 +167,8 @@ a0=0, an=0, method="M" is natural cubic spline
 * a0 : type of float , start edge condition, default = 0
 * an : type of float ,  end edge condition, default=0
 * method: type of string , edge condition option , "M" or "m" , default = "M"
+  + "m" : specify first-order differentiation at the start and end points
+  + "M" : specify second-order differentiation at the start and end points
 
 #### `interpolate.bspline(x, y [,degree=3, k])`
 
@@ -231,7 +236,7 @@ solve nonlinear simultaneous equation by Newton method
 * maxIteration: type of integer, max number of iteration
 * tolerance: type of float, solver torelance of residual sum of squares
 
-#### `solve.broydenMethod(x0, f, invB0, maxIteration, tolerance)`
+#### `solve.broydenMethod(x0, f, invB0, maxIteration, tolerance,relaxation)`
 
 returns `objcct`
 ```javascript
@@ -249,10 +254,17 @@ solve nonlinear simultaneous equation by Broyden method
 * invB0: type of double array, initial inverse of Broyden matrix
 * maxIteration: type of integer, max number of iteration
 * tolerance: type of float, solver torelance of residual sum of squares
+* relaxation: type of function(dx, count, x, y)
 
 initial inverse of Broyden matrix must be suggegested in some way
 
 you have to know general behavior of equation or calculate inverse of Jacob matrix initally
+
+`relaxation(dx, count ,x, y)`
+* dx: delta x from current x to  next x in the iteration 
+* count: current count of the iteration 
+* x: current x in the iteration
+* y: current y in the iteration
 
 
 ### optimize
