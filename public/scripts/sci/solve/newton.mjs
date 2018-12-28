@@ -19,14 +19,6 @@ export const lineSplitMethod = (x0,f,dfdx0,maxIteration,tolerance)=>{
     dfdx =  dy/dx
     count++
   }
-  /*
-  if(count<maxIteration){
-    console.log(`lineSplitMethod converged in ${count} iterations`)
-  }
-  else{
-    console.log(`lineSplitMethod diverged over ${count} iterations`)
-  }
-  */
   const result = {
     converged: count < maxIteration ? true: false,
     error : Math.abs(y),
@@ -52,14 +44,6 @@ export const newtonMethod = (x0, f, invJ, maxIteration,torelance)=>{
     }
     count++
   }
-  /*
-  if(count<maxIteration){
-    console.log(`Newton Method converged in ${count} iterations`)
-  }
-  else{
-    console.log(`Newton Method diverged over ${count} iterations`)
-  }
-*/
   const result = {
     converged: count < maxIteration ? true: false,
     error : y,
@@ -94,7 +78,6 @@ export const broydenMethod= (x0, f, invB0, maxIteration, torelance, relaxation)=
   
   let count=0
   const relaxFunc = relaxation ===undefined ? x=>x : relaxation
-  console.log(relaxFunc)
   while(count<maxIteration){
     const tempDx =matrix.mulScalarVec(-1, matrix.mulMatVec(invB, y))
     const d = Math.sqrt(tempDx.reduce((pre,current)=>pre+current**2,0))
@@ -118,14 +101,6 @@ export const broydenMethod= (x0, f, invB0, maxIteration, torelance, relaxation)=
     }
     count++
   }
-/*
-  if(count<maxIteration){
-    console.log(`Newton Method converged in ${count} iterations`)
-  }
-  else{
-    console.log(`Newton Method diverged over ${count} iterations`)
-  }
-*/
   const result = {
     converged: count < maxIteration ? true: false,
     error : y,
