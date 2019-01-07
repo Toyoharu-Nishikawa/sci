@@ -5,7 +5,8 @@ import  * as optimize from "./optimize/index.mjs"
 import  * as statistics from "./statistics/index.mjs"
 import  * as regression from "./regression/index.mjs"
 import  * as classification from "./classification/index.mjs"
+import  * as funcs from "./funcs/index.mjs"
 
 export {interpolate, solve, matrix, optimize,statistics,
-  regression, classification}
+  regression, classification,funcs}
 
