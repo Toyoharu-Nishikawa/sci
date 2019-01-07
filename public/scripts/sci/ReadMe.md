@@ -354,5 +354,173 @@ solve single regression
 * x : type of array  
 * y : type of array
 
- 
 
+#### `regression.singleRegressionLoad(parameters)`
+
+returns `function`
+
+makes and returns single regression function
+* parameters : type of object, parameters are equal to parameters of sigleRegression  
+
+
+#### `regression.multipleRegression(x, y)`
+
+returns `object`
+```javascript
+{
+    predict: "function", // function of prediction 
+    parameters: {
+        weight: "array", // linear weight 
+    }
+}
+```
+
+solve multiple regression 
+* x : type of array  
+* y : type of array
+
+
+#### `regression.multipleRegressionLoad(parameters)`
+
+returns `function`
+
+makes and returns multiple regression function
+* parameters : type of object, parameters are equal to parameters of multipleRegression  
+
+#### `regression.gaussKernelRegression(x, y, [beta=0.1, C=100])`
+
+returns `object`
+```javascript
+{
+    predict: "function", // function of prediction 
+    parameters: {
+        alpha: "array", // kernel weight 
+        beta: "array", // kernel parameter 
+        x: "double array", // explanatory variables 
+        y: "array", // objective variables
+    }
+}
+```
+
+solve gauss kernel regression 
+* x : type of double array, explanatory variables  
+* y : type of array, objective variables
+* beta: type of float, kernel parameter
+* C: regularization parameter
+
+#### `regression.gaussKernelRegressionLoad(parameters)`
+
+returns `function`
+
+makes and returns gauss kernel regression function 
+* parameters : type of object, parameters are equal to parameters of gaussKernelRegression  
+
+#### `regression.SVR(x, y, [beta=0.1, C=100, epsilon=0.01,tolerance=1E-3])`
+
+returns `object`
+```javascript
+{
+    predict: "function", // function of prediction 
+    parameters: {
+        alpha: "array", // kernel weight 
+        b: "float", // threshold parameter
+        beta: "array", // kernel parameter 
+        x: "double array", //support vector variables 
+        y: "array", // support vector variables
+    }
+}
+```
+
+solve support vector regression 
+* x : type of double array, explanatory variables  
+* y : type of array, objective variables
+* beta: type of float, kernel parameter
+* C: regularization parameter
+* epsilon: insensive parameter
+* tolerance: allowed error of KKT condition
+
+#### `regression.SVRLoad(parameters)`
+
+returns `function`
+
+makes and returns support vector regression function 
+* parameters : type of object, parameters are equal to parameters of SVR
+
+### classfication
+------
+
+#### `classfication.SVM(x, y,[beta=0.1, C=100,tolerance=1E-3])`
+
+returns `object`
+```javascript
+{
+    predict: "function", // function of prediction 
+    parameters: {
+        alpha: "array", // kernel weight 
+        b: "float", // threshold parameter
+        beta: "array", // kernel parameter 
+        x: "double array", // support vector x 
+        y: "array", // support vector y
+    }
+}
+```
+
+solve single regression 
+* x : type of double array, explanatory variables  
+* y : type of array, objective variables
+* beta: type of float, kernel parameter
+* C: regularization parameter
+* tolerance: allowed error of KKT condition
+ 
+### statistics
+------
+
+#### `statistics.variance(data)`
+
+returns `float`
+
+calculate variance 
+* data : type of array
+
+#### `statistics.standard(data)`
+
+returns `float`
+
+calculate standard
+* data : type of array
+
+#### `statistics.normalize(data, [min, max])`
+
+returns `array`
+
+calculate normalized data
+* data : type of array
+* min: type of float, if not supplied, calculate min automatically
+* max: type of float, if not supplied, calculate max automatically
+
+#### `statistics.standardize(data, [average, standard])`
+
+returns `array`
+
+calculate standardized data
+* data : type of array
+* average : type of float, if not supplied, calculate average automatically
+* standard: type of float, if not supplied, calculate standard automatically
+
+#### `statistics.reNormalize(data, min, max)`
+
+returns `array`
+
+calculate renormalized data
+* data : type of array
+* min: type of float
+* max: type of float
+
+#### `statistics.reStandardize(data, ave, std)`
+
+returns `array`
+
+calculate restandardized data
+* data : type of array
+* ave: type of float, average of data
+* std: type of float, standard of data
