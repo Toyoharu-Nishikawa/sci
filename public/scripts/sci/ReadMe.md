@@ -334,3 +334,25 @@ returns `object`
 solve simultaneous linear equations by Gauss elimination method 
 * A : type of double array , coefficient matrix 
 * v : type of array , constant term column vector
+
+### regression
+------
+
+#### `regression.singleRegression(x, y)`
+
+returns `object`
+```javascript
+{
+    predict: "function", // function of prediction 
+    parameters: {
+        weight: "array", // linear weight 
+    }
+}
+```
+
+solve single regression 
+* x : type of array  
+* y : type of array
+
+ 
+
