@@ -4,11 +4,12 @@ import {makeGaussKernel} from "../funcs/index.mjs"
 
 "use strict"
 
-export const gaussKernelRegression = (x,y,beta,C)=>{
+export const gaussKernelRegression = (x,y,beta=0.1,C=100)=>{
+  const ramda = C !==null ? 1/C: 0
   const kernel = makeGaussKernel(beta)
   const originK = x.map((v,i,arr)=>[].concat(
     [...Array(i)].map((u,j)=>kernel(v,arr[j])),
-    1+1/C
+    1+ramda
   ))
   const LDLT = modifiedCholeskyDecomposition(originK)  
   const alpha = modifiedCholeskySolve(LDLT.L, LDLT.D, y)

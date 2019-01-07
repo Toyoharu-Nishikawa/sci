@@ -406,7 +406,7 @@ solve gauss kernel regression
 * x : type of double array, explanatory variables  
 * y : type of array, objective variables
 * beta: type of float, kernel parameter
-* C: regularization parameter
+* C: regularization parameter, if C is null, regularization is invalid 
 
 #### `regression.gaussKernelRegressionLoad(parameters)`
 
