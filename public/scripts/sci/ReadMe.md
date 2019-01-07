@@ -145,7 +145,7 @@ a0=0, an=0, method="M" is natural cubic spline
   + "m" : specify first-order differentiation at the start and end points
   + "M" : specify second-order differentiation at the start and end points
 
-* differentiation: type of integer , differentiation , 0, 1 or 2, default = 0
+* differentiation: type of integer , differentiation , 0, 1, 2 or -1, default = 0
 
     + 0: spline at x0
     + 1: first differentiation of spline at x0
@@ -196,6 +196,56 @@ returns `array`
 solve simultaneous linear equations by Gauss elimination method 
 * A : type of double array , coefficient matrix 
 * v : type of array , constant term column vector
+
+#### `solve.LUDecomposition(A, [pivotFlag=true])`
+
+returns `object`
+```javascript
+{
+    L: "double array", //lower triangular matrix
+    U: "double array", //upper triangular matrix
+    P: "array", //pivoting list
+}
+```
+
+LU decomposition by Gauss elimination method 
+* A : type of double array ,  matrix 
+* pivotFlag: type of boolean, if true pivoting is allowed 
+
+#### `solve.LUSolve(L, U, P, Va)`
+
+returns `array`
+
+solve simultanious linear equation of LUx = PVa and returns x
+* L : type of double array ,  lower triangular matrix 
+* U : type of double array ,  upper triangular matrix 
+* P : type of array ,  pivoting list 
+* Va : type of array ,  constant term column vector
+
+#### `solve.modifiedCholeskyDecomposition(A)`
+
+returns `object`
+```javascript
+{
+    L: "double array", //lower triangular matrix
+    D: "array", //diagonal component of diagonal matrix
+}
+```
+
+modified Choleskey decomposition
+* A : type of double array ,  matrix 
+
+(caution) A must be symmetric matrix
+
+#### `solve.modifiedCholeskySolve(L, D, Va)`
+
+returns `array`
+
+solve simultanious linear equation of LDLTx = Va and returns x
+* L : type of double array ,  lower triangular matrix 
+* D : type of array ,  diagonal component of diagonal matrix 
+* Va: type of array ,  constant term column vector
+
 
 #### `solve.lineSplitMethod(x0, f, dfdx0, maxIteration, tolerance)`
 
@@ -284,3 +334,224 @@ returns `object`
 solve simultaneous linear equations by Gauss elimination method 
 * A : type of double array , coefficient matrix 
 * v : type of array , constant term column vector
+
+### regression
+------
+
+#### `regression.singleRegression(x, y)`
+
+returns `object`
+```javascript
+{
+    predict: "function", // function of prediction 
+    parameters: {
+        weight: "array", // linear weight 
+    }
+}
+```
+
+solve single regression 
+* x : type of array  
+* y : type of array
+
+
+#### `regression.singleRegressionLoad(parameters)`
+
+returns `function`
+
+makes and returns single regression function
+* parameters : type of object, parameters are equal to parameters of sigleRegression  
+
+
+#### `regression.multipleRegression(x, y)`
+
+returns `object`
+```javascript
+{
+    predict: "function", // function of prediction 
+    parameters: {
+        weight: "array", // linear weight 
+    }
+}
+```
+
+solve multiple regression 
+* x : type of array  
+* y : type of array
+
+
+#### `regression.multipleRegressionLoad(parameters)`
+
+returns `function`
+
+makes and returns multiple regression function
+* parameters : type of object, parameters are equal to parameters of multipleRegression  
+
+#### `regression.gaussKernelRegression(x, y, [beta=0.1, C=100])`
+
+returns `object`
+```javascript
+{
+    predict: "function", // function of prediction 
+    parameters: {
+        alpha: "array", // kernel weight 
+        beta: "array", // kernel parameter 
+        x: "double array", // explanatory variables 
+        y: "array", // objective variables
+    }
+}
+```
+
+solve gauss kernel regression 
+* x : type of double array, explanatory variables  
+* y : type of array, objective variables
+* beta: type of float, kernel parameter
+* C: regularization parameter, if C is null, regularization is invalid 
+
+#### `regression.gaussKernelRegressionLoad(parameters)`
+
+returns `function`
+
+makes and returns gauss kernel regression function 
+* parameters : type of object, parameters are equal to parameters of gaussKernelRegression  
+
+#### `regression.SVR(x, y, [beta=0.1, C=100, epsilon=0.01,tolerance=1E-3])`
+
+returns `object`
+```javascript
+{
+    predict: "function", // function of prediction 
+    parameters: {
+        alpha: "array", // kernel weight 
+        b: "float", // threshold parameter
+        beta: "array", // kernel parameter 
+        x: "double array", //support vector variables 
+        y: "array", // support vector variables
+    }
+}
+```
+
+solve support vector regression 
+* x : type of double array, explanatory variables  
+* y : type of array, objective variables
+* beta: type of float, kernel parameter
+* C: regularization parameter
+* epsilon: insensive parameter
+* tolerance: allowed error of KKT condition
+
+#### `regression.SVRLoad(parameters)`
+
+returns `function`
+
+makes and returns support vector regression function 
+* parameters : type of object, parameters are equal to parameters of SVR
+
+### classification
+------
+
+#### `classification.SVM(x, y,[beta=0.1, C=100,tolerance=1E-3])`
+
+returns `object`
+```javascript
+{
+    predict: "function", // function of prediction 
+    parameters: {
+        alpha: "array", // kernel weight 
+        b: "float", // threshold parameter
+        beta: "array", // kernel parameter 
+        x: "double array", // support vector x 
+        y: "array", // support vector y
+    }
+}
+```
+
+solve single regression 
+* x : type of double array, explanatory variables  
+* y : type of array, objective variables
+* beta: type of float, kernel parameter
+* C: regularization parameter
+* tolerance: allowed error of KKT condition
+ 
+### statistics
+------
+
+#### `statistics.variance(data)`
+
+returns `float`
+
+calculate variance 
+* data : type of array
+
+#### `statistics.standard(data)`
+
+returns `float`
+
+calculate standard
+* data : type of array
+
+#### `statistics.normalize(data, [min, max])`
+
+returns `array`
+
+calculate normalized data
+* data : type of array
+* min: type of float, if not supplied, calculate min automatically
+* max: type of float, if not supplied, calculate max automatically
+
+#### `statistics.standardize(data, [average, standard])`
+
+returns `array`
+
+calculate standardized data
+* data : type of array
+* average : type of float, if not supplied, calculate average automatically
+* standard: type of float, if not supplied, calculate standard automatically
+
+#### `statistics.reNormalize(data, min, max)`
+
+returns `array`
+
+calculate renormalized data
+* data : type of array
+* min: type of float
+* max: type of float
+
+#### `statistics.reStandardize(data, ave, std)`
+
+returns `array`
+
+calculate restandardized data
+* data : type of array
+* ave: type of float, average of data
+* std: type of float, standard of data
+
+#### `statistics.R2(x, y, f)`
+
+returns `float`
+
+calculate coefficient of determination R2
+* data : type of array
+* ave: type of float, average of data
+* std: type of float, standard of data
+
+### funcs
+------
+
+#### `funcs.getRandomInt(max)`
+
+returns `integer`
+
+get random integer n, 0 <= n < max 
+* max : type of integer
+
+#### `funcs.makeGaussKernel(beta)`
+
+returns `function`
+
+get gauss kernel function  
+* beta : type of float
+
+return function is
+f = exp(-beta*|x1-x2|**2)
+* x1: type of array
+* x2: type of array

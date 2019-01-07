@@ -1,12 +1,8 @@
+import {getRandomInt, makeGaussKernel} from "../funcs/index.mjs"
 
+"use strict"
 
-const getRandomInt = (max)=> Math.floor(Math.random() * Math.floor(max));
-
-const sumOfSqure = (x1, x2)=> x1.map((v,i)=>v-x2[i]).reduce((p,c)=>p+c**2,0)
-
-const makeGaussKernel = (beta)=> (x1, x2)=> Math.exp(-beta*sumOfSqure(x1,x2))  
-
-export const simpleSVM = (x, y, beta=0.1, C=100, tolerance=1E-2, maxIteration=30)=>{
+export const simpleSVM = (x, y, beta=0.1, C=100, tolerance=1E-3, maxIteration=30)=>{
   const kernel = makeGaussKernel(beta)
 
   const originK = x.map((v,i,arr)=>[].concat(
@@ -79,7 +75,7 @@ export const simpleSVM = (x, y, beta=0.1, C=100, tolerance=1E-2, maxIteration=30
   }
 }
 
-export const SVM = (x, y, beta=0.1, C=100, tolerance=1E-2, maxIteration=30)=>{
+export const SVM = (x, y, beta=0.1, C=100, tolerance=1E-3, maxIteration=30)=>{
   const kernel = makeGaussKernel(beta)
 
   const originK = x.map((v,i,arr)=>[].concat(

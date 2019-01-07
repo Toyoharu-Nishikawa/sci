@@ -40,4 +40,12 @@ export const reStandardize = (data,ave,std)=>{
   return re
 }
 
+export const R2 = (x, y, f)=>{
+  const std = variance(y)
+  const N = x.length
+  const estimated = x.map(f)
+  const res = estimated.reduce((p,c,i)=>p+(y[i]-c)**2)/N
+  const R2 = 1- res/std 
 
+  return R2
+}
