@@ -44,7 +44,7 @@
   return vx
 }
 
-export const LUDecomposition = (A, pipotFlag=true) =>{
+export const LUDecomposition = (A, pivotFlag=true) =>{
   const nrc = A.length
 
   const m = A.map(a=>[].concat(a))
@@ -52,7 +52,7 @@ export const LUDecomposition = (A, pipotFlag=true) =>{
   const P = [...Array(nrc)].map((v,i)=>i)
 
   for (let i=0;i<nrc;i++){
-    if(pipotFlag){
+    if(pivotFlag){
       // ピボット選択（初項の絶対値が最大の行を一番上に持ってくる
       const col = m.slice(i,nrc).map(v=>Math.abs(v[i])) //i行目以降のi列絶値の配列
       const n = col.indexOf(Math.max(...col))+i //最大の要素の列番号

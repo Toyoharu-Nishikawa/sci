@@ -14,29 +14,22 @@ export const singleRegression = (x, y)=>{
     const y = x*w[0]+w[1] 
     return y
   }
-  const std = statistics.variance(y)
-  const N = x.length
-  const estimated = x.map(f)
-  const res = estimated.reduce((p,c,i)=>p+(y[i]-c)**2)/N
-  const R2 = 1- res/std 
 
   const obj = {
-    regression: f,
-    parameters: w,
-    R2: R2,
+    predict: f,
+    parameters: {weight: w}
   }
   return obj
 }
 
-export const singleRegressionLoad = (w)=>{
+export const singleRegressionLoad = (parameters)=>{
+  const w = parameters.weight
   const f = (x)=>{
     const y = x*w[0]+w[1] 
     return y
   }
-  const obj = {
-    regression: f,
-  }
-  return obj
+
+  return f 
 }
  
 export const multipleRegression = (x, y)=>{
@@ -49,28 +42,20 @@ export const multipleRegression = (x, y)=>{
     const y = x.reduce((c,p,i)=>c+p*w[i])+w[w.length-1] 
     return y
   }
-  const std = statistics.variance(y)
-  const N = x.length
-  const estimated = x.map(f)
-  const res = estimated.reduce((p,c,i)=>p+(y[i]-c)**2)/N
-  const R2 = 1- res/std 
-
   const obj = {
-    regression: f,
-    parameters: w,
-    R2:R2,
+    predict: f,
+    parameters: {weight:w}
   }
   return obj 
 }
 
-export const multipleRegressionLoad = (w)=>{
+export const multipleRegressionLoad = (parameters)=>{
+  const w = parameters.weight
   const f = (x)=>{
     const y = x.reduce((c,p,i)=>c+p*w[i])+w[w.length-1] 
     return y
   }
-  const obj = {
-    regression: f,
-  }
-  return obj
+
+  return f 
 }
 
