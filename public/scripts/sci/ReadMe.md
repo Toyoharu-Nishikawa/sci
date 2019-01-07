@@ -446,10 +446,10 @@ returns `function`
 makes and returns support vector regression function 
 * parameters : type of object, parameters are equal to parameters of SVR
 
-### classfication
+### classification
 ------
 
-#### `classfication.SVM(x, y,[beta=0.1, C=100,tolerance=1E-3])`
+#### `classification.SVM(x, y,[beta=0.1, C=100,tolerance=1E-3])`
 
 returns `object`
 ```javascript
@@ -524,3 +524,34 @@ calculate restandardized data
 * data : type of array
 * ave: type of float, average of data
 * std: type of float, standard of data
+
+#### `statistics.R2(x, y, f)`
+
+returns `float`
+
+calculate coefficient of determination R2
+* data : type of array
+* ave: type of float, average of data
+* std: type of float, standard of data
+
+### funcs
+------
+
+#### `funcs.getRandomInt(max)`
+
+returns `integer`
+
+get random integer n, 0 <= n < max 
+* max : type of integer
+
+#### `funcs.makeGaussKernel(beta)`
+
+returns `function`
+
+get gauss kernel function  
+* beta : type of float
+
+return function is
+f = exp(-beta*|x1-x2|**2)
+* x1: type of array
+* x2: type of array
