@@ -145,7 +145,7 @@ a0=0, an=0, method="M" is natural cubic spline
   + "m" : specify first-order differentiation at the start and end points
   + "M" : specify second-order differentiation at the start and end points
 
-* differentiation: type of integer , differentiation , 0, 1 or 2, default = 0
+* differentiation: type of integer , differentiation , 0, 1, 2 or -1, default = 0
 
     + 0: spline at x0
     + 1: first differentiation of spline at x0
@@ -196,6 +196,56 @@ returns `array`
 solve simultaneous linear equations by Gauss elimination method 
 * A : type of double array , coefficient matrix 
 * v : type of array , constant term column vector
+
+#### `solve.LUDecomposition(A, [pivotFlag=true])`
+
+returns `object`
+```javascript
+{
+    L: "double array", //lower triangular matrix
+    U: "double array", //upper triangular matrix
+    P: "array", //pivoting list
+}
+```
+
+LU decomposition by Gauss elimination method 
+* A : type of double array ,  matrix 
+* pivotFlag: type of boolean, if true pivoting is allowed 
+
+#### `solve.LUSolve(L, U, P, Va)`
+
+returns `array`
+
+solve simultanious linear equation of LUx = PVa and returns x
+* L : type of double array ,  lower triangular matrix 
+* U : type of double array ,  upper triangular matrix 
+* P : type of array ,  pivoting list 
+* Va : type of array ,  constant term column vector
+
+#### `solve.modifiedCholeskyDecomposition(A)`
+
+returns `object`
+```javascript
+{
+    L: "double array", //lower triangular matrix
+    D: "array", //diagonal component of diagonal matrix
+}
+```
+
+modified Choleskey decomposition
+* A : type of double array ,  matrix 
+
+(caution) A must be symmetric matrix
+
+#### `solve.modifiedCholeskySolve(L, D, Va)`
+
+returns `array`
+
+solve simultanious linear equation of LDLTx = Va and returns x
+* L : type of double array ,  lower triangular matrix 
+* D : type of array ,  diagonal component of diagonal matrix 
+* Va: type of array ,  constant term column vector
+
 
 #### `solve.lineSplitMethod(x0, f, dfdx0, maxIteration, tolerance)`
 
