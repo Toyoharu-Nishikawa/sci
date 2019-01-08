@@ -1,4 +1,4 @@
-import {modifiedCholeskyDecomposition, modifiedCholeskySolve} from "../solve/linerEquation.mjs"
+import {modifiedCholeskyDecomposition, modifiedCholeskySolve} from "../solve/linearEquation.mjs"
 
 import {makeGaussKernel} from "../funcs/index.mjs"
 
