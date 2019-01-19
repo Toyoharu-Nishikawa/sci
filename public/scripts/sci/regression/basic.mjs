@@ -38,10 +38,7 @@ export const multipleRegression = (x, y)=>{
   const XtX = matrix.mulMatMat(Xt,X)
   const Xty = matrix.mulMatVec(Xt,y)
   const w = solve.linEqGauss(XtX, Xty) 
-  const f = (x)=>{
-    const y = x.reduce((c,p,i)=>c+p*w[i])+w[w.length-1] 
-    return y
-  }
+  const f = (x) => x.reduce((p,c,i)=>p+c*w[i],0)+w[w.length-1] 
   const obj = {
     predict: f,
     parameters: {weight:w}
