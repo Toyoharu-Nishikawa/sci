@@ -376,7 +376,7 @@ returns `object`
 ```
 
 solve multiple regression 
-* x : type of array  
+* x : type of double array  
 * y : type of array
 
 
