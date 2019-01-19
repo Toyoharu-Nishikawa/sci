@@ -363,7 +363,7 @@ makes and returns single regression function
 * parameters : type of object, parameters are equal to parameters of sigleRegression  
 
 
-#### `regression.multipleRegression(x, y)`
+#### `regression.linearRegression(x, y)`
 
 returns `object`
 ```javascript
@@ -375,17 +375,44 @@ returns `object`
 }
 ```
 
-solve multiple regression 
-* x : type of array  
+solve linear regression 
+* x : type of double array  
 * y : type of array
 
 
-#### `regression.multipleRegressionLoad(parameters)`
+#### `regression.linearRegressionLoad(parameters)`
 
 returns `function`
 
-makes and returns multiple regression function
-* parameters : type of object, parameters are equal to parameters of multipleRegression  
+makes and returns linear regression function
+* parameters : type of object, parameters are equal to parameters of linearRegression  
+
+#### `regression.polynominalRegression(x, y, degree)`
+
+returns `object`
+```javascript
+{
+    predict: "function", // function of prediction 
+    parameters: {
+        degree: "array", // linear weight 
+        weight: "array", // linear weight 
+    }
+}
+```
+
+solve polynominal regression 
+* x : type of double array  
+* y : type of array
+
+
+#### `regression.polynominalRegressionLoad(parameters)`
+
+returns `function`
+
+makes and returns polynominal regression function
+* parameters : type of object, parameters are equal to parameters of polynominalRegression  
+
+
 
 #### `regression.gaussKernelRegression(x, y, [beta=0.1, C=100])`
 
