@@ -242,6 +242,24 @@ interpolates coordinate of y0 from coordinate of x0 by cyclic cubic spline
 * list : type of double array ,  [[x0, y0], [x1,y1], ..., [xn, yn]]
 * cyclicFlag: type of boolean , if true: cyclic spline , if flase: non-cyclic spline
 
+#### `interpolate.normalize(X, Y)`
+
+returns `function`
+
+normalize parametric X and Y function to (t) => [X(t), Y(t)]
+
+* X : type of function ,  // (t) => X(t)
+* Y : type of function ,  // (t) => Y(t)
+
+#### `interpolate.renormalize(t0, t1, normalizedFunc)`
+
+returns `function`
+
+renormalize function 0 <= t <= 1   =>   function t0 <= t <= t1
+
+* t0 : type of float ,  // initial of t   
+* t1 : type of float ,  // end of t
+* normalizedFunc: type of function , // (t) => [X(t), Y(t)]
 
 #### `interpolate.bspline(x, y [,degree=3, k])`
 
