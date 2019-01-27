@@ -324,3 +324,13 @@ export const normalizedCubicspline = (list, cyclicFlag=false )=>{
   }
 }
 
+export const normalize = (X, Y) => (t)=>[X(t), Y(t)]
+
+export const renormalize = (t0, t1, normalizedFunc) => {
+  return t => {
+    const s = t0+(t1 -t0)*t
+    const p = normalizedFunc(s)
+    return p
+  } 
+} 
+ 
