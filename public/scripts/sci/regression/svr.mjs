@@ -91,7 +91,7 @@ export const simpleSVR = (x, y, beta=0.1, C=100,epsilon=0.01,tolerance=1E-3, max
 }
 
 export const SVR = (x, y, beta=0.1, C=100,epsilon=0.01, tolerance=1E-3)=>{
-  const kernel = sci.funcs.makeGaussKernel(beta)
+  const kernel = makeGaussKernel(beta)
 
   const originK = x.map((v,i,arr)=>[].concat(
     [...Array(i)].map((u,j)=>kernel(v,arr[j])),
@@ -122,7 +122,7 @@ export const SVR = (x, y, beta=0.1, C=100,epsilon=0.01, tolerance=1E-3)=>{
     const E2 = EMap.get(i2)   
     const i = E2 >0 ? [...EMap.keys()].indexOf(Math.min(...EMap.values())) :
       [...EMap.keys()].indexOf(Math.max(...EMap.values()))
-    const i1 = (i >-1 && i!==i2) ? i : sci.funcs.getRandomInt(N)
+    const i1 = (i >-1 && i!==i2) ? i : getRandomInt(N)
     return i1 
   }
    
@@ -208,7 +208,7 @@ export const SVR = (x, y, beta=0.1, C=100,epsilon=0.01, tolerance=1E-3)=>{
           return 1
         }
       }
-      const I = sci.funcs.getRandomInt(N)
+      const I = getRandomInt(N)
       for(let i=0;i<N;i++){
         const j = (I+i)%N
         if(0<Math.abs(a[j]) && Math.abs(a[j])<C){
