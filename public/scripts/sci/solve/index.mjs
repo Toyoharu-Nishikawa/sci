@@ -1,4 +1,6 @@
 export * from "./linearEquation.mjs"
-export {lineSplitMethod, newtonMethod, broydenMethod} from "./newton.mjs"
+export {newtonMethod, asyncNewtonMethod} from "./newton.mjs"
+export {lineSplitMethod, asyncLineSplitMethod} from "./lineSplit.mjs"
+export {broydenMethod, asyncBroydenMethod} from "./broyden.mjs"
 
 
