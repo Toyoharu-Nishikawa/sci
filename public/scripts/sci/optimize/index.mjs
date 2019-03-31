@@ -1,1 +1,1 @@
-export {gradientDescent} from "./optimize.mjs"
+export {gradientDescent, asyncGradientDescent} from "./optimize.mjs"
