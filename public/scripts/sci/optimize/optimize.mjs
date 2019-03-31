@@ -1,17 +1,17 @@
 
 "use strict"
 
-export const gradientDescent = (x0, f, dfdx0, alpha, tolerance, maxIteration) =>{
-  let f1 = f(x0) 
+export const gradientDescent = async (x0, f, dfdx0, alpha, tolerance, maxIteration) =>{
+  let f1 = await f(x0) 
   let x = x0 - alpha * dfdx0
   let dx = x - x0
-  let f2 = f(x)
+  let f2 = await f(x)
   let dfdx = (f2-f1)/dx
   let count = 0
   const history=[]
   while(count < maxIteration){
     const tempX =  x -alpha*dfdx 
-    const tempF = f(tempX)
+    const tempF = await f(tempX)
     dx = tempX - x
     x = tempX
     f1 = f2

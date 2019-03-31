@@ -2,15 +2,15 @@
 
 "use strict"
 
-export const lineSplitMethod = (x0,f,dfdx0,maxIteration,tolerance)=>{
+export const lineSplitMethod = async (x0,f,dfdx0,maxIteration,tolerance)=>{
   let x=x0
-  let y = f(x)
+  let y = await f(x)
   let dfdx = dfdx0
   let count=0
   while(count<maxIteration){
     const dx = -y/dfdx
     x +=dx
-    const tempY = f(x)
+    const tempY = await f(x)
     const dy = tempY-y
     y=tempY
     if(Math.abs(y)<tolerance){
@@ -28,16 +28,16 @@ export const lineSplitMethod = (x0,f,dfdx0,maxIteration,tolerance)=>{
   return result 
 }
 
-export const newtonMethod = (x0, f, invJ, maxIteration,torelance)=>{
+export const newtonMethod = async (x0, f, invJ, maxIteration,torelance)=>{
   let dx = [0,0] 
   let x = x0
-  let y = f(x0) 
+  let y = await f(x0) 
   
   let count=0
   while(count<maxIteration){
     dx =mulScalarVec(-1,matrix.mulMatVec(invJ(x), y))
     x = matrix.addVec(x,dx)
-    y = f(x) 
+    y = await f(x) 
     const rem = matrix.absVec(y)
     if(rem<torelance){
       break  
@@ -67,11 +67,11 @@ const calcDeltaB = (dx,dy,invB)=>{
   return dB
 }
 
-export const broydenMethod= (x0, f, invB0, maxIteration, torelance, relaxation)=>{
+export const broydenMethod= async (x0, f, invB0, maxIteration, torelance, relaxation)=>{
   let x = x0
   let dx = [0,0] 
   let invB = invB0
-  let y = f(x0) 
+  let y = await f(x0) 
   let dy = [0,0] 
   let tempDX = [0,0]
   const minRadius = 1E-10
@@ -85,9 +85,9 @@ export const broydenMethod= (x0, f, invB0, maxIteration, torelance, relaxation)=
       d < minRadius ? tempDX.map(v=>0.5*v) : 
       tempDx
     tempDX = tempdx
-    dx = relaxFunc(tempdx, count, x, y)
+    dx = await relaxFunc(tempdx, count, x, y)
     x = matrix.addVec(x,dx)
-    const tempy = f(x) 
+    const tempy = await f(x) 
     dy = matrix.subVec(tempy,y)
     y = tempy
 
