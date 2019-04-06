@@ -102,6 +102,14 @@ multipulation of tow matrix, AB
 * A : type of double array , matrix 
 * B : type of double array , matrix 
 
+#### `matrix.directSum(matrixList)`
+
+returns `double array`
+
+make direct sum matrix from a list of matrixes, 
+* matrixList : type of array of double array , matrix list 
+
+
 #### `matrix.invMat(A)`
 
 returns `double array`
@@ -654,6 +662,14 @@ calculate coefficient of determination R2
 
 ### funcs
 ------
+
+#### `funcs.sumList(a)`
+
+returns `array`
+
+get array of sum list , Sn = a0 + a1 + ... + an
+* a : type of array
+
 
 #### `funcs.getRandomInt(max)`
 
