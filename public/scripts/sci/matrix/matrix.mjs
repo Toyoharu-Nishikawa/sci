@@ -1,3 +1,4 @@
+import {sumList} from "../funcs/sum.mjs"
 
 //vector
 export const mulScalarVec=(a, x0)=>{
