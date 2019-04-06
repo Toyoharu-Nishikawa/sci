@@ -1,4 +1,4 @@
-
+import {sumList} from "../funcs/sum.mjs"
 
 //vector
 export const mulScalarVec=(a, x0)=>{
@@ -59,6 +59,34 @@ export const subMatMat = (A,B)=>{
   const C= A.map((columns,i)=>columns.map((a,j)=>a-B[i][j])) 
   return C 
 }
+
+export const directSum = list =>{
+  const cols = list.map(v=>v.length)  
+  const rows = list.map(v=>v[0].length)  
+      
+  const colSum = sumList(cols)
+  const rowSum = sumList(rows)
+  const colTotal = colSum[colSum.length-1]
+  const rowTotal = rowSum[rowSum.length-1]
+  const matrix = [...Array(colTotal)].map((v,i)=>
+    [...Array(rowTotal)].map((u,j)=>{
+      const m = colSum.reduce((p,c,k)=>i<c?p:k+1,0)
+      const n = rowSum.reduce((p,c,k)=>j<c?p:k+1,0)
+      if(m!==n){
+        return 0
+      }
+      else{
+        const i0 = m >0 ? colSum[m-1] : 0
+        const j0 = n >0 ? rowSum[n-1] : 0
+        const A = list[m]  
+        const value = A[i-i0][j-j0]  
+        return value 
+      }
+    })
+  )
+  return matrix
+}
+
 
 export const invMat = (A)=>{
   let temp, div, unko, sum;
