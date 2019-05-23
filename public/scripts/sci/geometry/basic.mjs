@@ -55,14 +55,16 @@ export const checkCrossOfVectorAndCurve = (P, dP, sSpline)=>{
 }
 
 export const getCrossPointOfVectorAndCurve=(P, dP, sSpline, sIni=0, maxIteration=30, tolerance=1E-5)=>{
+    /*
   const flag = checkCrossOfVectorAndCurve(P, dP, sSpline)
-
+  console.log(flag) 
   if(!flag){
     const obj ={
       crossFlag: false 
     }
     return obj
   }
+ */ 
   const f = (s)=>{
     const sx = sSpline.X(s)  
     const sy = sSpline.Y(s)  
@@ -95,6 +97,8 @@ export const getCrossPointOfVectorAndCurve=(P, dP, sSpline, sIni=0, maxIteration
     crossFlag: true,
     t: s,
     C: S,
+    P: P,
+    dP: dP,
     magVec: magVec
   }
   return obj
