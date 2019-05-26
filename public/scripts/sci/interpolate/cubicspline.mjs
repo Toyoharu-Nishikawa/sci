@@ -61,7 +61,13 @@ export const cubicspline = (x, y, a0=0, an=0, method="M", differentiation=0) =>{
   }, [])
   M.reverse()
 
-  if(differentiation ===-1){
+ if(differentiation ===-2){
+    return {
+      h :h,
+      M: M,
+    }
+  }
+  else if(differentiation ===-1){
     const F = (i, x0)=>{
       const y0= M[i]* (-((x[i+1]-x0)**4)/(24*h[i+1]) + (x[i+1]-x0)**2/12*h[i+1] ) 
         + M[i+1]* ( (x0 - x[i])**4/(24*h[i+1]) - (x0-x[i])**2/12*h[i+1] )
@@ -228,7 +234,13 @@ export const cyclicCubicspline = (x, y, differentiation=0) =>{
 
   const zn = (d[num-1] - (ramda[num-1]*v[1]+mu[num-1]*v[num-2]))/(ramda[num-1]*t[1]+mu[num-1]*t[num-2]+b[num-2])
   const M = [...Array(num)].map((u,i)=>i === 0 ? 0: t[i]*zn +v[i] )
-  
+
+  if(differentiation ===-2){
+    return {
+      h :h,
+      M: M,
+    }
+  }
   if(differentiation ===-1){
     const F = (i, x0)=>{
       const y0= M[i]* (-((x[i+1]-x0)**4)/(24*h[i+1]) + (x[i+1]-x0)**2/12*h[i+1] ) 
@@ -322,6 +334,43 @@ export const normalizedCubicspline = (list, cyclicFlag=false )=>{
     DX: DX,
     DY: DY,
   }
+}
+
+export const areaOfClosedCurve = (points, coincidentFlag=true)=>{
+  /* input : double array of float */
+  /* output: area inside of cyclic spline curve */
+  const list =  coincidentFlag ? [].concat(points): [].concat(points, points[0])
+  const x = list.map(v=>v[0])
+  const y = list.map(v=>v[1])
+
+  const ds = list.map((v,i,arr)=>i>0 ? dist(v,arr[i-1]) : 0) 
+  const total = ds.reduce((p,c)=>p+c,0)
+  const s = ds.reduce((p,c)=>{
+    const pre = p.length > 0 ?  p[p.length-1] :0
+    const sum = pre+c
+    const l = p.concat(sum)
+    return l 
+  },[]).map(v=>v/total) 
+ 
+  const XObj =  cyclicCubicspline(s, x, -2) 
+  const YObj =  cyclicCubicspline(s, y, -2) 
+
+  const Fi = (i)=>{
+    const h = XObj.h
+    const Mx = XObj.M  
+    const My = YObj.M
+    const value = (My[i]*Mx[i]-My[i+1]*Mx[i+1])*h[i+1]**4/36
+      +(My[i]*Mx[i+1]+My[i+1]*Mx[i])*h[i+1]**4/720
+      -(My[i]+My[i+1])*h[i+1]**2/24*(x[i+1]-x[i])
+      +(Mx[i]+Mx[i+1])*h[i+1]**2/24*(y[i+1]-y[i])
+      +(y[i+1]+y[i])*(x[i+1]-x[i])/2
+    return value
+  }
+  const N = s.length
+  const integration = s.map((v,i)=>i<N-1 ? Fi(i):0).reduce((p,c)=>p+c,0)
+  const area = Math.abs(integration)
+  return area 
+ 
 }
 
 export const normalize = (X, Y) => (t)=>[X(t), Y(t)]
