@@ -194,3 +194,54 @@ export const getCrossPointOfCurveNormals =(p,pSpline,s,sSpline) =>{
     mag:crossPoint.mag
   }
 } 
+
+const makeCalcDistanceFunc = (P,sSpline)=>{
+  return s =>{
+    const Sx = sSpline.X(s)
+    const Sy = sSpline.Y(s)
+    const d = Math.sqrt((P[0]-Sx)**2+(P[1]-Sy)**2)
+    return d
+  }
+}
+
+const makeMiniDistanceFunc = (P, sSpline) => {
+  return s =>{
+    const Sx = sSpline.X(s)
+    const Sy = sSpline.Y(s)
+    const Dx = sSpline.DX(s)
+    const Dy = sSpline.DY(s)
+    const dLds = (P[0]-Sx)*Dx + (P[1]-Sy)*Dy
+    return dLds
+  } 
+}
+
+export const minDistanceFromPointToCurve = (P, sSpline, N=10, 
+                            maxIteration=30, tolerance=1E-5) =>{
+
+  const sTemps = [...Array(N+1)].map((v,i)=>i/N)
+  const calcDistance = makeCalcDistanceFunc(P, sSpline)
+  const distances = sTemps.map(v=>calcDistance) 
+  const min = Math.min(...distances)
+  const index = distances.indexOf(min)
+  const x0 = index/N
+  const f = makeMiniDistanceFunc(P, sSpline)
+  const y0 = f(x0)
+  const y1 = f(x0+tolerance)
+  const dfdx0 = (y1-y0)/tolerance
+  const res = solve.lineSplitMethod(x0, f, dfdx0, maxIteration, tolerance)
+  if(!res.converged){
+    return {
+      converged: false
+    }
+  }
+  const s = res.value
+  const distance = calcDistance(s)
+  const S = [sSpline.X(s), sSpline.Y(s)]
+  return {
+    converged: true,
+    distance: distance,
+    S: S,
+    s: s,
+  }
+}
+
