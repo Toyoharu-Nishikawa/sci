@@ -180,6 +180,202 @@ get cross points of self curve
 * N : type of integer ,        // devisions of curve
 * tolerance : type of float ,  // iteration tolerance
 
+### `geometry.getPointObject(p, normalizedSpline)`
+
+returns `object` 
+
+```
+{
+    point: "double array", // position vector at p on the spline curve
+    tangent: "double array", // tangent vectorat p on the spline curve
+    normal: "double array", // normal vectorat p on the spline curve
+}
+```
+get position , tangent and normal vector at p on the normalized spline curve
+* p : type of float ,  // 0 <= t <=1  
+* normalizedSpline : type of object ,  // refer to interpolate.normalizedCubicspline
+
+### `geometry.getDistance(P, dP, S)`
+
+returns `float` // distance form the line represented as position vector P and direction vector dP to the point S 
+
+get distance from the line to the point
+* P : type of array ,  [x, y] // position vector on the line 
+* dP : type of array , [dx, dy] // direction vector of the line
+* S : type of array, [x, y] // the target point mesured distance from th line
+
+### `geometry.checkCrossOfVectorAndCurve(P, dP, normalizedSpline)`
+
+returns `boolean` // true or false 
+
+check cross of vector and normalized spline curve
+* P : type of array ,  [x, y] // position vector on the line 
+* dP : type of array , [dx, dy] // direction vector of the line
+* normalizedSpline :  type of object ,  // refer to interpolate.normalizedCubicspline
+
+### `geometry.getCrossPointOfVectorAndCurve(P, dP, sSpline, sIni=0, maxIteration=30, tolerance=1E-5)`
+
+returns `boolean` // true or false 
+
+```
+{
+    crossFlag: "boolean", // cross or not 
+    t: "float", //parameter of normalized spline at the cross point 
+    P: P,  // is same as the input P
+    dP: dP, // is same as the input P
+    magVec: magVec // magnification of dP to the cross point
+}
+```
+
+get cross point of vector and normalized spline curve
+* P : type of array ,  [x, y] // position vector on the line 
+* dP : type of array , [dx, dy] // direction vector of the line
+* sSpline :  type of object ,  // normalizedSpline, refer to interpolate.normalizedCubicspline
+* sIni :  type of float ,  // initial parameter of sSpline to find the cross point
+* maxIteration: type of integer, // max iteration to find the cross point
+* tolerance : type of float, // tolerance of coincidece of the cross point
+
+
+### `geometry.getPerdendicularFootOfCurves(p, pSpline, sSpline, sIni=0, maxIteration=30, tolerance=1E-5)`
+
+returns `boolean` // true or false 
+
+```
+{
+    crossFlag: "boolean", // cross or not 
+    t: "float", //parameter of sSpline at the cross point 
+    P: "array of float",  // is same as the input P
+    dP: "array of float", // is same as the input P
+    magVec: "float" // magnification of dP to the cross point
+}
+```
+
+get perdencular foot from the point represented as p on pSpline to the curve represented as pSpline
+* p : type of flpat ,  // parameter of pSpline 
+* pSpline :  type of object ,  // normalizedSpline, refer to interpolate.normalizedCubicspline
+* sSpline :  type of object ,  // normalizedSpline, refer to interpolate.normalizedCubicspline
+* sIni :  type of float ,  // initial parameter of sSpline to find the perdencular foot
+* maxIteration: type of integer, // max iteration to find the perdencular foot
+* tolerance : type of float, // tolerance of coincidece of the perdencular foot
+
+### `geometry.getCrossPointOfVectors(P, dP, S, dS)`
+
+returns `object` // cross point object 
+
+```
+{
+    crossFlag: "boolean", // cross or not 
+    C: "array of float", //cross point
+    mag: "float" // magnifications of dP and dS 
+}
+```
+
+get the cross point of two lines  
+* P : type of array of float ,  [x, y]// position vector of line 1 
+* dP :  type of array of float , [dx, dy]  //  direction vector of line 1
+* S : type of array of float ,  [x, y]// position vector of line 2 
+* dS :  type of array of float , [dx, dy]  //  direction vector of line 2
+
+### `geometry.getCrossPointOfCurveNormals(p, pSpline, s, sSpline)`
+
+returns `object` // cross point object 
+
+```
+{
+    crossFlag: "boolean",
+    Rp:"float", //distance from P to the cross point
+    Rs:"float",//distance from P to the cross point
+    C:"array of float", // the cross point
+    S:"array of float", // the point on sSpline
+    P:"array of float",// the point on pSpline
+    dS:"array of float", // the normal vector on sSpline
+    dP:"array of float",// the normal vector on pSpline
+    mag:"array of float" // magnifications of dP and dS
+}
+```
+
+get the cross point of normals of spline curves 
+* P : type of array of float ,  [x, y]// position vector of line 1 
+* dP :  type of array of float , [dx, dy]  //  direction vector of line 1
+* S : type of array of float ,  [x, y]// position vector of line 2 
+* dS :  type of array of float , [dx, dy]  //  direction vector of line 2
+
+### `geometry.minDistanceFromPointToCurve(P, sSpline, N=10,　maxIteration=30, tolerance=1E-5)`
+
+returns `object` // minimum distance point 
+
+```
+{
+    converged: true,
+    distance: distance,
+    S: S,
+    s: s,
+}
+```
+
+get minimum distance from the point P to spline curve 
+* P : type of array of float ,  [x, y]// position vector of line 1 
+* sSpline :  type of object ,  // normalizedSpline, refer to interpolate.normalizedCubicspline
+* N : type of array of integer ,  // division number of sSpline to find the candidate of minimum distance before iteration 
+* maxIteration: type of integer, // max iteration to find the miminum distance
+* tolerance : type of float, // tolerance of iteration to find the miminum distance
+
+### `geometry.getFittingCircle(p, pSpline, sSpline,N, maxIteration, tolerance)`
+
+returns `object` // fitting circle 
+
+```
+{
+    converged:"boolean", // iteration converged or not
+    P: "array of float", // the poin at p on pSpline
+    S: "array of float", // the poin at s on sSpline
+    center: "array of float", the center of fitting circle
+    radius: "float", // radius of the fitting circle
+    p: p, // parameter of pSpline at contact point
+    s: s // parameter of sSpline at contact point
+}
+```
+
+get the fitting circle of two spline curves. one of contact points is the point P .  
+* p : type of flpat ,  // parameter of pSpline 
+* pSpline :  type of object ,  // normalizedSpline, refer to interpolate.normalizedCubicspline
+* sSpline :  type of object ,  // normalizedSpline, refer to interpolate.normalizedCubicspline
+* N : type of array of integer ,  // division number of sSpline to find the candidate of the fitting circle 
+* maxIteration: type of integer, // max iteration to find the fitting circle
+* tolerance : type of float, // tolerance of iteration to find the fitting circle
+
+### `geometry.getFittingCircles(pSpline, sSpline,divisions, N, maxIteration, tolerance)`
+
+returns `array of object` // fitting circles , fitting circle object is the same as return of getFittingCircle
+
+
+get the fitting circles of two spline curves.  calculate a fitting circle by a parameter of pSpline (0 <= p <=1)  
+* pSpline :  type of object ,  // normalizedSpline, refer to interpolate.normalizedCubicspline
+* sSpline :  type of object ,  // normalizedSpline, refer to interpolate.normalizedCubicspline
+* divisions: type of integer, // division number of the section [0, 1] of the parameter of pSpline
+* N : type of array of integer ,  // division number of sSpline to find the candidate of the fitting circle 
+* maxIteration: type of integer, // max iteration to find the fitting circle
+* tolerance : type of float, // tolerance of iteration to find the fitting circle
+
+### `geometry.getMinMaxOfList(list, minmax, maxIteration, tolerance)`
+
+returns `object` // minimum or maximum value object
+
+```
+{
+    converged: "boolean", 
+    value: "float", // minimum or maximum valaue
+    t: "float", // normalized parameter of minimum or maximum value position in 0 <= t <= 1 
+}
+```
+
+
+get the mimimum or maximum value on the spline curve made from list points
+* list :  type of array of float ,  // list of values
+* minmax :  type of string ,  // "min" or "max". if "min"/"max" , then function returns minimum/maximum value.
+* maxIteration: type of integer, // max iteration to find the minimum or maximum value
+* tolerance : type of float, // tolerance of iteration to find the minimum or maximum value
+
 
 ### interpolate
 ------
