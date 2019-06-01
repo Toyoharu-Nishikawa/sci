@@ -180,6 +180,39 @@ get cross points of self curve
 * N : type of integer ,        // devisions of curve
 * tolerance : type of float ,  // iteration tolerance
 
+### `geometry.getPointObject(p, normalizedSpline)`
+
+returns `object` 
+
+```
+{
+    point: "double array", // position vector at p on the spline curve
+    tangent: "double array", // tangent vectorat p on the spline curve
+    normal: "double array", // normal vectorat p on the spline curve
+}
+```
+get position , tangent and normal vector at p on the normalized spline curve
+* p : type of float ,  // 0 <= t <=1  
+* normalizedSpline : type of object ,  // refer to interpolate.normalizedCubicspline
+
+### `geometry.getDistance(P, dP, S)`
+
+returns `float` // distance form the line represented as position vector P and direction vector dP to the point S 
+
+get distance from the line to the point
+* P : type of array ,  [x, y] // position vector on the line 
+* dP : type of array , [dx, dy] // direction vector of the line
+* S : type of array, [x, y] // the target point mesured distance from th line
+
+### `geometry.checkCrossOfVectorAndCurve(P, dP, normalizedSpline)`
+
+returns `boolean` // true or false 
+
+check cross of vector and normalized spline curve
+* P : type of array ,  [x, y] // position vector on the line 
+* dP : type of array , [dx, dy] // direction vector of the line
+* normalizedSpline :  type of object ,  // refer to interpolate.normalizedCubicspline
+
 
 ### interpolate
 ------
