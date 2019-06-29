@@ -22,7 +22,7 @@ const updateN = (N, knots, x, m, i)=>{
   return newN
 }
 
-const makeN = (knots, order,num, x) => {
+export const makeN = (knots, order,num, x) => {
   const index = search(knots, order, x)
   const N1 =[...Array(num)].map((v,i)=>i===index?1:0)
   const N = [...Array(order-1)].reduce((pre,current,m)=>{
@@ -31,14 +31,20 @@ const makeN = (knots, order,num, x) => {
   return N
 }
 
-export const bspline = (x, y, degree=3, k)=>{
-  const order = degree+1
+export const makeKnots = (k, x, order) => {
+  const n = x.length
   const knots = typeof k !=="undefined" ? k:
     [].concat(
-      Array(order).fill(x[0]),
-      Array(x.length-order).fill(0).map((v,i)=>(i+1)*(x[x.length-1]-x[0])/(x.length-order+1)),
-      Array(order).fill(x[x.length-1])
+      [...Array(order)].fill(x[0]),
+      [...Array(n-order)].map((v,i)=>(i+1)*(x[n-1]-x[0])/(n-order+1)),
+      [...Array(order)].fill(x[n-1])
     )
+  return knots
+}
+
+export const bspline = (x, y, degree=3, k)=>{
+  const order = degree+1
+  const knots = makeKnots(k, x, order)
   try{
     if(knots.length !== x.length+order){
       throw new RangeError("length of knots must be equal to x.length + degree + 1") 
