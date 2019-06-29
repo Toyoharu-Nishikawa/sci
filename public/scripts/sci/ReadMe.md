@@ -369,12 +369,52 @@ returns `object` // minimum or maximum value object
 }
 ```
 
-
 get the mimimum or maximum value on the spline curve made from list points
 * list :  type of array of float ,  // list of values
 * minmax :  type of string ,  // "min" or "max". if "min"/"max" , then function returns minimum/maximum value.
 * maxIteration: type of integer, // max iteration to find the minimum or maximum value
 * tolerance : type of float, // tolerance of iteration to find the minimum or maximum value
+
+
+### `geometry.bspline(points, degree=3, knots)`
+
+returns `function` // b-spline curve function
+
+```
+// 0 <= t <= 1
+(t) => { 
+  // returns x and y coordinates
+  return [x, y]
+} 
+```
+
+get bspline curve from control points , degree of spline and knots
+* points :  type of double array of float ,  // [[x0, y0], [x1, y1], ... ]
+* degree :  type of interger ,  // degree of b-spline
+* knots : type of array of integer// ex. [0, 0, 0, 1, 2, 3,3,3]. it is not necessarily. it will be set as open uniform vector in default
+
+Schoenberg-Whitney conditions
+```
+ m = n + degree + 1
+```
+* m : number of knots
+* n : number of points
+* degree: degree of b-spline
+
+### `geometry.bezier(points)`
+
+returns `function` // bezier curve function
+
+```
+// 0 <= t <= 1
+(t) => { 
+  // returns x and y coordinates
+  return [x, y]
+} 
+```
+
+get bezier curve from control points
+* points :  type of double array of float ,  // [[x0, y0], [x1, y1], ... ]
 
 
 ### interpolate
@@ -428,6 +468,15 @@ a0=0, an=0, method="M" is natural cubic spline
 * method: type of string , edge condition option , "M" or "m" , default = "M"
   + "m" : specify first-order differentiation at the start and end points
   + "M" : specify second-order differentiation at the start and end points
+
+#### `interpolate.areaOfClosedCurve(points, coincidentFlag=true)`
+
+returns `float`
+
+calculate are in closed curve by using cyclic cubic spline 
+
+* points : type of double array , coordinate of [...[x, y]] 
+* coincidentFlag : boolean // true supposes that points include the last cylclic point as same as the initial point. 
 
 #### `interpolate.normalizedCubicspline(list, [,cyclicFlag=false])`
 
