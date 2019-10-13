@@ -416,6 +416,69 @@ returns `function` // bezier curve function
 get bezier curve from control points
 * points :  type of double array of float ,  // [[x0, y0], [x1, y1], ... ]
 
+### `geometry.calcAreaOfPolygon(points)`
+
+returns `float` // area of polygon
+
+calcuate area of polygon as  points placed counter-clockwise has positive area value and clockwise has negative area value
+* points :  type of double array of float ,  // [[x0, y0], [x1, y1], ... ]
+
+### `geometry.calcMomentOfInteriaOfArea(points)`
+
+returns `Object` // moment of interaia of area on center of figure of polygon
+
+```javascript
+{
+    Ix: "float",
+    Ix: "float",
+    Ixy: "float",
+}
+```
+
+calcuate Ix, Iy, Ixy as moment of interia of area for X axis and Y asxis , and product of inertia of area on center of figure 
+* points :  type of double array of float ,  // [[x0, y0], [x1, y1], ... ]
+
+### `geometry.calcPrincipalMomentOfInteriaOfArea(points)`
+
+return `Object` // principal moment of interia of area and angle of principal axis
+
+```javascript
+{
+    Ipx: "float",
+    Ipx: "float",
+    alpha: "float",
+}
+```
+calcuate Ipx, Ipy, alpha, as principal moment of interia of area for X axis and Y asxis ,and angle of principal axis for X-Y coordinate 
+
+* points :  type of double array of float ,  // [[x0, y0], [x1, y1], ... ]
+
+
+### `geometry.calcSpecOfPolygon(points)`
+
+return `Object` // area, , center of figure, principal moment of interia of area ...
+
+```javascript
+{
+    area: "float", // area of polygon. polygon whose points are placed counter-clockwise has positive area value, and clockwise has negative area value
+    centroid: "array", // centroid of polygon. [x, y]
+    Ix: Ix,  // moment of interia of area for X axis on center of polygon
+    Iy: Iy,  //moment of interia of area for X axis on center of polygon
+    Ixy: Ixy, //product of interia of area on center of polygon
+    Imx: Imx, //moment of interia of area for X axis on origin of x-y coordinate
+    Imy: Imy, //moment of interia of area for Y axis on origin of x-y coordinate
+    Imxy: Imxy,  //product of interia of area on origin of x-y coordinate
+    Ipx: Ipx, / principal moment of interia of area for X axis
+    Ipy: Ipy, //principal moment of interia of area for X axis
+    alpha: alpha, // angle of principal axis for X -Y coordinate against x-y coordinate
+    Xaxis: Xaxis, // unit vector of X axis
+    Yaxis: Yaxis, // unit vector of Y axis
+}
+```
+
+calcuate specification of polygon 
+
+* points :  type of double array of float ,  // [[x0, y0], [x1, y1], ... ]
 
 ### interpolate
 ------
