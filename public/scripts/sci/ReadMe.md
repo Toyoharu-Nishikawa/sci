@@ -471,8 +471,8 @@ return `Object` // area, , center of figure, principal moment of interia of area
     Ipx: Ipx, / principal moment of interia of area for X axis
     Ipy: Ipy, //principal moment of interia of area for X axis
     alpha: alpha, // angle of principal axis for X -Y coordinate against x-y coordinate
-    Xaxis: Xaxis,
-    Yaxis: Yaxis,
+    Xaxis: Xaxis, // unit vector of X axis
+    Yaxis: Yaxis, // unit vector of Y axis
 }
 ```
 
