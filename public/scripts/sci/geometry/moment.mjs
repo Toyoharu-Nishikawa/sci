@@ -5,7 +5,7 @@ const makeRotFunc = theta => P => [
   Math.sin(theta) * P[0] + Math.cos(theta) * P[1],
 ]
 
-export const calcArea = points =>{
+export const calcAreaOfPolygon = points =>{
  const Ai = points.map( (v, i,arr)=> i>0 ? 
     (arr[i-1][0]*v[1]-arr[i-1][1]*v[0])/2:
     (arr[arr.length-1][0]*v[1]-arr[arr.length-1][1]*v[0])/2
@@ -117,7 +117,7 @@ export const calcPrincipalMomentOfInteriaOfArea =(Ix, Iy, Ixy) => {
 } 
 
 export const calcSpecOfPolygon = points => {
-  const area = calcArea(points)
+  const area = calcAreaOfPolygon(points)
   const momentOfInteriaOfArea = calcMomentOfInteriaOfArea(points)
   const {centroid, Ix, Iy, Ixy} = momentOfInteriaOfArea 
   const [cx, cy] = centroid
@@ -129,11 +129,11 @@ export const calcSpecOfPolygon = points => {
   const {alpha,Ipx, Ipy } = principalMomentOfInteriaOfArea
   
   const rotAlpha = makeRotFunc(alpha)
-  const xaxes = [1, 0]
-  const yaxes = [0, 1] 
+  const xaxis = [1, 0]
+  const yaxis = [0, 1] 
   
-  const Xaxes = rotAlpha(xaxes)
-  const Yaxes = rotAlpha(yaxes)
+  const Xaxis = rotAlpha(xaxis)
+  const Yaxis = rotAlpha(yaxis)
   
   const spec = {
     area: area,
@@ -147,8 +147,8 @@ export const calcSpecOfPolygon = points => {
     Ipx: Ipx,
     Ipy: Ipy,
     alpha: alpha,
-    Xaxes: Xaxes,
-    Yaxes: Yaxes,
+    Xaxis: Xaxis,
+    Yaxis: Yaxis,
   }
   return spec
 }
