@@ -592,6 +592,23 @@ if k is empty, uniform knot vector will be set automatically
 
 k.length must be equal to sum of x.length + degree +1
 
+#### `interpolate.bicubicspline(x, y z)`
+
+returns `function`
+
+interpolates coordinate of y0 from coordinate of x0 by b-spline
+
+* x : type of array , coordinate of x = x[i] 
+* y : type of array , coordinate of y = y[j]
+* z : type of double array , z = z[i][j]
+
+When the length of x is m and the length of y is n, z must be double array of m * n
+
+returned function(x0, y0, cx=0, cy=0)
+* x0: type of double, x coordinate of interpolate point
+* y0: type of double, y coordinate of interpolate point
+* cx: type of integer, order of derivative of x (x= 0, 1, 2, 3)
+* cy: type of integer, order of derivative of y (y= 0, 1, 2, 3)
 
 ### solve
 ------
