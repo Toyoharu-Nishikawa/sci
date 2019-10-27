@@ -480,6 +480,25 @@ calcuate specification of polygon
 
 * points :  type of double array of float ,  // [[x0, y0], [x1, y1], ... ]
 
+### `geometry.innerTriangle(triangle, point)`
+
+return `boolean` // point is included in inner of triangle or not
+
+check that  point is included in inner of triangle or not
+
+* triangle :  type of double array of float ,  // [ [x0, y0], [x1, y1], [x2, y2] ]
+* point : type of array, // [x, y]
+
+
+### `geometry.delaunayTriangulation(points)`
+
+return `double array` // array of triangles's points
+
+calcuate triangles of delaunay triangulation 
+
+* points :  type of double array of float ,  // [[x0, y0], [x1, y1], ... ]
+
+
 ### interpolate
 ------
 
@@ -596,7 +615,7 @@ k.length must be equal to sum of x.length + degree +1
 
 returns `function`
 
-interpolates coordinate of y0 from coordinate of x0 by b-spline
+interpolates coordinate of y0 from coordinate of x0 by bicubic spline
 
 * x : type of array , coordinate of x = x[i] 
 * y : type of array , coordinate of y = y[j]
@@ -609,6 +628,23 @@ returned function(x0, y0, cx=0, cy=0)
 * y0: type of double, y coordinate of interpolate point
 * cx: type of integer, order of derivative of x (x= 0, 1, 2, 3)
 * cy: type of integer, order of derivative of y (y= 0, 1, 2, 3)
+
+#### `interpolate.gridLinear(points)`
+
+returns `function`
+
+interpolates coordinate of z from coordinate of x and y by linear interpolation of grid triangle
+
+* points : type of double array , //[ [x0, y0, z0], [x1, y1, z1], ... ]
+
+
+returned function(x, y)
+
+  returns z // interpolated value
+
+* x: type of double, x coordinate of interpolate point
+* y: type of double, y coordinate of interpolate point
+
 
 ### solve
 ------
