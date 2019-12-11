@@ -339,7 +339,7 @@ export const normalizedCubicspline = (list, cyclicFlag=false )=>{
 export const areaOfClosedCurve = (points, coincidentFlag=true)=>{
   /* input : double array of float */
   /* output: area inside of cyclic spline curve */
-  const list =  coincidentFlag ? [].concat(points): [].concat(points, points[0])
+  const list =  coincidentFlag ? [].concat(points): [].concat(points, [points[0]])
   const x = list.map(v=>v[0])
   const y = list.map(v=>v[1])
 
