@@ -25,7 +25,7 @@ scalar multipulation of vector, a*u
 * a : type of float , scalar 
 * v : type of array , vector
 
-#### `matrix.addVecVec(u, v)`
+#### `matrix.addVec(u, v)`
 
 returns `array`
 
@@ -33,7 +33,7 @@ addition of two vectors,  u + v
 * u : type of array , vector 
 * v : type of array , vector
 
-#### `matrix.subVecVec(u, v)`
+#### `matrix.subVec(u, v)`
 
 returns `array`
 
@@ -498,6 +498,31 @@ calcuate triangles of delaunay triangulation
 
 * points :  type of double array of float ,  // [[x0, y0], [x1, y1], ... ]
 
+### `geometry.DelaunayTriangulation(points)`
+
+`class` 
+
+calcuate triangles of delaunay triangulation 
+
+#### concstuctor(points)
+
+* points :  type of double array of float ,  // [[x0, y0], [x1, y1], ... ]
+
+#### attributions
+
+* points :  is iqual to argument of points
+* numberOfPoints : length of points
+* triangles: type of double array of integer involving indices of points// [ [v1, v2, v3],  [v4, v5, v6], ...]
+* neighbors: type of double array of integer involving indices of triangles// [[t1, t2, t3], [t4, t5, t6], ...]
+* allEdges: type of double array of integer involving indices of edges // [[v1, v2], [v3, v4], ...]
+* convexHull: type of array of integer involving indices of counter-clockwise convex hull // [v1, v2, v3,...] 
+* neighborPoints: type of array of integer involving indices of neighboring points// [[v1, v2,...], [v5, v6,...],...] 
+
+#### method
+
+* getCoord(list) : returns coordinates corresponding with list of indices
+* findTriangle(point) : returns index of triangle including the point
+* getBarycentricCoord(triangleId, point): returns barycentric coordinates of point  determined from the given the triangleId
 
 ### interpolate
 ------
@@ -629,21 +654,35 @@ returned function(x0, y0, cx=0, cy=0)
 * cx: type of integer, order of derivative of x (x= 0, 1, 2, 3)
 * cy: type of integer, order of derivative of y (y= 0, 1, 2, 3)
 
-#### `interpolate.gridLinear(points)`
+#### `interpolate.nongridLinear(points)`
 
 returns `function`
 
-interpolates coordinate of z from coordinate of x and y by linear interpolation of grid triangle
+interpolates coordinate of z from coordinates of x and y by linear method
 
 * points : type of double array , //[ [x0, y0, z0], [x1, y1, z1], ... ]
 
 
-returned function(x, y)
+returnes function(P)
 
   returns z // interpolated value
 
-* x: type of double, x coordinate of interpolate point
-* y: type of double, y coordinate of interpolate point
+* P: type of array // [x, y] 
+
+#### `interpolate.cloughTocher2DInterpolator(points)`
+
+returns `function`
+
+interpolates coordinate of z from coordinates of x and y by Clough-Tocher method
+
+* points : type of double array , //[ [x0, y0, z0], [x1, y1, z1], ... ]
+
+
+returnes function(P)
+
+  returns z // interpolated value
+
+* P: type of array // [x, y] 
 
 
 ### solve
