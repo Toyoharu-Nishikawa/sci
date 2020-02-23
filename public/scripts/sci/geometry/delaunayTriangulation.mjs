@@ -587,4 +587,40 @@ export const DelaunayTriangulation = class {
     const simplices = delaunayTriangulation(points)
     return simplices
   }
+  getCoord(list){
+    const coord = []
+    for(let i=0;i<list.length;i++){
+      coord[i]=this.points[list[i]]
+    }
+    return coord
+  }
+  findTriangle(point){
+    const triangles = this.triangles
+    for(let i=0; i<triangles.length; i++){
+      const t = triangles[i]
+      const triangle = this.getCoord(t)
+      const flag = innerTriangle(triangle, point)
+      if(flag){
+        return i
+      }
+    }
+  }
+  getBarysentricCoord(triangleId, point){
+    const triangles = this.triangles
+    const t = triangles[triangleId]
+    const Ax = t[0][0]
+    const Ay = t[0][1]
+    const Bx = t[1][0]
+    const By = t[1][1]
+    const Cx = t[2][0]
+    const Cy = t[2][1]
+    const Px = point[0]
+    const Py = point[1]
+
+    const alpha = ((By-Cy)*(Px-Cx)+(Cx-Bx)*(Py-Cy))/((By-Cy)*(Ax-Cx)+(Cx-Bx)*(Ay-Cy))
+    const beta  = ((Cy-Ay)*(Px-Cx)+(Ax-Cx)*(Py-Cy))/((By-Cy)*(Ax-Cx)+(Cx-Bx)*(Ay-Cy))
+    const gamma= 1-alpha-beta 
+    const coord = [alpha, beta, gamma]
+    return coord
+  }
 }
