@@ -605,9 +605,10 @@ export const DelaunayTriangulation = class {
       }
     }
   }
-  getBarysentricCoord(triangleId, point){
+  getBarycentricCoord(triangleId, point){
     const triangles = this.triangles
-    const t = triangles[triangleId]
+    const tri = triangles[triangleId]
+    const t = this.getCoord(tri)
     const Ax = t[0][0]
     const Ay = t[0][1]
     const Bx = t[1][0]
