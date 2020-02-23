@@ -1,4 +1,4 @@
-import {innerTriangle, delaunayTriangulation} from "../geometry/delaunayTriangulation.mjs"
+import {DelaunayTriangulation} from "../geometry/delaunayTriangulation.mjs"
 
 const triangleInterpolate = (p1, p2, p3) => {
   return p4 => {
@@ -16,28 +16,24 @@ const triangleInterpolate = (p1, p2, p3) => {
       Uint[0][0]*u14[0]+Uint[0][1]*u14[1], 
       Uint[1][0]*u14[0]+Uint[1][1]*u14[1], 
     ] 
-
+    
     const z = p1[2] + s[0]*(p2[2]-p1[2]) + s[1]*(p3[2]-p1[2])
     
     return z
   }
 }
 
-const searchTriangle = (triangles, point) => {
-  for(let i=0; i<triangles.length; i++){
-    const flag = innerTriangle(triangles[i], point)
-    if(flag){
-      return triangles[i]
-    }
-  }
-}
-
-
-export const gridLinear = points=> {
-  const triangles = delaunayTriangulation(points)
+export const nongridLinear = points=> {
+  const DT = new DelaunayTriangulation(points)
   return point => {
-    const targetTriangle = searchTriangle(triangles, point)  
-    const interp = triangleInterpolate(...targetTriangle)
+    const triId = DT.findTriangle(point)  
+    const t = DT.triangles[triId]
+    const triCoord = [
+      points[t[0]],
+      points[t[1]],
+      points[t[2]],
+    ]
+    const interp = triangleInterpolate(...triCoord)
     const z = interp(point)
 
     return z
