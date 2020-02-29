@@ -36,7 +36,7 @@ export const makeKnots = (k, x, order) => {
   const knots = typeof k !=="undefined" ? k:
     [].concat(
       [...Array(order)].fill(x[0]),
-      [...Array(n-order)].map((v,i)=>(i+1)*(x[n-1]-x[0])/(n-order+1)),
+      [...Array(n-order)].map((v,i)=>x[0]+(i+1)*(x[n-1]-x[0])/(n-order+1)),
       [...Array(order)].fill(x[n-1])
     )
   return knots
