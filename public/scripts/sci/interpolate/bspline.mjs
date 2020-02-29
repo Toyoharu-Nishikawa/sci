@@ -22,8 +22,9 @@ const updateN = (N, knots, x, m, i)=>{
   return newN
 }
 
-export const makeN = (knots, order,num, x) => {
+export const makeN = (knots, order, x) => {
   const index = search(knots, order, x)
+  const num = knots.length - order
   const N1 =[...Array(num)].map((v,i)=>i===index?1:0)
   const N = [...Array(order-1)].reduce((pre,current,m)=>{
     return pre.map((v,i,arr)=>updateN(arr, knots, x, m+2,i))
@@ -56,11 +57,11 @@ export const bspline = (x, y, degree=3, k)=>{
   catch(e){
    console.log(e.name +" : " + e.message)
   }
-  const A = x.map((value, i, arr) => makeN(knots, order, arr.length, value))
+  const A = x.map((value, i) => makeN(knots, order, value))
   const c = solve.linEqGauss(A, y)
   const num = x.length 
   return (x0)=>{ 
-    const N = makeN(knots, order,num, x0)
+    const N = makeN(knots, order, x0)
     const y0 = N.reduce((pre, current, i)=>pre+current*c[i],0)
     return y0
   }
