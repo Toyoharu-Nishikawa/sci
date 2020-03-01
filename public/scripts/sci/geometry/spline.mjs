@@ -102,11 +102,47 @@ export const bezier = (points) => {
   return func
 }
 
+const makeNormalizedSamplingKnots = (points, knots, order, type="stable") => {
+  switch(type){
+    case "chord":{
+      const l = points.map((v,i,arr)=>i>0?Math.sqrt( (v[0]-arr[i-1][0])**2+(v[1]-arr[i-1][1])**2 ):0)
+      const S = l.reduce((p,c,i)=>i>0?p.concat(p[p.length-1]+c):[c],0)
+      const endS = S[S.length-1]
+      const s = S.map(v=>v/endS)
+      return s
+ 
+    }
+    case "square": {
+      const l = points.map((v,i,arr)=>i>0?Math.sqrt( (v[0]-arr[i-1][0])**2+(v[1]-arr[i-1][1])**2 ):0)
+      const lt = l.map(v=>Math.sqrt(v))
+      const S = lt.reduce((p,c,i)=>i>0?p.concat(p[p.length-1]+c):[c],0)
+      const endS = S[S.length-1]
+      const s = S.map(v=>v/endS)
+      return s
+    }
+    case "uniform" :{
+      const num = points.length
+      const s = [...Array(num)].map((v,i)=>i/(num-1))
+      return s
+    }
+    case "stable":
+    default : {
+      const num = points.length
+      const min = knots[0]
+      const max = knots[knots.length-1]
+ 
+      const xi = [...Array(num)].map((v,i)=>knots.slice(i+1, i+order).reduce((p,c)=>p+c,0)/(order-1))
+      const s = xi.map(v=> (v-min)/(max-min))
+      return s
+    }
+  }
+}
+
 // @points: nurbs curve through points
 // @degree: degree of nurbs curve
 // @w     : weight vector whose length is equl to points
 // @ k    : knot vector whose length is equal to length of points + degree + 1
-export const getNurbsParameters = (points, degree=3, w, k) => {
+export const getNurbsParameters = (points, degree=3, type="stable", w, k) => {
   const num = points.length
   const order = degree + 1
 
@@ -119,17 +155,12 @@ export const getNurbsParameters = (points, degree=3, w, k) => {
   const knots = k || makeKnots(num, order,"openUniformKnots")
   const W =  w || [...Array(num)].fill(1)
 
-  const min = knots[0]
-  const max = knots[knots.length-1]
- 
+
   const bN = bsplineBasis(knots, degree, true)
-  const xi = [...Array(num)].map((v,i)=>knots.slice(i+1, i+order).reduce((p,c)=>p+c,0)/(order-1))
-  const xiNormalized = xi.map(v=> (v-min)/(max-min))
-
-
-  const matN = xiNormalized.map(v=>bN(v)) 
+         
+  const s = makeNormalizedSamplingKnots(points, knots, order, type)
+  const matN = s.map(v=>bN(v)) 
   const NW = matN.map(v=>v.reduce((p,c,i)=>p+c*W[i],0))
-
   const x = points.map((v,i)=>v[0]*NW[i])
   const y = points.map((v,i)=>v[1]*NW[i])
 
@@ -153,9 +184,9 @@ export const getNurbsParameters = (points, degree=3, w, k) => {
     controlPoints: controlPoints,
     wights: W,
     knots: knots,
+    N : matN,
     bN: bN,
-    samplingKnots: xi,
-    normalizedSamplingKnots: xiNormalized,
+    normalizedSamplingKnots: s,
     nurbs: nurbs,
   }
   return obj
