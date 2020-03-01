@@ -416,6 +416,58 @@ returns `function` // bezier curve function
 get bezier curve from control points
 * points :  type of double array of float ,  // [[x0, y0], [x1, y1], ... ]
 
+### `geometry.bsplineBasis(knots, degree, normalizedFlag=true)`
+
+returns "array of function" // whose length is equal to knots' length - degree -1
+
+* knots: knots vector // ex. [0, 0, 0, 1, 2, 3, 3, 3]
+* degree: degeree of bspline // ex. 2 
+* normalizedFlag : if true, then argument of bspline basis is normalized from 0 to 1
+
+### `geometry.nurbs(points, degree=3, weights, knots)`
+
+returns "function" // whose argument is normalized from 0 to 1
+
+* points: through points // ex. [ [0,0], [1,3], [3, 4], ...]
+* degree: degree of bspline // ex. 3
+* weights: weight vector // ex. [1, 1, 1, ...] the length is equal to of points
+* knots: knots vector // ex. [0, 0, 0, 1, 2, 3, 3, 3]
+
+needs to satisfy Schoenberg-Whitney conditions
+
+```
+ knots.length = points.length + degree + 1
+```
+
+### `geometry.getNurbsParameters(points, degree=3, type=stable, weights, knots)`
+
+returns "object"  // get parameters from through points, degree and so on
+
+```
+{
+    points: same as the argurmet,
+    controlPoints: control points of NURBS curve,
+    weights: same as the argument or if argument is undefined then array filled with 1,
+    knots: same as the argument or if argument is undefined then open uniform knot vector,
+    N: bspline matrix,
+    bN: bspline basis function list,
+    normalizedSamplingKnots: depends on type,
+    nurbs : NURBS curve function whose argument is normalized from 0 o 1
+}
+```
+
+* points: through points // ex. [ [0,0], [1,3], [3, 4], ...]
+* degree: degree of bspline // ex. 2
+* type: sampling knots type // "chord" or "square" or "uniform" or "stable"
+* weights: weight vector // ex. [1, 1, 1, ...] the length is equal to of points
+* knots: knots vector // ex. [0, 0, 0, 1, 2, 3, 3, 3]
+
+needs to satisfy Schoenberg-Whitney conditions
+
+```
+ knots.length = points.length + degree + 1
+```
+
 ### `geometry.calcAreaOfPolygon(points)`
 
 returns `float` // area of polygon
