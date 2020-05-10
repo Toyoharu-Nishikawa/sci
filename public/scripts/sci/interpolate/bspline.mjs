@@ -22,6 +22,7 @@ const updateN = (N, knots, x, m, i)=>{
   return newN
 }
 
+// return vector whose length is equal to knots.length - order
 export const makeN = (knots, order, x) => {
   const index = search(knots, order, x)
   const num = knots.length - order
