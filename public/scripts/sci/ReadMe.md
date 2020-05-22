@@ -447,9 +447,8 @@ returns "object"  // get parameters from through points, degree and so on
 {
     points: same as the argurmet,
     controlPoints: control points of NURBS curve,
-    weights: same as the argument or if argument is undefined then array filled with 1,
-    knots: same as the argument or if argument is undefined then open uniform knot vector,
-    N: bspline matrix,
+    weights: array filled with 1,
+    knots: bepends on knotType,
     bsplineFunctionMatrix: bspline basis function matrix whose column is k th derivative,
     parameters: sampling parameters,
     nurbs : f(t, k=0) NURBS curve function whose argument is normalized from 0 o 1, k means k th derivative
@@ -457,7 +456,6 @@ returns "object"  // get parameters from through points, degree and so on
 ```
 
 * points: through points // ex. [ [0,0], [1,3], [3, 4], ...]
-* degree: degree of bspline // ex. 2
 * parameterTyp: sampling parameter's type // "chord" , "sqrt" or "uniform"
 * knotType: knotType // "uniform" , "average" or "natural"
 
