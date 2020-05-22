@@ -1,41 +1,5 @@
-import {  bsplineBasis} from "./spline.mjs"
+import {bsplineBasis} from "./spline.mjs"
 import {linEqGauss} from "../solve/linearEquation.mjs"
-
-//const makeNormalizedSamplingKnots = (points, knots, order, type="stable") => {
-//  switch(type){
-//    case "chord":{
-//      const l = points.map((v,i,arr)=>i>0?Math.sqrt( (v[0]-arr[i-1][0])**2+(v[1]-arr[i-1][1])**2 ):0)
-//      const S = l.reduce((p,c,i)=>i>0?p.concat(p[p.length-1]+c):[c],0)
-//      const endS = S[S.length-1]
-//      const s = S.map(v=>v/endS)
-//      return s
-// 
-//    }
-//    case "square": {
-//      const l = points.map((v,i,arr)=>i>0?Math.sqrt( (v[0]-arr[i-1][0])**2+(v[1]-arr[i-1][1])**2 ):0)
-//      const lt = l.map(v=>Math.sqrt(v))
-//      const S = lt.reduce((p,c,i)=>i>0?p.concat(p[p.length-1]+c):[c],0)
-//      const endS = S[S.length-1]
-//      const s = S.map(v=>v/endS)
-//      return s
-//    }
-//    case "uniform" :{
-//      const num = points.length
-//      const s = [...Array(num)].map((v,i)=>i/(num-1))
-//      return s
-//    }
-//    case "stable":
-//    default : {
-//      const num = points.length
-//      const min = knots[0]
-//      const max = knots[knots.length-1]
-// 
-//      const xi = [...Array(num)].map((v,i)=>knots.slice(i+1, i+order).reduce((p,c)=>p+c,0)/(order-1))
-//      const s = xi.map(v=> (v-min)/(max-min))
-//      return s
-//    }
-//  }
-//}
 
 const makeParameters = (points, type) => {
   const m = points.length -1
@@ -102,10 +66,9 @@ export const getNurbsParameters = (points, parameterType="chord", knotType="aver
   const W =  [...Array(num)].fill(1)
 
 
-  const bN = bsplineBasis(knots, degree, true)
+  const bNmatrix = bsplineBasis(knots, degree, true)
          
-
-  const matN = parameters.map(v=>bN(v)) 
+  const matN = parameters.map(v=>bNmatrix(v)[0]) 
   const NW = matN.map(v=>v.reduce((p,c,i)=>p+c*W[i],0))
 
   const x = points.map((v,i)=>v[0]*NW[i])
@@ -118,11 +81,12 @@ export const getNurbsParameters = (points, parameterType="chord", knotType="aver
   const g = gtmp.map((v,i)=>v/W[i])
   const controlPoints = f.map((v,i)=>[v, g[i]])
 
-  const nurbs = (t)=>{  // 0 <= t <=1
-    const N = bN(t)
-    const NW = N.reduce((p,c,i)=>p+c*W[i],0)
-    const x = N.reduce((p, c, i)=>p+c*W[i]*controlPoints[i][0],0)/NW
-    const y = N.reduce((p, c, i)=>p+c*W[i]*controlPoints[i][1],0)/NW
+  const nurbs = (t, k=0)=>{  // 0 <= t <=1
+    const bN = bNmatrix(t)
+    const N = bN[k]
+    //const NW = N.reduce((p,c,i)=>p+c*W[i],0)
+    const x = N.reduce((p, c, i)=>p+c*W[i]*controlPoints[i][0],0)
+    const y = N.reduce((p, c, i)=>p+c*W[i]*controlPoints[i][1],0)
     return [x, y] 
   } 
 
@@ -131,7 +95,7 @@ export const getNurbsParameters = (points, parameterType="chord", knotType="aver
     controlPoints: controlPoints,
     wights: W,
     knots: knots,
-    bsplineFunctionsVector: bN,
+    bsplineFunctionMatrix: bNmatrix,
     parameters: parameters,
     nurbs: nurbs,
   }

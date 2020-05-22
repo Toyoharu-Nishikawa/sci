@@ -1,4 +1,4 @@
-import {makeN} from "../interpolate/bspline.mjs"
+import {makeN, makeNmatrix} from "../interpolate/bspline.mjs"
 import {linEqGauss} from "../solve/linearEquation.mjs"
 
 const checkSchoenbergWhitneyCondition = (pointsLength, knotsLength, order) => {
@@ -31,6 +31,15 @@ export const makeKnots = (num, order, type="openUniformKnots") => {
 }
 
 export const bsplineBasis = (knots, degree=3,  normalizedFlag=true) => {
+  //Matrix(degree+1,  * knots.length - degree -1)
+  // [
+  //   [ bsplrine basis list] ,
+  //   [ 1st derivertive of bsplrine basis list] ,
+  //   [ 2nd derivertive of bsplrine basis list] ,
+  //  ...
+  //   [ degree-th derivertive of bsplrine basis list] ,
+  // ]
+
   // default knot vector is open uniform
   const order = degree+1
   const min = knots[0]
@@ -38,14 +47,14 @@ export const bsplineBasis = (knots, degree=3,  normalizedFlag=true) => {
   if(normalizedFlag){
     return (t)=>{  // 0 <= t <=1
       const s = min + t * (max - min)
-      const N = makeN(knots, order,  s)
-      return N
+      const Nmatrix = makeNmatrix(knots, degree,  s)
+      return Nmatrix
     } 
   }
   else{
     return (s)=>{  // knots[0] <= s <=knots[knots.length-1]
-      const N = makeN(knots, order, s)
-      return N
+      const Nmatrix = makeNmatrix(knots, degree, s)
+      return Nmatrix
     } 
   }
 }
@@ -60,10 +69,11 @@ export const bspline = (points, degree=3, k) =>{
     checkSchoenbergWhitneyCondition(pointsLength, knotsLength, order)
   }
   const knots = k || makeKnots(num, order, "openUniformKnots")
-  const bN = bsplineBasis(knots, degree,  true)
+  const bNmatrix = bsplineBasis(knots, degree,  true)
 
-  return (t)=>{  // 0 <= t <=1
-    const N = bN(t) 
+  return (t, k=0)=>{  // 0 <= t <=1
+    const Nmatrix = bNmatrix(t)
+    const N = Nmatrix[k]
     const x = N.reduce((p, c, i)=>p+c*points[i][0],0)
     const y = N.reduce((p, c, i)=>p+c*points[i][1],0)
     return [x, y] 
@@ -83,11 +93,12 @@ export const nurbs = (points, degree=3, w, k) =>{
   }
 
   const knots = k || makeKnots(num, order, "openUniformKnots")
-  const bN = bsplineBasis(knots, degree,  true)
+  const bNmatrix = bsplineBasis(knots, degree,  true)
   const W =  w || [...Array(num)].fill(1)
 
   return (t)=>{  // 0 <= t <=1
-    const N = bN(t)
+    const Nmatrix = bNmatrix(t)
+    const N = Nmatrix[0]
     const NW = N.reduce((p,c,i)=>p+c*W[i],0)
     const x = N.reduce((p, c, i)=>p+c*W[i]*points[i][0],0)/NW
     const y = N.reduce((p, c, i)=>p+c*W[i]*points[i][1],0)/NW

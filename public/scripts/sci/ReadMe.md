@@ -382,7 +382,8 @@ returns `function` // b-spline curve function
 
 ```
 // 0 <= t <= 1
-(t) => { 
+// k means k th derivative
+(t, k) => { 
   // returns x and y coordinates
   return [x, y]
 } 
@@ -418,7 +419,9 @@ get bezier curve from control points
 
 ### `geometry.bsplineBasis(knots, degree, normalizedFlag=true)`
 
-returns "array of function" // whose length is equal to knots' length - degree -1
+returns "function" // whose length is equal to knots' length - degree -1
+
+return's function returns b-spline basis derivative matrix.
 
 * knots: knots vector // ex. [0, 0, 0, 1, 2, 3, 3, 3]
 * degree: degeree of bspline // ex. 2 
