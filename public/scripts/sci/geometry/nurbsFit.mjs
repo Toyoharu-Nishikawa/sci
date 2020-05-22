@@ -84,9 +84,9 @@ export const getNurbsParameters = (points, parameterType="chord", knotType="aver
   const nurbs = (t, k=0)=>{  // 0 <= t <=1
     const bN = bNmatrix(t)
     const N = bN[k]
-    const NW = N.reduce((p,c,i)=>p+c*W[i],0)
-    const x = N.reduce((p, c, i)=>p+c*W[i]*controlPoints[i][0],0)/NW
-    const y = N.reduce((p, c, i)=>p+c*W[i]*controlPoints[i][1],0)/NW
+    //const NW = N.reduce((p,c,i)=>p+c*W[i],0)
+    const x = N.reduce((p, c, i)=>p+c*W[i]*controlPoints[i][0],0)
+    const y = N.reduce((p, c, i)=>p+c*W[i]*controlPoints[i][1],0)
     return [x, y] 
   } 
 

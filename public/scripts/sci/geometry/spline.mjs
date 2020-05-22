@@ -71,9 +71,9 @@ export const bspline = (points, degree=3, k) =>{
   const knots = k || makeKnots(num, order, "openUniformKnots")
   const bNmatrix = bsplineBasis(knots, degree,  true)
 
-  return (t)=>{  // 0 <= t <=1
+  return (t, k=0)=>{  // 0 <= t <=1
     const Nmatrix = bNmatrix(t)
-    const N = Nmatrix[0]
+    const N = Nmatrix[k]
     const x = N.reduce((p, c, i)=>p+c*points[i][0],0)
     const y = N.reduce((p, c, i)=>p+c*points[i][1],0)
     return [x, y] 
