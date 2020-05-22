@@ -439,7 +439,7 @@ needs to satisfy Schoenberg-Whitney conditions
  knots.length = points.length + degree + 1
 ```
 
-### `geometry.getNurbsParameters(points, degree=3, type=stable, weights, knots)`
+### `geometry.getNurbsParameters(points, parameterType="chord", knotType="average")`
 
 returns "object"  // get parameters from through points, degree and so on
 
@@ -447,22 +447,19 @@ returns "object"  // get parameters from through points, degree and so on
 {
     points: same as the argurmet,
     controlPoints: control points of NURBS curve,
-    weights: same as the argument or if argument is undefined then array filled with 1,
-    knots: same as the argument or if argument is undefined then open uniform knot vector,
-    N: bspline matrix,
-    bN: bspline basis function list,
-    normalizedSamplingKnots: depends on type,
-    nurbs : NURBS curve function whose argument is normalized from 0 o 1
+    weights: array filled with 1,
+    knots: bepends on knotType,
+    bsplineFunctionMatrix: bspline basis function matrix whose column is k th derivative,
+    parameters: sampling parameters,
+    nurbs : f(t, k=0) NURBS curve function whose argument is normalized from 0 o 1, k means k th derivative
 }
 ```
 
 * points: through points // ex. [ [0,0], [1,3], [3, 4], ...]
-* degree: degree of bspline // ex. 2
-* type: sampling knots type // "chord" or "square" or "uniform" or "stable"
-* weights: weight vector // ex. [1, 1, 1, ...] the length is equal to of points
-* knots: knots vector // ex. [0, 0, 0, 1, 2, 3, 3, 3]
+* parameterTyp: sampling parameter's type // "chord" , "sqrt" or "uniform"
+* knotType: knotType // "uniform" , "average" or "natural"
 
-needs to satisfy Schoenberg-Whitney conditions
+degree of bpline is 3 (user cannot change)
 
 ```
  knots.length = points.length + degree + 1
@@ -687,6 +684,8 @@ interpolates coordinate of y0 from coordinate of x0 by b-spline
 if k is empty, uniform knot vector will be set automatically
 
 k.length must be equal to sum of x.length + degree +1
+
+format of return function is (x, k=0) => y // k means k th deferential 
 
 #### `interpolate.bicubicspline(x, y z)`
 
