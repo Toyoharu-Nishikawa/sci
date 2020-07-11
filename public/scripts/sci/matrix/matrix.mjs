@@ -6,9 +6,9 @@ export const mulScalarVec=(a, x0)=>{
   return y
 }
 
-export const addVec = (x0,x1)=>{
-  const y= x0.map((a,i)=>a+x1[i]) 
-  return y
+export const addVec = (...x)=>{
+  const y = x.reduce((p,c,i)=>i>0?p.map((u,j)=>u+c[j]): c, [])
+  return y 
 }
 
 export const subVec = (x0,x1)=>{
@@ -16,10 +16,20 @@ export const subVec = (x0,x1)=>{
   return y
 }
 
+
 export const absVec = (x0)=>{
   const a2 = x0.reduce((pre,current)=>pre+current**2,0) 
   const a = Math.sqrt(a2)
   return a
+}
+
+export const vectorProduct = (x0, x1) => {
+  const v = [
+    x0[1]*x1[2] - x0[2]*x1[1], 
+    x0[2]*x1[0] - x0[0]*x1[2], 
+    x0[0]*x1[1] - x0[1]*x1[0], 
+  ]
+  return v
 }
 
 export const innerProductVec=(x0,x1)=>{

@@ -25,13 +25,15 @@ scalar multipulation of vector, a*u
 * a : type of float , scalar 
 * v : type of array , vector
 
-#### `matrix.addVec(u, v)`
+#### `matrix.addVec(...v)`
 
 returns `array`
 
-addition of two vectors,  u + v
-* u : type of array , vector 
-* v : type of array , vector
+add some vectors,  v1 + v2 + ... + vn
+* v1 : type of array , vector 
+* v2 : type of array , vector
+* vn : type of array , vector
+
 
 #### `matrix.subVec(u, v)`
 
@@ -55,6 +57,15 @@ returns `float`
 inner product of two vectors, (u,v)
 * u : type of array , vector 
 * v : type of array , vector 
+
+#### `matrix.vectorProduct(u, v)`
+
+returns `array`
+
+vector product of two 3D vectors, (u,v)
+* u : type of array , vector 
+* v : type of array , vector 
+
 
 #### `matrix.transpose(A)`
 
@@ -215,7 +226,7 @@ check cross of vector and normalized spline curve
 
 ### `geometry.getCrossPointOfVectorAndCurve(P, dP, sSpline, sIni=0, maxIteration=30, tolerance=1E-5)`
 
-returns `boolean` // true or false 
+returns `object` // true or false 
 
 ```
 {
@@ -531,6 +542,83 @@ return `Object` // area, , center of figure, principal moment of interia of area
 calcuate specification of polygon 
 
 * points :  type of double array of float ,  // [[x0, y0], [x1, y1], ... ]
+
+### `geometry.calcPolyhedronSpecFromSurfaces(surfaceVertices)`
+
+return `Object` // volume, , centroid
+
+```javascript
+{
+    volume: "float", // volume of polyhedron
+    centroid: "array", // centroid of polygon. [x, y, y]
+}
+```
+
+* surfaceVertices :  type of triple array of float , //array of counter-clockwisely listed surface vertices looked from outside 
+
+input sample: regular cube(10 x 10 x 10)
+```
+ [
+  [ [0, 0, 0], [10,0, 0], [10,0, 10], [0, 0, 10] ],      // surface1
+  [ [10, 0, 0], [10, 10, 0], [10,10, 10], [10, 0, 10] ], // surface2
+  [ [10, 10, 0], [0,10, 0], [0,10, 10], [10, 10, 10] ],  // surface3
+  [ [0, 10, 0], [0,0, 0], [0,0, 10], [0, 10, 10] ],      // surface4
+  [ [0, 0, 10], [10,0, 10], [10,10, 10], [0, 10, 10] ],  // surface5
+  [ [0, 0, 0], [0,10, 0], [10,10, 0], [10, 0, 0] ],      // surface6
+]
+```
+
+### `geometry.calcTetrahedronSpecFromVertices(vertices)`
+
+return `Object` // volume, , centroid
+
+```javascript
+{
+    volume: "float", // volume of tetrahedron
+    centroid: "array", // centroid of polygon. [x, y, y]
+}
+```
+
+* vertices :  type of double array of float , //array of vertices of tetrahedron 
+
+input sample: regular tetrahedron
+
+```javascript
+ [
+  [0, 10, 0],
+  [-5*Math.sqrt(3), -5, 0],
+  [5*Math.sqrt(3), -5, 0],
+  [0, 0, 10*Math.sqrt(2)],
+ ]
+```
+
+### `geometry.calcHexahedronSpecFromVertices(vertices)`
+
+return `Object` // volume, , centroid
+
+```javascript
+{
+    volume: "float", // volume of hexahedron
+    centroid: "array", // centroid of polygon. [x, y, y]
+}
+```
+
+* vertices :  type of double array of float , //array of vertices of hexahedron 
+
+input sample: regular tetrahedron
+
+```javascript
+ [
+  [0, 0, 10],
+  [10, 0, 10],
+  [10, 10, 10],
+  [0, 10, 10],
+  [0, 0, 0],
+  [10, 0, 0],
+  [10, 10, 0],
+  [0, 10, 0],
+ ]
+```
 
 ### `geometry.innerTriangle(triangle, point)`
 
