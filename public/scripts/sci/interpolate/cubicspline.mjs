@@ -309,6 +309,21 @@ export const cyclicCubicspline = (x, y, differentiation=0) =>{
 
 const dist = (p1, p2)=> Math.sqrt((p1[0]-p2[0])**2+(p1[1]-p2[1])**2)
 
+const calcDistance = (p1, p2) => {
+  const vec = p1.map((v,i)=>v-p2[i]) 
+  const d2 = vec.reduce((p,c)=>p+c**2,0)
+  const d = Math.sqrt(d2)
+  return d
+}
+
+const calcSumList = (list) => {
+  const sumList = list.reduce((p,c,i)=>i>0 ? p.concat(p[p.length-1]+c) : [0], [])
+  return sumList
+}
+
+const transpose = A=>A[0].map((k,i)=>A.map((v)=>v[i]))
+
+
 export const normalizedCubicspline = (list, cyclicFlag=false )=>{
   /* input : double array of float */
   /* output: function args from 0 to 1, return [x, y]  */
