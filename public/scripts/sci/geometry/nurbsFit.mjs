@@ -150,7 +150,7 @@ const makeMatNWithBoundaryConstraints = (num, degree, parameters, knots, bNmatri
   const p = degree
   const Nn = parameters.map(v=>bNmatrix(v)[0]) 
   const N2= [].concat(-degree/knots[p+1], degree/knots[p+1], [...Array(num)].fill(0))
-  const Npenultimate = [].concat([...Array(num)].fill(0), -degree/(1-knots[m]), degree/(1-knots[m]))
+  const Npenultimate = [].concat([...Array(num)].fill(0), -degree/(1-knots[m+2]), degree/(1-knots[m+2]))
 
   const matN = [].concat([Nn[0]], [N2], Nn.slice(1,m), [Npenultimate], [Nn[m]])
   return matN
@@ -158,7 +158,7 @@ const makeMatNWithBoundaryConstraints = (num, degree, parameters, knots, bNmatri
 
 // @points: nurbs curve fit points
 // @type   : uniform, chord or sqrt 
-export const getNurbsParametersWidthBoundaryConstraints = (points, e1, e2, parameterType="chord", knotType="natural") => {
+export const getNurbsParametersWidthBoundaryConstraints = (points, e1, e2, parameterType="chord", knotType="natural", unitVectorFlag=true) => {
   const degree = 3
   const num = points.length 
   const order = degree + 1
@@ -170,8 +170,8 @@ export const getNurbsParametersWidthBoundaryConstraints = (points, e1, e2, param
   const knots = makeKnotVectorWithBoundaryConstrained(num, degree, parameters, knotType)
 
   const totalLength = points.map((v,i,arr) => i>0 ? calcDistance(v, arr[i-1]) : 0 ).reduce((p,c)=>p+c,0)
-  const C1 = e1.map(v=>v*totalLength)
-  const C2 = e2.map(v=>v*totalLength)
+  const C1 = unitVectorFlag ? e1.map(v=>v*totalLength) : e1
+  const C2 = unitVectorFlag ? e2.map(v=>v*totalLength) : e2
 
   const W =  [...Array(num+2)].fill(1)
 
