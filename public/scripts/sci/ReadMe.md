@@ -469,9 +469,38 @@ returns "object"  // get parameters from through points, degree and so on
 }
 ```
 
-* points: through points // ex. [ [0,0], [1,3], [3, 4], ...]
+* points: through points // ex. [ [0,0], [1,3], [3, 4], ...] arbitary dimension points
 * parameterTyp: sampling parameter's type // "chord" , "sqrt" or "uniform"
 * knotType: knotType // "uniform" , "average" or "natural"
+
+degree of bpline is 3 (user cannot change)
+
+```
+ knots.length = points.length + degree + 1
+```
+
+### `geometry.getBoundaryConstrainedNurbsParameters(points, e1, e2, parameterType="chord", knotType="average", unitVectorFlag=true)`
+
+returns "object"  // get parameters from through points, degree and so on
+
+```
+{
+    points: same as the argurmet,
+    controlPoints: control points of NURBS curve,
+    weights: array filled with 1,
+    knots: bepends on knotType,
+    bsplineFunctionMatrix: bspline basis function matrix whose column is k th derivative,
+    parameters: sampling parameters,
+    nurbs : f(t, k=0) NURBS curve function whose argument is normalized from 0 o 1, k means k th derivative
+}
+```
+
+* points: through points // ex. [ [0,0], [1,3], [3, 4], ...] arbitary dimension points
+* e1: start point tangential vector,
+* e2: end point tangential vector,
+* parameterTyp: sampling parameter's type // "chord" , "sqrt" or "uniform"
+* knotType: knotType // "uniform" , "average" or "natural"
+* unitVectorFlag: true or false // start and end point tangential vector is unit vector or not
 
 degree of bpline is 3 (user cannot change)
 
