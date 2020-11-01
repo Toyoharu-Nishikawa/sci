@@ -704,6 +704,20 @@ interpolates coordinate of y0 from coordinate of x0 by linear interpolation
 * x : type of array , coordinate of x 
 * y : type of array , coordinate of y
 
+#### `interpolate.stepLinear(x, y)`
+
+returns `function(x0, str="left")`
+```javascript
+  x0: float,
+  str: string // "left" or "right" , default valuse is "left"
+```
+interpolates coordinate of y0 from coordinate of x0 by step linear interpolation
+
+str means side of step. Ex. left means left side of step and right means right side of step
+
+* x : type of array , coordinate of x 
+* y : type of array , coordinate of y
+
 #### `interpolate.cubicspline(x, y [,a0=0, an=0, method="M",differentiation=0])`
 
 returns `function`
