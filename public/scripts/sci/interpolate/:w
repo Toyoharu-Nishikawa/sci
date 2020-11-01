@@ -186,8 +186,10 @@ export const cyclicCubicspline = (x, y) =>{
     6*((arr[i+1]-arr[i])/h[i+1]-(arr[i]-arr[i-1])/h[i])/(h[i]+h[i+1])
   )
  
-  const b = [...Array(num)].fill(2)  //0,1, ... ,N-1
-  const A = b.slice(0,-1).reduce((p,c, i)=>{
+  const b = [...Array(num-1)].fill(2)  //0,1, ... ,N-2
+  //const b = [...Array(num)].fill(2)  //0,1, ... ,N-1
+  const A = b.reduce((p,c, i)=>{
+  //const A = b.slice(0,-1).reduce((p,c, i)=>{
     const a = i === 0 ? 0 :
               i === 1 ? c :
               c - mu[i]/p[i-1]*ramda[i-1]  
@@ -214,7 +216,6 @@ export const cyclicCubicspline = (x, y) =>{
 
   P.reverse()
   Q.reverse()
-  R.reverse()
   
   const t = [...Array(num)].reduce((p,c,i)=>{
     const a = i === 0 ? 1 :
@@ -235,9 +236,9 @@ export const cyclicCubicspline = (x, y) =>{
   t.reverse()  
   v.reverse()  
 
-  const zn = (d[num-1] - (mu[num-1]*v[1]+ramda[num-1]*v[num-2]))/(mu[num-1]*t[1]+ramda[num-1]*t[num-2]+b[num-1])
-  const M = [...Array(num)].map((u,i)=>i === 0 ? zn: t[i]*zn +v[i] )
-
+  //const zn = (d[num-1] - (ramda[num-1]*v[1]+mu[num-1]*v[num-2]))/(ramda[num-1]*t[1]+mu[num-1]*t[num-2]+b[num-2])
+  const zn = (d[num-1] - (mu[num-1]*v[1]+ramda[num-1]*v[num-2]))/(mu[num-1]*t[1]+ramda[num-1]*t[num-2]+b[num-2])
+  const M = [...Array(num)].map((u,i)=>i === 0 ? 0: t[i]*zn +v[i] )
 
   const integral = (x0, x1) => {
     const F = (i, x0)=>{
@@ -277,8 +278,6 @@ export const cyclicCubicspline = (x, y) =>{
       + M[i+1]* ( (x0 - x[i])**3/(6*h[i+1]) - (x0-x[i])/6*h[i+1] )
       + (x[i+1]-x0)/h[i+1]*y[i]
       + (x0-x[i])/h[i+1]*y[i+1]
-
-
     return y0
   }
 
