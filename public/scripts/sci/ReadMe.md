@@ -718,9 +718,21 @@ str means side of step. Ex. left means left side of step and right means right s
 * x : type of array , coordinate of x 
 * y : type of array , coordinate of y
 
-#### `interpolate.cubicspline(x, y [,a0=0, an=0, method="M",differentiation=0])`
+#### `interpolate.cubicspline(x, y [,a0=0, an=0, method="M")`
 
-returns `function`
+returns `object of functions`
+
+```javascript
+{
+  F:  "function",// (x0, x1) => I,  integrate from x0 to x1
+  f:  "function", // (x0) => y,  interpolate from x0 to y0
+  df:  "function", // (x0) => dy/dx,  return first derivative from x0 
+  d2f:  "function", // (x0) => d2y/dx2,  return second derivative from 
+  d3f:  "function", // (x0) => d3y/dx3,  return third derivative from x0 
+  M: "array of float", // spline parameter,
+  h: "array of float", // x directive distance of each points,
+}
+```
 
 interpolates coordinate of y0 from coordinate of x0 by cubic spline
 
@@ -734,12 +746,6 @@ a0=0, an=0, method="M" is natural cubic spline
   + "m" : specify first-order differentiation at the start and end points
   + "M" : specify second-order differentiation at the start and end points
 
-* differentiation: type of integer , differentiation , 0, 1, 2 or -1, default = 0
-
-    + 0: spline at x0
-    + 1: first differentiation of spline at x0
-    + 2: second differentiation of spline at x0
-    + -1: integration of spline from x0 to x1
 
 #### `interpolate.cubicsplineLinear(x, y [,a0=0, an=0, method="M"])`
 
@@ -758,6 +764,30 @@ a0=0, an=0, method="M" is natural cubic spline
 * method: type of string , edge condition option , "M" or "m" , default = "M"
   + "m" : specify first-order differentiation at the start and end points
   + "M" : specify second-order differentiation at the start and end points
+
+#### `interpolate.cyclicCubicspline(x, y)`
+
+returns `object of functions`
+
+```javascript
+{
+  F:  "function",// (x0, x1) => I,  integrate from x0 to x1
+  f:  "function", // (x0) => y,  interpolate from x0 to y0
+  df:  "function", // (x0) => dy/dx,  return first derivative from x0 
+  d2f:  "function", // (x0) => d2y/dx2,  return second derivative from 
+  d3f:  "function", // (x0) => d3y/dx3,  return third derivative from x0 
+  M: "array of float", // spline parameter,
+  h: "array of float", // x directive distance of each points,
+}
+```
+
+interpolates coordinate of y0 from coordinate of x0 by cyclic cubic spline
+
+a0=0, an=0, method="M" is natural cubic spline
+
+* x : type of array , coordinate of x 
+* y : type of array , coordinate of y
+
 
 #### `interpolate.areaOfClosedCurve(points, coincidentFlag=true)`
 
