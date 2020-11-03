@@ -311,6 +311,35 @@ get the cross point of normals of spline curves
 * S : type of array of float ,  [x, y]// position vector of line 2 
 * dS :  type of array of float , [dx, dy]  //  direction vector of line 2
 
+### `geometry.getContactCircle(P1, e1, P2, e2)`
+
+returns `object` // contact circle on P1 and the lline dependent on P2 and e2 
+
+```
+{
+    positive:{ // contact circle at the positive half side as e2 positively points 
+      r: "float" // radius
+      C: "array of float", //center of circle
+      P1: "array of float", // contact point on line1 that is equal to the argument of P1 
+      P3: "array of float",// contact point on line2 dependent on P2 and e2
+
+    },
+    negative:{// contact circle at the negative half side as e2 negatively points
+      r: rd,
+      C: "array of float", //center of circle
+      P1: "array of float", // contact point on line1 that is equal to the argument of P1 
+      P3: "array of float", // contact point on line2 dependent on P2 and e2
+    } 
+}
+```
+
+get the cross point of normals of spline curves 
+* P1 : type of array of float ,  [x, y]// contact point of line2 
+* e1 :  type of array of float , [dx, dy]  //  unit direction vector of line 1
+* P2 : type of array of float ,  [x, y] // basic position vector of line 2 
+* e2 :  type of array of float , [dx, dy]  //  unit direction vector of line 2
+
+
 ### `geometry.minDistanceFromPointToCurve(P, sSpline, N=10,　maxIteration=30, tolerance=1E-5)`
 
 returns `object` // minimum distance point 
