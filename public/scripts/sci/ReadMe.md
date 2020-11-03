@@ -339,6 +339,32 @@ get the cross point of normals of spline curves
 * P2 : type of array of float ,  [x, y] // basic position vector of line 2 
 * e2 :  type of array of float , [dx, dy]  //  unit direction vector of line 2
 
+### `geometry.getContactCircleOfTwoSplinesAndOneLine(sp1, sp2, line, t1ini, t2ini)`
+
+returns `object` // contact circle on P1 and the lline dependent on P2 and e2 
+
+```
+{
+    center: "array of float", //center of circle 
+    P1: "array of float", // contact point on the curve of sp1 
+    P2: "array of float",// contact point on the curve of sp2
+    P3: "array of float",// contact point on the curve of the line
+    theta1: "float" // [rad] degree of P1 
+    theta2: "float" // [rad] degree of P2
+    theta3: "float" // [rad] degree of P3
+    r:  "float" // radius
+    t1: t1, // normalized parameter of the contact point of P1
+    t2: t2,// normalized parameter of the contact point of P2
+}
+```
+
+get the contact circle fo two cubic spline curves and one line 
+
+* sp1 : type of function ,  normalized cubic spline function of curve 1 
+* sp2 :  type of function ,  normalized cubic spline function of curve 1
+* line : type of double array of float , ex. [ [Sx1, Sy1], [Sx2, Sy2] ]  
+* t1ini :  type of float , //  normalized paramter from 0 to 1, initial parameter to search contact circle
+* t2ini :  type of float , //  normalized paramter from 0 to 1, initial parameter to search contact circle
 
 ### `geometry.minDistanceFromPointToCurve(P, sSpline, N=10,　maxIteration=30, tolerance=1E-5)`
 
