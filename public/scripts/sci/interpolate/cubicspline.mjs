@@ -139,7 +139,7 @@ export const cubicspline = (x, y, a0=0, an=0, method="M") =>{
 
 
 export const cubicsplineLinear = (x, y, a0=0, an=0, method="M")=>{
-  const splineObj = cubicspline(x, y, a0, an, method0)
+  const splineObj = cubicspline(x, y, a0, an, method)
   const spline = splineObj.f
   const splineDiff1 = splineObj.df
   const x0 = x[0]
