@@ -30,15 +30,15 @@ export const getContactCircle = (P1, e1, P2, e2) => {
   
   const obj = {
     positive:{
-      r: ru,
-      C: [Cxu, Cyu],
+      radius: ru,
+      center: [Cxu, Cyu],
       P1: P1,
       P3: P3u,
 
     },
     negative:{
-      r: rd,
-      C: [Cxd, Cyd],
+      radius: rd,
+      center: [Cxd, Cyd],
       P1: P1,
       P3: P3d,
     } 
@@ -55,7 +55,11 @@ const judgeFunc = (P1, P2, e2) => {
   return jud
 }
 
-export const getContactCircleOfTwoSplinesAndOneLine = (sp1, sp2, line, t1ini, t2ini) => {
+export const getContactCircleOfTwoSplinesAndOneLine = (sp1, sp2, line, t1ini, t2ini, config) => {
+
+  const maxIteration = config?.maxIteration || 30
+  const tolerance = config?.tolerance || 1E-5
+
   const P2 = line[0]  
   const E2 = [ line[1][0]-line[0][0], line[1][1]-line[0][1] ]
   const e2 = normalize(E2) 
@@ -94,8 +98,8 @@ export const getContactCircleOfTwoSplinesAndOneLine = (sp1, sp2, line, t1ini, t2
     const C1Obj =  sp1Circle(t1)
     const C2Obj =  sp2Circle(t2)
    
-    const C1 = judge1ini ==="positive" ? C1Obj.positive.C:C1Obj.negative.C
-    const C2 = judge2ini ==="positive" ? C2Obj.negative.C:C2Obj.positive.C
+    const C1 = judge1ini ==="positive" ? C1Obj.positive.center:C1Obj.negative.center
+    const C2 = judge2ini ==="positive" ? C2Obj.negative.center:C2Obj.positive.center
    
     const dx = C1[0] -C2[0]
     const dy = C1[1] -C2[1]
@@ -106,9 +110,6 @@ export const getContactCircleOfTwoSplinesAndOneLine = (sp1, sp2, line, t1ini, t2
   }
 
   
-  const maxIteration = 30
-  const tolerance = 1E-5
-
   const x0 = [t1ini, t2ini]
   const Yini = F(x0)
   const Y_dt1 = F([t1ini+tolerance, t2ini])
@@ -135,22 +136,27 @@ export const getContactCircleOfTwoSplinesAndOneLine = (sp1, sp2, line, t1ini, t2
   const C1 = judge1ini ==="positive" ? C1Obj.positive:C1Obj.negative
   const C2 = judge2ini ==="positive" ? C2Obj.negative:C2Obj.positive
 
-  const theta1 = Math.atan2(C1.P1[1]-C1.C[1], C1.P1[0]-C1.C[0] )
-  const theta2 = Math.atan2(C2.P1[1]-C1.C[1], C2.P1[0]-C1.C[0] )
-  const theta3 = Math.atan2(C1.P3[1]-C1.C[1], C1.P3[0]-C1.C[0] )
+  const theta1 = Math.atan2(C1.P1[1]-C1.center[1], C1.P1[0]-C1.center[0] )
+  const theta2 = Math.atan2(C2.P1[1]-C1.center[1], C2.P1[0]-C1.center[0] )
+  const theta3 = Math.atan2(C1.P3[1]-C1.center[1], C1.P3[0]-C1.center[0] )
 
 
   const obj = {
-    center: C1.C, 
+    center: C1.center, 
     P1: C1.P1,
     P2: C2.P1,
     P3: C1.P3,
     theta1: theta1,
     theta2: theta2,
     theta3: theta3,
-    r: C1.r, 
+    radius: C1.radius, 
     t1: t1,
     t2: t2,
+    iterationStatus: {
+      converged: res.converged,
+      error: res.error,
+      count: res.count, 
+    }
   } 
   return obj
 }

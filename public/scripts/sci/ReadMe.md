@@ -318,15 +318,15 @@ returns `object` // contact circle on P1 and the lline dependent on P2 and e2
 ```
 {
     positive:{ // contact circle at the positive half side as e2 positively points 
-      r: "float" // radius
-      C: "array of float", //center of circle
+      radius: "float" // radius
+      center: "array of float", //center of circle
       P1: "array of float", // contact point on line1 that is equal to the argument of P1 
       P3: "array of float",// contact point on line2 dependent on P2 and e2
 
     },
     negative:{// contact circle at the negative half side as e2 negatively points
-      r: rd,
-      C: "array of float", //center of circle
+      radius: rd,
+      center: "array of float", //center of circle
       P1: "array of float", // contact point on line1 that is equal to the argument of P1 
       P3: "array of float", // contact point on line2 dependent on P2 and e2
     } 
@@ -352,7 +352,7 @@ returns `object` // contact circle on P1 and the lline dependent on P2 and e2
     theta1: "float" // [rad] degree of P1 
     theta2: "float" // [rad] degree of P2
     theta3: "float" // [rad] degree of P3
-    r:  "float" // radius
+    radius:  "float" // radius
     t1: t1, // normalized parameter of the contact point of P1
     t2: t2,// normalized parameter of the contact point of P2
 }
