@@ -109,7 +109,8 @@ const getMinMax = (x, y, minmax,maxIteration, tolerance)=>{
     }
   }
   else{
-    const f = interpolate.cubicspline(x, y,0,0,"M", 1)
+    const F = interpolate.cubicspline(x, y,0,0,"M")
+    const f = F.df 
     const x0 = index/N
     const y0 = f(x0)
     const y1 = f(x0+tolerance)
@@ -124,7 +125,7 @@ const getMinMax = (x, y, minmax,maxIteration, tolerance)=>{
     }
     const t = res.value
     
-    const g = interpolate.cubicspline(x, y,0,0,"M", 0)
+    const g = F.f
     const value = g(t) 
     return {
       converged: true,
