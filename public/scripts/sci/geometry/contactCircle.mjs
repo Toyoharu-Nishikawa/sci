@@ -1,3 +1,5 @@
+import {broydenMethod} from "../solve/broyden.mjs"
+import {invMat} from "../matrix/matrix.mjs"
 
 const normalize = E => {
   const l = Math.sqrt(E.reduce((p,c)=>p+c**2,0))
@@ -121,9 +123,9 @@ export const getContactCircleOfTwoSplinesAndOneLine = (sp1, sp2, line, t1ini, t2
   ]
   
 
-  const invB0 = sci.matrix.invMat(B0)
+  const invB0 = invMat(B0)
 
-  const res = sci.solve.broydenMethod(x0, F, invB0, maxIteration, tolerance)
+  const res = broydenMethod(x0, F, invB0, maxIteration, tolerance)
   
   const value = res.value
   
