@@ -136,6 +136,41 @@ multipulation of matrix and column vector, Av
 * A : type of double array , matrix 
 * v : type of double array , column vector 
 
+
+### quaternion
+------
+
+#### `quaternion.makeQuaternion(v, theta)`
+
+return `array` // [v[0]*sin(theta/2), v[1]*sin(theta/2), v[2]*sin(theta/2), cos(theta/2)]
+
+makes quaternion from 3D vector and rotational angle [rad]
+* v: type of array , [x, y, z]
+* theta: type of float // radian
+
+#### `quaternion.makeQuaternion(v, theta)`
+
+return `array` // [v[0]*sin(theta/2), v[1]*sin(theta/2), v[2]*sin(theta/2), cos(theta/2)]
+
+makes quaternion from 3D vector and rotational angle [rad]
+* v: type of array , [x, y, z]
+* theta: type of float // radian
+
+#### `quaternion.invQuaternion(q)`
+
+return `array` // [-q[0], -q[1], -v[2], q[3]]
+
+makes inverse of quaternion 
+* q: type of array , quaternion
+
+#### `quaternion.mulQQ(...qList)`
+
+return `array` // quaternion
+
+multiplies quaternions in order  
+* qlist: type of array , list of quaternion
+
+
 ### geometry
 ------
 
