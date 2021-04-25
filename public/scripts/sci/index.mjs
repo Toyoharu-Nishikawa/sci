@@ -7,8 +7,9 @@ import  * as regression from "./regression/index.mjs"
 import  * as classification from "./classification/index.mjs"
 import  * as funcs from "./funcs/index.mjs"
 import  * as geometry from "./geometry/index.mjs"
+import  * as quaternion from "./quaternion/index.mjs"
 import  {version} from "./version.mjs"
 
 export {interpolate, solve, matrix, optimize,statistics,
-  regression, classification,funcs, geometry, version}
+  regression, classification,funcs, geometry, quaternion,version}
 
