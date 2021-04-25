@@ -1036,6 +1036,36 @@ solve nonlinear equation by line split method
 * tolerance: type of float, solver torelance of residual sum of squares
 
 
+#### `solve.asyncLineSplitMethod(x0, f, dfdx0, maxIteration, tolerance)`
+returns `object of Promise`
+
+use this function instead of solve.lineSplitMethod when f retuens `promise`
+
+#### `solve.newtonMethod1D(x0, f, df, maxIteration, tolerance)`
+
+returns `objcct`
+```javascript
+{
+    converged: "boolean", // true means converged and false means diverged
+    error: "float", // the last error of convergence iteration
+    count: "integer", // the last iteration count
+    value: "array", //a result of comvergence method
+}
+```
+
+solve nonlinear equation by 1D netwonMethod
+* x0 : type of float , initial value
+* f : type of function , target function to solve
+* df: type of function, first differentiation of f
+* maxIteration: type of integer, max number of iteration
+* tolerance: type of float, solver torelance of residual sum of squares
+
+#### `solve.asyncNewtontMethod(x0, f, dfdx0, maxIteration, tolerance)`
+returns `object of Promise`
+
+use this function instead of solve.newtonMethod when f retuens `promise`
+
+
 #### `solve.newtonMethod(x0, f, invJ, maxIteration, tolerance)`
 
 returns `objcct`
