@@ -136,6 +136,41 @@ multipulation of matrix and column vector, Av
 * A : type of double array , matrix 
 * v : type of double array , column vector 
 
+
+### quaternion
+------
+
+#### `quaternion.makeQuaternion(v, theta)`
+
+return `array` // [v[0]*sin(theta/2), v[1]*sin(theta/2), v[2]*sin(theta/2), cos(theta/2)]
+
+makes quaternion from 3D vector and rotational angle [rad]
+* v: type of array , [x, y, z]
+* theta: type of float // radian
+
+#### `quaternion.makeQuaternion(v, theta)`
+
+return `array` // [v[0]*sin(theta/2), v[1]*sin(theta/2), v[2]*sin(theta/2), cos(theta/2)]
+
+makes quaternion from 3D vector and rotational angle [rad]
+* v: type of array , [x, y, z]
+* theta: type of float // radian
+
+#### `quaternion.invQuaternion(q)`
+
+return `array` // [-q[0], -q[1], -v[2], q[3]]
+
+makes inverse of quaternion 
+* q: type of array , quaternion
+
+#### `quaternion.mulQQ(...qList)`
+
+return `array` // quaternion
+
+multiplies quaternions in order  
+* qlist: type of array , list of quaternion
+
+
 ### geometry
 ------
 
@@ -1034,6 +1069,36 @@ solve nonlinear equation by line split method
 * dfdx0: type of float, first differentiation at x0
 * maxIteration: type of integer, max number of iteration
 * tolerance: type of float, solver torelance of residual sum of squares
+
+
+#### `solve.asyncLineSplitMethod(x0, f, dfdx0, maxIteration, tolerance)`
+returns `object of Promise`
+
+use this function instead of solve.lineSplitMethod when f retuens `promise`
+
+#### `solve.newtonMethod1D(x0, f, df, maxIteration, tolerance)`
+
+returns `objcct`
+```javascript
+{
+    converged: "boolean", // true means converged and false means diverged
+    error: "float", // the last error of convergence iteration
+    count: "integer", // the last iteration count
+    value: "array", //a result of comvergence method
+}
+```
+
+solve nonlinear equation by 1D netwonMethod
+* x0 : type of float , initial value
+* f : type of function , target function to solve
+* df: type of function, first differentiation of f
+* maxIteration: type of integer, max number of iteration
+* tolerance: type of float, solver torelance of residual sum of squares
+
+#### `solve.asyncNewtontMethod(x0, f, dfdx0, maxIteration, tolerance)`
+returns `object of Promise`
+
+use this function instead of solve.newtonMethod when f retuens `promise`
 
 
 #### `solve.newtonMethod(x0, f, invJ, maxIteration, tolerance)`
