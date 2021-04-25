@@ -1,32 +1,8 @@
-console.clear()
+import {newtonMethod1D} from "../solve/newton1d.mjs"
+import {transpose, absVec, subVec, addVec,mulScalarVec,
+        innerProductVec,vectorProduct} from "../matrix/matrix.mjs"
 
-const f1 = x => -1/20* (x-14)**2 + 5 
-const f2 = x => -1/10* (x-6)**2 + 14 
-const transpose = A=>A[0].map((k,i)=>A.map((v)=>v[i]))
-
-const newtonMethod1D = (x0,f,df, maxIteration,tolerance)=>{
-  let x=x0
-  let y = f(x)
-  let dfdx = df(x0) 
-  let count=0
-  while(count<maxIteration){
-    const dx = -y/dfdx
-    x +=dx
-    y = f(x)
-    if(Math.abs(y)<tolerance){
-      break
-    }
-    dfdx = df(x) 
-    count++
-  }
-  const result = {
-    converged: count < maxIteration ? true: false,
-    error : Math.abs(y),
-    count :count,
-    value: x,
-  }
-  return result 
-}
+import {makeQuaternion, invQuaternion, mulQQ} from "../quaternion/quaternion.mjs"
 
 const divideMinMax = (min, max, N) => {
   const list = [...Array(N)].map((v,i)=>min+(max-min)*i/(N-1))
@@ -56,47 +32,6 @@ const cylindricalToCartesian = xrtr => {
   return xyz
 }
 
-const RA = [
-  [300, 0],
-  [325, 0],
-  [350, 0],
-  [375, 0],
-  [400, 0],
-]
-
-const calcCirclePoint = (c, r, theta) => {
-  const dx = r*Math.cos(theta)
-  const dy = r*Math.sin(theta)
-  const x = c[0] + dx
-  const y = c[1] + dy
-  const p = [x, y]
-  return p
-}
-
-const rotSlide = (vec, ra) => {
-  const theta = ra[1]/180*Math.PI
-  const z = ra[0]
-  const x = vec[0]* Math.cos(theta) -  vec[1]* Math.sin(theta)
-  const y = vec[0]* Math.sin(theta) +  vec[1]* Math.cos(theta)
-  const p = [x, y, z]
-  return p
-}
-
-
-const getThreePolylineObj = (points,color="white",closed=true) =>{ 
-  const ps = points.map(v=>new THREE.Vector3(v[0],v[1],v[2]))
-  if(closed){
-    ps.push(ps[0])
-  }
- 
-  
-  const points3D = new THREE.Geometry();
-
-  points3D.vertices = ps
-  const line2 = new THREE.Line(points3D, new THREE.LineBasicMaterial({color: color}));
-  //scene.add(line2);
-  return line2 
-}
 
 const offsetPath = (path, offset) => {
   const P1 = path[0] 
@@ -112,34 +47,9 @@ const offsetPath = (path, offset) => {
   return newPath
 }
 
-const absVec = a => {
-  const c2 = a.reduce((p,c)=>p+c**2,0)  
-  const c = Math.sqrt(c2)
-  return c
-}
-
-const subVec = (a,b) => {
-  const u = a.map((v,i)=>v-b[i]) 
-  return u
-}
-
-const addVec = (a,b) => {
-  const u = a.map((v,i)=>v+b[i]) 
-  return u
-}
-
-const mulVec = (t, a) => {
-  const u = a.map((v,i)=>t*v) 
-  return u
-}
-
-const innerProduct = (a, b) => {
-  const c = a.reduce((p,c,i)=>p+c*b[i],0) 
-  return c 
-}
 
 const getAngle = (a,b) => {
-  const c = innerProduct(a,b)
+  const c = innerProductVec(a,b)
   const absA = absVec(a) 
   const absB = absVec(b) 
   const cos = c/(absA*absB)
@@ -154,14 +64,6 @@ const normVec = a => {
   return n
 }
 
-const vectorProduct = (a, b) => {
-  const c = [
-    a[1]*b[2]-a[2]*b[1],
-    a[2]*b[0]-a[0]*b[2],
-    a[0]*b[1]-a[1]*b[0],
-  ]
-  return c
-}
 
 const reverseVec = a => {
   const u = a.map(v=>-v) 
@@ -203,7 +105,7 @@ const getPerpendicularHootFromPoint = (ribSplineZX,ribSplineZY,P, iniZ, maxItera
     const Q = [x,y,z]
     const PQ = subVec(P, Q)
     const dQ = [dx, dy, 1]
-    const c = innerProduct(PQ,dQ)
+    const c = innerProductVec(PQ,dQ)
     return c
   } 
   const df = z => {
@@ -217,12 +119,11 @@ const getPerpendicularHootFromPoint = (ribSplineZX,ribSplineZY,P, iniZ, maxItera
     const PQ = subVec(P, Q)
     const dQ = [dx, dy, 1]
     const d2Q = [d2x, d2y, 0]
-    const c1 = innerProduct(dQ,dQ)
-    const c2 = innerProduct(Q,d2Q)
+    const c1 = innerProductVec(dQ,dQ)
+    const c2 = innerProductVec(Q,d2Q)
     const c = c1+c2
     return c
   } 
-  
   
   const res = newtonMethod1D(iniZ, f, df, maxIteration, tolerance)
   const z = res.value 
@@ -230,7 +131,6 @@ const getPerpendicularHootFromPoint = (ribSplineZX,ribSplineZY,P, iniZ, maxItera
   const y = ribSplineZY.f(z)
   const Q = [x, y, z]
   const d = absVec(subVec(P,Q))
-  console.log("z",iniZ, z)
   
   return Q
 }
@@ -263,7 +163,7 @@ const getNormalVecOfSurface = coordinates => {
 
 const getOffsetSurface = (coordinate, fillet) => {
   const dn = getNormalVecOfSurface(coordinate) 
-  const offsetSurface = coordinate.map((v,i)=>v.map((u,j)=>addVec(u, mulVec(fillet,dn[i][j])) )) 
+  const offsetSurface = coordinate.map((v,i)=>v.map((u,j)=>addVec(u, mulScalarVec(fillet,dn[i][j])) )) 
   return offsetSurface
 }
 
@@ -287,48 +187,15 @@ const getPerpendicularFooForCone = (path, P) => {
   const y1 = -r1*Math.sin(theta0)
   const z1 = r1*Math.cos(theta0)
   const H = [x1, y1, z1]
-  //
-  //
+
   return H
 }
 
-const makeQuaternion = (vec, theta) => {
-  const vec2 = normVec(vec)
-  const sin = Math.sin(theta/2)
-  const cos = Math.cos(theta/2)
-  const q0 = vec2[0]*sin
-  const q1 = vec2[1]*sin
-  const q2 = vec2[2]*sin
-  const q3 = cos
-  const Q = [q0, q1, q2, q3]
-  return Q
-}
-
-const invQuaternion = q => {
-  const invQ = [-q[0], -q[1],-q[2],q[3]]
-  return invQ
-}
-
-const mulQQ = (q, p) => {
-  const Q = [
-    q[3]*p[0] - q[2]*p[1] + q[1]*p[2] + q[0]*p[3],
-    q[2]*p[0] + q[3]*p[1] - q[0]*p[2] + q[1]*p[3],
-   -q[1]*p[0] + q[0]*p[1] + q[3]*p[2] + q[2]*p[3],
-   -q[0]*p[0] - q[1]*p[1] - q[2]*p[2] + q[3]*p[3],
-  ]  
-  return Q
-}
-
-const mulQQlist = (list) => {
-  const e = [0,0,0,1]
-  const res = list.reduce((p,c)=>mulQQ(p,c),e)
-  return res
-}
 
 const getFilletPolyline = (center, contact, foot, fillet, N=9) => {
   const CC = subVec(contact, center)
   const cc = normVec(CC)
-  const CC2 = mulVec(fillet, cc)
+  const CC2 = mulScalarVec(fillet, cc)
   const contact2 = addVec(center, CC2)
   const FC = subVec(foot, center)
   const fc = normVec(FC)
@@ -339,71 +206,17 @@ const getFilletPolyline = (center, contact, foot, fillet, N=9) => {
   
   const q = theta.map(v=>makeQuaternion(n, v))
   const p = [...CC2,0]
-  const q2 = q.map(v=>mulQQlist([v,p,invQuaternion(v)]))
+  const q2 = q.map(v=>mulQQ(v,p,invQuaternion(v)))
   
   const vec = q2.map(v=>[v[0],v[1],v[2]]) 
   
   const polyline = vec.map(v=>addVec(center,v)).reverse()
   
   return polyline 
-  
-}
-
-const makeSections = (f1, f2, RA, config) =>{
-  const N = config.N//31
-  const M = config.M//16 
-  const L = config.L//51 
-  
-  const X = [...Array(N)].map((v,i)=>-16+i) 
-  const Yp = X.map(v=>f1(v))
-  const Ys = X.map(v=>f2(v))
-  
-  const Pp = X.map((v,i)=>[v, Yp[i]])
-  const Ps = X.map((v,i)=>[v, Ys[i]])
-  
-  
-  const leEdgePoints = [Pp[N-1], Ps[N-1]]
-  const teEdgePoints = [Pp[0], Ps[0]]
-  
-  const pSpline = sci.interpolate.normalizedCubicspline(Pp)
-  const sSpline = sci.interpolate.normalizedCubicspline(Ps)
-  
-  const teCircle = sci.geometry.getContactCircleOfTwoSplinesAndOneLine(pSpline, sSpline, teEdgePoints, 0.1, 0.1)
-  console.log(teCircle)
-  
-  
-  const leCircle = sci.geometry.getContactCircleOfTwoSplinesAndOneLine(pSpline, sSpline, leEdgePoints, 0.95, 0.95)
-  console.log(leCircle)
-  
-  const tePt = [...Array(M)].map((v,i)=>teCircle.theta2+(teCircle.theta1+2*Math.PI-teCircle.theta2)/M*i)
-  const lePt = [...Array(M)].map((v,i)=>leCircle.theta1+(leCircle.theta2-leCircle.theta1)/M*i)
-  
-  console.log(tePt,lePt)
- 
-  const tePoints = tePt.map(v=>calcCirclePoint(teCircle.center,teCircle.radius, v))
-  const lePoints = lePt.map(v=>calcCirclePoint(leCircle.center,leCircle.radius, v))
-  
-  
-  const pPt = [...Array(L)].map((v,i)=>teCircle.t1+(leCircle.t1-teCircle.t1)/L*i)
-  const sPt = [...Array(L)].map((v,i)=>leCircle.t2-(leCircle.t2-teCircle.t2)/L*i)
-  
-  const pPoints = pPt.map(v=>[pSpline.X(v), pSpline.Y(v)])
-  const sPoints = sPt.map(v=>[sSpline.X(v), sSpline.Y(v)])
-  
-  
-  const curve = [].concat(tePoints, pPoints, lePoints, sPoints)
-  console.log(curve)
-
-  const coordinates = RA.map(v=>curve.map(u=>rotSlide(u,v)))  
-  console.log("coordinates",coordinates)
- 
-  return coordinates 
 }
 
 
-const cutLoftByPlaneAndFillet = (sections,planes,fillet,config) => {
-  
-}
+
 const divideZ = (mainZ, bottomXYZ, topXYZ, Ns) => {
   const min = bottomXYZ.length !==0 ? bottomXYZ[bottomXYZ.length-1][2] : mainZ[0]
   const max = topXYZ.length !==0 ? topXYZ[topXYZ.length-1][2] : mainZ[mainZ.length-1]
@@ -443,6 +256,7 @@ const makeLoftObj = sections => {
     ribsCSplineRX: ribsCSplineRX,
     ribsCSplineRRT: ribsCSplineRRT,
   } 
+
   return loftObj
 }
 
@@ -451,7 +265,6 @@ const getCrossPointsOfLoftAndCone = (loftObj, path) => {
   const rIni =  ribsCR.map(v=>v[0])
   const crossPointsR = ribsCSplineRX.map((v,i)=>getCrossPointsOfSplineAndCone(v,  path, rIni[i], 30, 1E-5))
   const crossPointsXRTR = crossPointsR.map((v,i)=>[ribsCSplineRX[i].f(v), ribsCSplineRRT[i].f(v), v]) 
-  console.log("crossPoints", crossPointsXRTR) 
   
   const crossPointsXYZ =  crossPointsXRTR.map(v=>cylindricalToCartesian(v))
   return crossPointsXYZ
@@ -480,23 +293,18 @@ const getFilletPolylines = (loftObj, path, fillet, filletDivisions, upside) => {
   const filletCenterXRTR = filletCenterR.map((v,i)=>[offsetRibsCSplineRX[i].f(v), offsetRibsCSplineRRT[i].f(v), v])
   const filletCenterXYZ = filletCenterXRTR.map(v=>cylindricalToCartesian(v))
   
-  console.log("filletCenterXYZ" ,filletCenterXYZ )
  
  
   const contactRibsZTmp = filletCenterXYZ.map((v,i)=>convertZfunc[i].f(v[2]))  
-  console.log("contactRibsZTmp",contactRibsZTmp)
   
   //const contactXYZ = filletCenterXYZ.map(
   //  (v,i)=>getPerpendicularHootFromPoint(ribSplineZX[i],ribSplineZY[i],v,contactRibsZTmp[i],1E-5)
   //)
   const contactXYZ = contactRibsZTmp.map((v,i)=>[ribsSplineZX[i].f(v),ribsSplineZY[i].f(v), v])
-  console.log("contactXYZ" ,contactXYZ )
   
   const footXYZ = filletCenterXYZ.map(v=>getPerpendicularFooForCone(path, v))
-  console.log("footXYZ", footXYZ)
   
   const filletPolylines = filletCenterXYZ.map((v,i)=>getFilletPolyline(v,contactXYZ[i],footXYZ[i], fillet, filletDivisions))
-  console.log("filletPoylines", filletPolylines)
   if(!upside){
     filletPolylines.forEach(v=>v.reverse())
   }
@@ -505,7 +313,7 @@ const getFilletPolylines = (loftObj, path, fillet, filletDivisions, upside) => {
 }
 
 
-const cutLoftByConeAndFillet = (sections, paths, fillet, config) => {
+export const cutLoftByConeAndMakeFillet = (sections, paths, fillet, config) => {
   const bottomPath = paths?.bottom
   const topPath = paths?.top
   const bottomFillet = fillet?.bottom
@@ -531,7 +339,6 @@ const cutLoftByConeAndFillet = (sections, paths, fillet, config) => {
   if(bottomCutFlag){
     const path = bottomPath
     const crossPointsXYZ = getCrossPointsOfLoftAndCone(loftObj, path)
-    console.log("crossPointsXYZ",crossPointsXYZ)
     obj.bottomXYZ = transpose([crossPointsXYZ])
   }
   else{
@@ -541,7 +348,6 @@ const cutLoftByConeAndFillet = (sections, paths, fillet, config) => {
   if(topCutFlag){
     const path = topPath
     const crossPointsXYZ = getCrossPointsOfLoftAndCone(loftObj, path)
-    console.log("crossPointsXYZ",crossPointsXYZ)
     obj.topXYZ = transpose([crossPointsXYZ])
   } 
   else{
@@ -570,7 +376,6 @@ const cutLoftByConeAndFillet = (sections, paths, fillet, config) => {
   }
 
   const {ribsZ, ribsSplineZX, ribsSplineZY} = loftObj
-  console.log("obj",obj) 
   const Ns = sections.length
   const ribsZCut = ribsZ.map((v,i)=>divideZ(v, obj.bottomXYZ[i], obj.topXYZ[i], Ns))
   const newRibs = ribsZCut.map((v,i)=>v.map(u=>[ribsSplineZX[i].f(u),ribsSplineZY[i].f(u), u]))
@@ -586,104 +391,4 @@ const cutLoftByConeAndFillet = (sections, paths, fillet, config) => {
   return newSections
 }
 
-const main = async () => {
-  const width = 800
-  const height = 800
-  
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(45,width/height, 0.1, 3000);
-  const renderer = new THREE.WebGLRenderer();
-  renderer.setClearColor(new THREE.Color("rgb(0,0,0)"));
-  renderer.setSize(width, height);
 
-  const controls =  new THREE.OrbitControls( camera );
-  const axes = new THREE.AxesHelper(100);
-  scene.add(axes);
-  const geometry = new THREE.Geometry();
-  
-
-  const sections = makeSections(f1,f2,RA,{N:31,M:16,L:51})
- 
-  
-//filet  
-  const paths = {
-    bottom:[ [-20,315], [20, 305]],
-    top:  [[-20, 390], [20,380]],
-  }
-  const fillets ={
-    bottom: 10,
-    top: 5,
-  }  
-  const config = {
-    bottomfilletDivisions : 17,
-    topFilletDivisions : 17,
-  }
-  
-  const sections2 = cutLoftByConeAndFillet(sections, paths, fillets, config) 
-  sections2.forEach(v=>{
-    const line = getThreePolylineObj(v,"red",true)   
-    scene.add(line)
-  })
-  
-  const sections2T = transpose(sections2) 
-  sections2T.forEach(v=>{
-    const line = getThreePolylineObj(v,"red",false)   
-    scene.add(line)
-  }) 
-  
-  
-  camera.position.x = 100;
-  camera.position.y = 100;
-  camera.position.z = 100; 
-  
-  const animate =() =>{
-    requestAnimationFrame( animate );
-    renderer.render( scene, camera );
-    controls.update();
-  }
-
-  document.getElementById("draw").appendChild(renderer.domElement);
-  
-//renderer.render(scene, camera)
-
-  animate();
-  
-  exportText = JSON.stringify(sections2, null, "  ")
-  exportFileName = "coordinates.json"
-}
-main()
-
-const test = () => {
-  const ori = [9.744665027670174, -2.2453292628257954, 0] 
-  const ori2 = [2.425356250363322, 0.952097951227001, -9.654592510825765]
-  //const ori = [2,0,0]
-  //const ori2 = normVec([1,1,1])
-  
-  const phi = getAngle(ori, ori2) 
-  const phiDeg = phi * 180/Math.PI
-  console.log("phiDeg",phiDeg)
-  const N = 9
-  const ax = normVec(vectorProduct(ori, ori2))
-  console.log(ax)
-  
-  const q = makeQuaternion(ax, phi)
-  const Q = [...ori, 0] 
-  const Q2 = mulQQlist([q,Q,invQuaternion(q)])
-  console.log(Q2, absVec(Q2))
-//  const n = [0,1,0]
-//  const phi = Math.PI/2
-//  const q = makeQuaternion(n,phi)
-//  const invq = invQuaternion(q)
-//  const p = makeQuaternion(ori,0)
-//  const r = mulQQlist([q,p,invQuaternion(q)])
-//  //const r2 = mulQQ(r,invq)
-//  console.log(r)
-
-  const obj = {a:1} 
-  console.log(obj.b !=undefined)
-  const list = []
-  console.log(list[5])
-  console.log([].concat([],[[11,3]],[]))
-}
-
-//test()
