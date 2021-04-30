@@ -25,6 +25,13 @@ scalar multipulation of vector, a*u
 * a : type of float , scalar 
 * v : type of array , vector
 
+#### `matrix.normailizeVec(v)`
+
+returns `array`
+
+normalize vectors whose length is 1
+* v : type of array , vector 
+
 #### `matrix.addVec(...v)`
 
 returns `array`
@@ -759,7 +766,7 @@ calcuate triangles of delaunay triangulation
 
 ### `geometry.DelaunayTriangulation(points)`
 
-`class` 
+return `class` 
 
 calcuate triangles of delaunay triangulation 
 
@@ -782,6 +789,21 @@ calcuate triangles of delaunay triangulation
 * getCoord(list) : returns coordinates corresponding with list of indices
 * findTriangle(point) : returns index of triangle including the point
 * getBarycentricCoord(triangleId, point): returns barycentric coordinates of point  determined from the given the triangleId
+
+
+### `geometry.cutLoftByConeAndMakeFillet(sections, path, fillet, config)`
+
+return `triple array` // format is equal to sections
+
+makes a loft along sections,  cuts it by path and makes fillet
+
+* sections :  type of triple array of float ,  // [ [ [x0, y0], [x1, y1], [x2, y2] ],[ [x0, y0], [x1, y1], [x2, y2] ], ...] 
+* path : type of object, // {bottom: [[x0,y0], [x1,y1]], top: [[x2,y2], [x3,y3]]}
+* fillet: type of object // {bottom: 5, top:5 }
+* config: type of object // {bottomFilletDivisions: 5, mainDivisions: 5, topDivisions: 5}
+
+
+
 
 ### interpolate
 ------
