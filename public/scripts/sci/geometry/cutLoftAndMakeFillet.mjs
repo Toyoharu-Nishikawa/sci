@@ -260,16 +260,16 @@ const makeLoftObj = sections => {
   const ribsX = ribs.map(v=>v.map(u=>u[0])) 
   const ribsY = ribs.map(v=>v.map(u=>u[1])) 
   const ribsZ = ribs.map(v=>v.map(u=>u[2])) 
-  const ribsSplineZX = ribsZ.map((v,i)=>sci.interpolate.cubicspline(v,ribsX[i]))
-  const ribsSplineZY = ribsZ.map((v,i)=>sci.interpolate.cubicspline(v,ribsY[i]))
+  const ribsSplineZX = ribsZ.map((v,i)=>cubicspline(v,ribsX[i]))
+  const ribsSplineZY = ribsZ.map((v,i)=>cubicspline(v,ribsY[i]))
  
   const ribsC = ribs.map(v=>v.map(u=>cartesianToCylindrical(u)))
   
   const ribsCX = ribsC.map(v=>v.map(u=>u[0]))
   const ribsCRT = ribsC.map(v=>v.map(u=>u[1])) 
   const ribsCR = ribsC.map(v=>v.map(u=>u[2])) 
-  const ribsCSplineRX = ribsCR.map((v,i)=>sci.interpolate.cubicspline(v,ribsCX[i]))
-  const ribsCSplineRRT = ribsCR.map((v,i)=>sci.interpolate.cubicspline(v,ribsCRT[i]))
+  const ribsCSplineRX = ribsCR.map((v,i)=>cubicspline(v,ribsCX[i]))
+  const ribsCSplineRRT = ribsCR.map((v,i)=>cubicspline(v,ribsCRT[i]))
 
   const sectionsSplines = sections.map(v=>makeSplineObj(v))
   
@@ -310,14 +310,14 @@ const getFilletPolylines = (loftObj, path, fillet, filletDivisions, upside) => {
   const offsetRibs = transpose(offsetSections) 
   const offsetRibsZ = offsetRibs.map(v=>v.map(u=>u[2]))
   
-  const convertZfunc = ribsZ.map((v,i)=>sci.interpolate.cubicspline(offsetRibsZ[i],v))
+  const convertZfunc = ribsZ.map((v,i)=>cubicspline(offsetRibsZ[i],v))
   
   const offsetRibsC = offsetRibs.map(v=>v.map(u=>cartesianToCylindrical(u)))
   const offsetRibsCX = offsetRibsC.map(v=>v.map(u=>u[0]))
   const offsetRibsCRT = offsetRibsC.map(v=>v.map(u=>u[1])) 
   const offsetRibsCR = offsetRibsC.map(v=>v.map(u=>u[2])) 
-  const offsetRibsCSplineRX = offsetRibsCR.map((v,i)=>sci.interpolate.cubicspline(v,offsetRibsCX[i]))
-  const offsetRibsCSplineRRT = offsetRibsCR.map((v,i)=>sci.interpolate.cubicspline(v,offsetRibsCRT[i]))
+  const offsetRibsCSplineRX = offsetRibsCR.map((v,i)=>cubicspline(v,offsetRibsCX[i]))
+  const offsetRibsCSplineRRT = offsetRibsCR.map((v,i)=>cubicspline(v,offsetRibsCRT[i]))
 
 
   const rIni =  ribsCR.map(v=>v[0])
