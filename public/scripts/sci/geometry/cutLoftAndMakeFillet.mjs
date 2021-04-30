@@ -1,8 +1,9 @@
 import {newtonMethod1D} from "../solve/newton1d.mjs"
-import {transpose, absVec, subVec, addVec,mulScalarVec,
+import {transpose, absVec, subVec, addVec,mulScalarVec, normalizeVec,
         innerProductVec,vectorProduct} from "../matrix/matrix.mjs"
 
 import {makeQuaternion, invQuaternion, mulQQ} from "../quaternion/quaternion.mjs"
+import {cubicspline, cyclicCubicspline} from "../interpolate/cubicspline.mjs"
 
 const divideMinMax = (min, max, N) => {
   const list = [...Array(N)].map((v,i)=>min+(max-min)*i/(N-1))
@@ -57,12 +58,7 @@ const getAngle = (a,b) => {
   return theta
 }
 
-const normVec = a => {
-  const l2 = a.reduce((p,c)=>p+c**2,0)
-  const l = Math.sqrt(l2)
-  const n = a.map(v=>v/l)
-  return n
-}
+
 
 
 const reverseVec = a => {
@@ -91,7 +87,7 @@ const getCrossPointsOfSplineAndCone = (ribCSplineRX,  path, rIni=0,maxIteration=
     return R
   }
   else{
-    R = pathT[0][0]  
+    const R = pathT[0][0]  
     return R
   }
 }
@@ -136,34 +132,46 @@ const getPerpendicularHootFromPoint = (ribSplineZX,ribSplineZY,P, iniZ, maxItera
 }
 
 const getNormalVecByThreePoints = (P, Q, R) => {
-  const dpq = normVec(subVec(Q,P)) 
-  const dpr = normVec(subVec(R,P)) 
+  const dpq = normalizeVec(subVec(Q,P)) 
+  const dpr = normalizeVec(subVec(R,P)) 
   const dn = vectorProduct(dpq, dpr) 
   return dn
 }
 
-const getNormalVecOfSurface = coordinates => {
-  
-  const dn = coordinates.map((v,i,arr)=>{
-    if(i<arr.length-1) { 
-      const res = v.map((u,j,brr)=>
-        j<brr.length-1 ? getNormalVecByThreePoints(u, brr[j+1], arr[i+1][j]):getNormalVecByThreePoints(u, brr[0], arr[i+1][j])
-      )
-      return res
-    }
-    else{ 
-      const res = v.map((u,j,brr)=>
-        j<brr.length-1 ? reverseVec(getNormalVecByThreePoints(u, brr[j+1], arr[i-1][j])):reverseVec(getNormalVecByThreePoints(u, brr[0],  arr[i-1][j]))
-      )
-      return res
-    }
-  })
-  return dn
+const getNormalVecOfSurface = loftObj => {
+  const sections = loftObj.sections
+
+  const dns = sections.map((v,i)=>v.map((u,j)=>{
+      const splineObj = loftObj.sectionsSplines[i]
+      const x = u[0]
+      const y = u[1]
+      const z = u[2]
+      //along section
+      const t = splineObj.t[j]
+      const dxdt = splineObj.XSpline.df(t)
+      const dydt = splineObj.YSpline.df(t)
+      const dzdt = splineObj.ZSpline.df(t)
+      const du = normalizeVec([dxdt, dydt, dzdt])
+
+      //along rib
+      const ribSplineZX = loftObj.ribsSplineZX[j]
+      const ribSplineZY = loftObj.ribsSplineZY[j]
+ 
+      const dxdz = ribSplineZX.df(z)
+      const dydz = ribSplineZY.df(z)
+      const dzdz = 1
+      const dv = normalizeVec([dxdz, dydz, dzdz])
+      const dn = normalizeVec(vectorProduct(du, dv))
+      return dn
+    })
+  ) 
+  return dns  
 }
 
-const getOffsetSurface = (coordinate, fillet) => {
-  const dn = getNormalVecOfSurface(coordinate) 
-  const offsetSurface = coordinate.map((v,i)=>v.map((u,j)=>addVec(u, mulScalarVec(fillet,dn[i][j])) )) 
+const getOffsetSurface = (loftObj, fillet) => {
+  const sections = loftObj.sections
+  const dn = getNormalVecOfSurface(loftObj) 
+  const offsetSurface = sections.map((v,i)=>v.map((u,j)=>addVec(u, mulScalarVec(fillet,dn[i][j])) )) 
   return offsetSurface
 }
 
@@ -194,11 +202,11 @@ const getPerpendicularFooForCone = (path, P) => {
 
 const getFilletPolyline = (center, contact, foot, fillet, N=9) => {
   const CC = subVec(contact, center)
-  const cc = normVec(CC)
+  const cc = normalizeVec(CC)
   const CC2 = mulScalarVec(fillet, cc)
   const contact2 = addVec(center, CC2)
   const FC = subVec(foot, center)
-  const fc = normVec(FC)
+  const fc = normalizeVec(FC)
   const n = vectorProduct(cc, fc)
   
   const phi = getAngle(cc, fc) 
@@ -224,6 +232,28 @@ const divideZ = (mainZ, bottomXYZ, topXYZ, Ns) => {
   return list
 }
 
+const makeSplineObj = section => {
+  const section2 = [].concat(section, [section[0]])
+  const x = section2.map(v=>v[0])
+  const y = section2.map(v=>v[1])
+  const z = section2.map(v=>v[2])
+  const dist = (p1, p2) => absVec(subVec(p1, p2))
+  const list = section2.map((v,i,arr)=>i>0?dist(v, arr[i-1]):0) 
+  const s = list.reduce((p,c,i)=>i>0 ? [].concat(p,p[p.length-1]+c):[c],[] )
+  const total = s[s.length-1]
+  const t = s.map(v=>v/total) 
+  const XSpline = cyclicCubicspline(t,x)
+  const YSpline = cyclicCubicspline(t,y)
+  const ZSpline = cyclicCubicspline(t,z)
+  const obj = {
+    XSpline: XSpline,
+    YSpline: YSpline,
+    ZSpline: ZSpline,
+    t: t,
+  }
+  return obj
+}
+
 const makeLoftObj = sections => {
   const ribs = transpose(sections)
   
@@ -240,6 +270,8 @@ const makeLoftObj = sections => {
   const ribsCR = ribsC.map(v=>v.map(u=>u[2])) 
   const ribsCSplineRX = ribsCR.map((v,i)=>sci.interpolate.cubicspline(v,ribsCX[i]))
   const ribsCSplineRRT = ribsCR.map((v,i)=>sci.interpolate.cubicspline(v,ribsCRT[i]))
+
+  const sectionsSplines = sections.map(v=>makeSplineObj(v))
   
   const loftObj = {
     sections: sections,  
@@ -255,6 +287,7 @@ const makeLoftObj = sections => {
     ribsCR: ribsCR,
     ribsCSplineRX: ribsCSplineRX,
     ribsCSplineRRT: ribsCSplineRRT,
+    sectionsSplines: sectionsSplines
   } 
 
   return loftObj
@@ -273,7 +306,7 @@ const getCrossPointsOfLoftAndCone = (loftObj, path) => {
 const getFilletPolylines = (loftObj, path, fillet, filletDivisions, upside) => {
   const {sections,ribsCR, ribsZ,ribsSplineZX,ribsSplineZY} = loftObj
   
-  const offsetSections = getOffsetSurface(sections, fillet) 
+  const offsetSections = getOffsetSurface(loftObj, fillet) 
   const offsetRibs = transpose(offsetSections) 
   const offsetRibsZ = offsetRibs.map(v=>v.map(u=>u[2]))
   
@@ -320,6 +353,7 @@ export const cutLoftByConeAndMakeFillet = (sections, paths, fillet, config) => {
   const topFillet = fillet?.top
   const bottomFilletDivisions = config?.bottomFilletDivisions || 16
   const topFilletDivisions = config?.topFilletDivisions ||16
+  const Ns = config?.bladeDivisions || sections.length
   
   const bottomCutFlag = bottomPath != undefined
   const topCutFlag = topPath != undefined 
@@ -376,7 +410,6 @@ export const cutLoftByConeAndMakeFillet = (sections, paths, fillet, config) => {
   }
 
   const {ribsZ, ribsSplineZX, ribsSplineZY} = loftObj
-  const Ns = sections.length
   const ribsZCut = ribsZ.map((v,i)=>divideZ(v, obj.bottomXYZ[i], obj.topXYZ[i], Ns))
   const newRibs = ribsZCut.map((v,i)=>v.map(u=>[ribsSplineZX[i].f(u),ribsSplineZY[i].f(u), u]))
   const mergedRibs = newRibs.map((v,i)=>
