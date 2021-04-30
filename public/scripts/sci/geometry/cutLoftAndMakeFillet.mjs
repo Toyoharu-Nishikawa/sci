@@ -353,7 +353,7 @@ export const cutLoftByConeAndMakeFillet = (sections, paths, fillet, config) => {
   const topFillet = fillet?.top
   const bottomFilletDivisions = config?.bottomFilletDivisions || 16
   const topFilletDivisions = config?.topFilletDivisions ||16
-  const Ns = config?.bladeDivisions || sections.length
+  const Ns = config?.mainDivisions || sections.length
   
   const bottomCutFlag = bottomPath != undefined
   const topCutFlag = topPath != undefined 
