@@ -16,6 +16,13 @@ export const subVec = (x0,x1)=>{
   return y
 }
 
+export const normalizeVec = a => {
+  const l2 = a.reduce((p,c)=>p+c**2,0)
+  const l = Math.sqrt(l2)
+  const n = a.map(v=>v/l)
+  return n
+}
+
 
 export const absVec = (x0)=>{
   const a2 = x0.reduce((pre,current)=>pre+current**2,0) 

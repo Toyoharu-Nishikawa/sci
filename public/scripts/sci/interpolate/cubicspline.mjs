@@ -170,72 +170,81 @@ export const cyclicCubicspline = (x, y) =>{
     return null
   }
   const num = x.length
+  const N = num-1
   
-  const h = x.map((v,i,arr)=> i ?arr[i]-arr[i-1]:0)  //0,1,2, ..., N-1
+  const h = x.map((v,i,arr)=> i >0?arr[i]-arr[i-1]:0)  //0,1,2, ..., N
 
   const ramda = h.map((v,i,arr)=> 
     i === 0 ?0:
-    i === arr.length-1 ? h[1]/(h[arr.length-1]+h[1]):
+    i === N ? h[1]/(h[N]+h[1]):
     h[i+1]/(h[i]+h[i+1])
   )
   
   const mu = ramda.map(v=>1-v) 
   const d= y.map((v,i,arr)=>
     i ===0 ? 0:
-    i ===arr.length-1 ? 6*((arr[1]-arr[0])/h[1] -(arr[0]-arr[i-1])/h[i])/(h[i]+h[1]) :
+    i ===N ? 6*((arr[1]-arr[i])/h[1] -(arr[i]-arr[i-1])/h[i])/(h[i]+h[1]) :
     6*((arr[i+1]-arr[i])/h[i+1]-(arr[i]-arr[i-1])/h[i])/(h[i]+h[i+1])
   )
  
-  const b = [...Array(num)].fill(2)  //0,1, ... ,N-1
-  const A = b.slice(0,-1).reduce((p,c, i)=>{
-    const a = i === 0 ? 0 :
-              i === 1 ? c :
-              c - mu[i]/p[i-1]*ramda[i-1]  
-    p.push(a) 
-    return p
-  },[])
-  
-  const P = A.map((v,i)=> i===0 ? 0: -mu[i]/A[i]) 
-  const Q = [...Array(num-1)].reduce((p,c,i)=>{
-    const a = i === 0 ? 0 :
-              i === 1 ? ramda[1] :
-              -ramda[i]*p[i-1] 
-    p.push(a) 
-    return p   
-  },[])
-  
-  const R = [...Array(num-1)].reduce((p,c,i)=>{
-    const a = i === 0 ? 0 :
-              i === 1 ? d[1] :
-              d[i]-ramda[i]*p[i-1] 
-    p.push(a) 
-    return p   
-  },[])
+  const b = [...Array(num)].fill(2)  //0,1, ... ,N
+  const alpha = []
+  const A = []
+  const P = []
+  const Q = []
+  const R = []
+  for(let i=0;i<num;i++){
+    if(i===0){
+      alpha[0]=0
+      A[0]=0
+      P[0]=0
+      Q[0]=0
+      R[0]=0
+    }
+    else if(i===1){
+      const al = 0
+      const AA = b[i]
+      const PP  = -ramda[i]/AA
+      const QQ = -mu[i]/AA
+      const RR = d[i]/AA
 
-  P.reverse()
-  Q.reverse()
-  R.reverse()
-  
-  const t = [...Array(num)].reduce((p,c,i)=>{
-    const a = i === 0 ? 1 :
-              i === num-1 ? 0:
-              P[i]*p[i-1] + Q[i]
-    p.push(a) 
-    return p   
-  },[]) 
-  
-  const v = [...Array(num)].reduce((p,c,i)=>{
-    const a = i === 0 ? 0 :
-              i === num-1 ? 0:
-              P[i]*p[i-1] + R[i]
-    p.push(a) 
-    return p   
-  },[]) 
+      alpha[i]=al
+      A[i]=AA
+      P[i]=PP
+      Q[i]=QQ
+      R[i]=RR
+    }
+    else{
+      const al = mu[i]/A[i-1]
+      const AA = b[i]-al*ramda[i-1]
+      const PP  = -ramda[i]/AA
+      const QQ = -mu[i]*Q[i-1] /AA
+      const RR = (d[i] - mu[i]*R[i-1])/AA
 
-  t.reverse()  
-  v.reverse()  
+      alpha[i]=al
+      A[i]=AA
+      P[i]=PP
+      Q[i]=QQ
+      R[i]=RR
+    }
+  }
+  const t = []
+  const v = []
 
-  const zn = (d[num-1] - (mu[num-1]*v[1]+ramda[num-1]*v[num-2]))/(mu[num-1]*t[1]+ramda[num-1]*t[num-2]+b[num-1])
+  for(let i=N; i>-1;i--){
+    if(i===num-1){
+      t[i]=1
+      v[i]=0
+    }
+    else{
+      const ti = P[i]*t[i+1]+Q[i]
+      const vi = P[i]*v[i+1]+R[i]
+      t[i]=ti
+      v[i]=vi
+    }
+  }
+  
+  const zn = (d[N] - ramda[N]*v[1]-mu[N]*v[N-1])/(ramda[N]*t[1]+mu[N]*t[N-1]+b[N])
   const M = [...Array(num)].map((u,i)=>i === 0 ? zn: t[i]*zn +v[i] )
 
 
