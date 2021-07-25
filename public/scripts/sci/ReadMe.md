@@ -1191,6 +1191,59 @@ solve simultaneous linear equations by Gauss elimination method
 * A : type of double array , coefficient matrix 
 * v : type of array , constant term column vector
 
+### `optimize.Pareto(data)`
+
+return `class` 
+
+calcuate pareto front 
+
+#### concstuctor(data)
+
+* data :  type of  array of float ,  // [[x0, y0], [x1, y1], ... ]
+
+#### attributions
+
+* data :  is injected data
+* dataMap : is Map of data, where the key is id and value is data
+* paretoMap: is Map of pareto front data
+* currentId: current maximum id number
+
+#### method
+
+* setData(data) : set initial data
+* solveOne(dId, dValue) : judge that dValue is allowed to be counted as pareto front
+* solve(): make pareto front from data
+* addOneDataAndSolve(dValue): add dValue and juddge it adoptable as pareto front or not
+* addDataListAndSolve(dList):: add dValue list and juddge them adoptable as pareto front or not
+* getParetoData(): return pareto data
+* getParetoDataIds(): return Ids of pareto data
+* getParetoMap(): return pareto Map
+* getData(): return data
+* getDataMap(): return data Map
+
+```
+//sample code
+const makeList = (l) => {
+  const list = [...Array(l)].map(v=>Math.random()*1E2) 
+  return list
+}
+
+ const Pareto = sci.optimize.Pareto 
+
+ const L = 2
+ const N =500
+ const data = [...Array(N)].map(v=>makeList(2))
+ const data2 = [...Array(N)].map(v=>makeList(2))
+  
+ const pareto = new Pareto(data) 
+ pareto.solve()
+  
+ pareto.addDataListAndSolve(data2)
+ const paretoData = pareto.getParetoData()
+ 
+```
+
+
 ### regression
 ------
 
@@ -1328,6 +1381,9 @@ returns `function`
 
 makes and returns support vector regression function 
 * parameters : type of object, parameters are equal to parameters of SVR
+
+
+
 
 ### classification
 ------
