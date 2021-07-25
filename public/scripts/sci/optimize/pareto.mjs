@@ -94,4 +94,8 @@ export const Pareto = class {
   getData(){
     return this.data
   }
+  getDataMap(){
+    return this.dataMap
+  }
+
 }
