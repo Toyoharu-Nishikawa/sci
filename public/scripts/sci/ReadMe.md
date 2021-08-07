@@ -1243,6 +1243,62 @@ const makeList = (l) => {
  
 ```
 
+### `optimize.NonDominatedSorting(data)`
+
+return `class` 
+
+calcuate pareto front 
+
+#### concstuctor(data)
+
+* data :  type of  array of float ,  // [[x0, y0], [x1, y1], ... ]
+
+#### attributions
+
+* data :  is injected data
+* dataMap : is Map of data, where the key is id and value is data
+* paretoMapList: is Map of pareto front data
+* currentId: current maximum id number
+
+#### method
+
+* setData(data) : set initial data
+* discriminateOne(dId, dValue, paretoMap) : descriminate that dValue is allowed to be counted as paerto solution
+* append(dId, dValue) : append a new data to pareto ranking
+* solve(): sort data by non-dominated sorting (as the way to append data one by one)
+* addOneDataAndSolve(dValue): add dValue and solve the non-dominated sorting problem
+* addDataListAndSolve(dList):: add dValue list and solve the non-dominated sorting problem
+* getParetoMapList(): return pareto Map list (key is data id, value: data)
+* getParetoRankMap(): return pareto Rank Map (key : data id, value: pareto rank)
+* getParetoDataList(): return pareto rank data
+* getParetoDataIdList(): return Ids of pareto rank data
+* getParetoMap(): return pareto Map
+* getData(): return data
+* getDataMap(): return data Map
+
+```
+//sample code
+const makeList = (l) => {
+  const list = [...Array(l)].map(v=>Math.random()*1E2) 
+  return list
+}
+
+ const NS = sci.optimize.NonDominatedSorting
+
+ const L = 2
+ const N =500
+ const data = [...Array(N)].map(v=>makeList(2))
+ const data2 = [...Array(N)].map(v=>makeList(2))
+  
+ const ns = new NS(data) 
+ ns.solve()
+  
+ ns.addDataListAndSolve(data2)
+ const paretoDataList = ns.getParetoDataList()
+ 
+```
+
+
 
 ### regression
 ------
