@@ -1048,20 +1048,26 @@ solve simultanious linear equation of LUx = PVa and returns x
 * P : type of array ,  pivoting list 
 * Va : type of array ,  constant term column vector
 
-#### `solve.modifiedCholeskyDecomposition(A)`
+#### `solve.modifiedCholeskyDecomposition(A, method="skyline")`
 
 returns `object`
 ```javascript
 {
     L: "double array", //lower triangular matrix
     D: "array", //diagonal component of diagonal matrix
+    nonZeroListI: "double array",//non-zero row elements in L that
+    nonZeroListJ: "double array",//non-zero column elements in L that
 }
 ```
 
 modified Choleskey decomposition
-* A : type of double array ,  matrix 
+* A : type of double array ,  lower triangular matrix 
+* type : type of string ,  "simple", "generalSkyline","skyline"   
+  - "simple": is the most simple method and it's for a dense matrix
+  - "generalSkyline": is the fast method for a sparse and discrete matrix
+  - "skyline": is the fast method for a sparse and continuous matrix
 
-(caution) A must be symmetric matrix
+(caution) A must be a symmetric matrix
 
 #### `solve.modifiedCholeskySolve(L, D, Va)`
 
