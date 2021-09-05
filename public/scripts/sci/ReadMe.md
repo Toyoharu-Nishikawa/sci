@@ -1069,14 +1069,13 @@ modified Choleskey decomposition
 
 (caution) A must be a symmetric matrix
 
-#### `solve.modifiedCholeskySolve(L, D, Va)`
+#### `solve.modifiedCholeskySolve(LDobj, V)`
 
 returns `array`
 
 solve simultanious linear equation of LDLTx = Va and returns x
-* L : type of double array ,  lower triangular matrix 
-* D : type of array ,  diagonal component of diagonal matrix 
-* Va: type of array ,  constant term column vector
+* LDobj : type of object , return value of modifiedCholeskyDecomposition 
+* V: type of array ,  constant term column vector
 
 
 #### `solve.lineSplitMethod(x0, f, dfdx0, maxIteration, tolerance)`
