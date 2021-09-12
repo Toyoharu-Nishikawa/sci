@@ -1303,7 +1303,56 @@ const makeList = (l) => {
  
 ```
 
+### `optimize.FastNonDominatedSorting(data)`
 
+return `class` 
+
+calcuate pareto front 
+
+#### concstuctor(data)
+
+* data :  type of  array of float ,  // [[x0, y0], [x1, y1], ... ]
+
+#### properties
+
+* data :  is injected data
+* myDominatingIds: is dominating ids of i th data 
+* dominatingMeIds : is ids dominating ith data 
+* paretoDataIdList : pareto rank id list 
+* currentId : the last data id
+
+
+#### method
+
+* setData(data) : set initial data
+* solve(): sort data by non-dominated sorting (as the way to append data one by one)
+* addOneDataAndSolve(dValue): add dValue and solve the non-dominated sorting problem
+* addDataListAndSolve(dList):: add dValue list and solve the non-dominated sorting problem
+* getParetoDataList(): return pareto rank data
+* getParetoDataIdList(): return Ids of pareto rank data
+* getParetoMap(): return pareto Map
+
+```
+//sample code
+const makeList = (l) => {
+  const list = [...Array(l)].map(v=>Math.random()*1E2) 
+  return list
+}
+
+ const NS = sci.optimize.FastNonDominatedSorting
+
+ const L = 2
+ const N =500
+ const data = [...Array(N)].map(v=>makeList(2))
+ const data2 = [...Array(N)].map(v=>makeList(2))
+  
+ const ns = new NS(data) 
+ ns.solve()
+  
+ ns.addDataListAndSolve(data2)
+ const paretoDataList = ns.getParetoDataList()
+ 
+```
 
 ### regression
 ------
