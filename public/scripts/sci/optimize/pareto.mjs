@@ -268,7 +268,6 @@ export const FastNonDominatedSorting = class {
 
   constructor(data){
     this.data = []
-    this.indivisuals = []
     this.myDominatingIds = []
     this.dominatingMeIds = []
     this.paretoDataIdList = []
