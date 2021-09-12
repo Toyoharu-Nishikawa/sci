@@ -1,2 +1,2 @@
 export {gradientDescent, asyncGradientDescent} from "./optimize.mjs"
-export {Pareto, NonDominatedSorting} from "./pareto.mjs"
+export {Pareto, NonDominatedSorting,FastNonDominatedSorting} from "./pareto.mjs"
