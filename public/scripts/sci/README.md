@@ -808,15 +808,22 @@ makes a loft along sections,  cuts it by path and makes fillet
 ### interpolate
 ------
 
-#### `interpolate.linear(x, y)`
+#### `interpolate.polyline(x, y)`
 
-returns `function`
+returns `object`
+```javascript
+{
+  F:  "function",// (x0, x1) => I,  integrate from x0 to x1
+  f:  "function", // (x0) => y,  interpolate at x0 
+  df:  "function", // (x0) => dy/dx,  return first derivative at x0 
+}
+```
 
-interpolates coordinate of y0 from coordinate of x0 by linear interpolation
+interpolates coordinate of y0 from coordinate of x0 by polyline interpolation
 * x : type of array , coordinate of x 
 * y : type of array , coordinate of y
 
-#### `interpolate.stepLinear(x, y)`
+#### `interpolate.stepLine(x, y)`
 
 returns `function(x0, str="left")`
 ```javascript
