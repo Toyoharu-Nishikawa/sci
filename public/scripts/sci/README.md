@@ -1371,7 +1371,7 @@ returns `object`
 {
     predict: "function", // function of prediction 
     parameters: {
-        weight: "array", // linear weight 
+        weight: "array", // linear weight 1, x
     }
 }
 ```
@@ -1389,14 +1389,14 @@ makes and returns single regression function
 * parameters : type of object, parameters are equal to parameters of sigleRegression  
 
 
-#### `regression.linearRegression(x, y)`
+#### `regression.multipleRegression(x, y)`
 
 returns `object`
 ```javascript
 {
     predict: "function", // function of prediction 
     parameters: {
-        weight: "array", // linear weight 
+        weight: "array", // linear weight 1, x1, x2, x3,...
     }
 }
 ```
@@ -1406,7 +1406,7 @@ solve linear regression
 * y : type of array
 
 
-#### `regression.linearRegressionLoad(parameters)`
+#### `regression.multipleRegressionLoad(parameters)`
 
 returns `function`
 
@@ -1420,14 +1420,14 @@ returns `object`
 {
     predict: "function", // function of prediction 
     parameters: {
-        degree: "array", // linear weight 
-        weight: "array", // linear weight 
+        degree: "integer"
+        weight: "array", // linear weight 1, x, x**2, x**3, ..., x**degree
     }
 }
 ```
 
 solve polynominal regression 
-* x : type of double array  
+* x : type of array  
 * y : type of array
 
 
