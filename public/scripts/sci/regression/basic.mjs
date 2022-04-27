@@ -5,13 +5,13 @@ import * as statistics from "../statistics/index.mjs"
 "use strict"
 
 export const singleRegression = (x, y)=>{
-  const X = x.map(v=>[v,1])
+  const X = x.map(v=>[1,v])
   const Xt = matrix.transpose(X) 
   const XtX = matrix.mulMatMat(Xt,X)
   const Xty = matrix.mulMatVec(Xt,y)
   const w = solve.linEqGauss(XtX, Xty) 
   const f = (x)=>{
-    const y = x*w[0]+w[1] 
+    const y = w[0] + x*w[1]
     return y
   }
 
@@ -25,7 +25,7 @@ export const singleRegression = (x, y)=>{
 export const singleRegressionLoad = (parameters)=>{
   const w = parameters.weight
   const f = (x)=>{
-    const y = x*w[0]+w[1] 
+    const y = w[0] + x*w[1]
     return y
   }
 
@@ -33,12 +33,12 @@ export const singleRegressionLoad = (parameters)=>{
 }
  
 export const multipleRegression = (x, y)=>{
-  const X = x.map(v=>v.concat(1))
+  const X = x.map(v=>[1,...v])
   const Xt = matrix.transpose(X) 
   const XtX = matrix.mulMatMat(Xt,X)
   const Xty = matrix.mulMatVec(Xt,y)
   const w = solve.linEqGauss(XtX, Xty) 
-  const f = (x) => x.reduce((p,c,i)=>p+c*w[i],0)+w[w.length-1] 
+  const f = (x) => x.reduce((p,c,i)=>p+c*w[i+1],0)+w[0] 
   const obj = {
     predict: f,
     parameters: {weight:w}
@@ -48,12 +48,12 @@ export const multipleRegression = (x, y)=>{
 
 export const multipleRegressionLoad = (parameters)=>{
   const w = parameters.weight
-  const f = (x)=> x.reduce((p,c,i)=>p+c*w[i],0) + w[w.length-1] 
+  const f = (x)=> x.reduce((p,c,i)=>p+c*w[i+1],0) + w[0] 
 
   return f 
 }
 
-const makePolyList = (x, n)=>[...Array(n)].map((v,i)=>x**(i+1))
+const makePolyList = (x, degree)=>[...Array(degree)].map((v,i)=>x**(i+1))
 
 const polynominalize = (degree)=>{
   return list => {
@@ -66,13 +66,13 @@ const polynominalize = (degree)=>{
 export const polynominalRegression = (x, y, degree=1)=>{
   const x2 = x.map(v=>makePolyList(v, degree))
  
-  const X = x2.map(v=>v.concat(1))
+  const X = x2.map(v=>[1,...v])
   const Xt = matrix.transpose(X) 
   const XtX = matrix.mulMatMat(Xt,X)
   const Xty = matrix.mulMatVec(Xt,y)
   const w = solve.linEqGauss(XtX, Xty) 
 
-  const f = (x0) => makePolyList(x0, degree).reduce((p,c,i)=>p+c*w[i],0)+w[w.length-1] 
+  const f = (x0) => makePolyList(x0, degree).reduce((p,c,i)=>p+c*w[i+1],0)+w[0] 
   const obj = {
     predict: f,
     parameters: {
@@ -87,7 +87,7 @@ export const polynominalRegressionLoad = (parameters)=>{
   const degree = parameters.degree
   const w = parameters.weight
 
-  const f = (x0) => makePolyList(x0,degree).reduce((p,c,i)=>p+c*w[i],0)+w[w.length-1] 
+  const f = (x0) => makePolyList(x0,degree).reduce((p,c,i)=>p+c*w[i+1],0)+w[0] 
 
   return f 
 }
