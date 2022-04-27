@@ -32,7 +32,7 @@ export const singleRegressionLoad = (parameters)=>{
   return f 
 }
  
-export const linearRegression = (x, y)=>{
+export const multipleRegression = (x, y)=>{
   const X = x.map(v=>v.concat(1))
   const Xt = matrix.transpose(X) 
   const XtX = matrix.mulMatMat(Xt,X)
@@ -46,7 +46,7 @@ export const linearRegression = (x, y)=>{
   return obj 
 }
 
-export const linearRegressionLoad = (parameters)=>{
+export const multipleRegressionLoad = (parameters)=>{
   const w = parameters.weight
   const f = (x)=> x.reduce((p,c,i)=>p+c*w[i],0) + w[w.length-1] 
 
@@ -57,15 +57,14 @@ const makePolyList = (x, n)=>[...Array(n)].map((v,i)=>x**(i+1))
 
 const polynominalize = (degree)=>{
   return list => {
-    const data = list.map((v,i)=>makePolyList(v, degree[i]))
+    const data = list.map((v,i)=>makePolyList(v, degree))
     const res =  [].concat(...data)
     return res
   }
 }
 
-export const polynominalRegression = (x, y, degree)=>{
-  const polyFunc = polynominalize(degree)
-  const x2 = x.map(polyFunc)
+export const polynominalRegression = (x, y, degree=1)=>{
+  const x2 = x.map(v=>makePolyList(v, degree))
  
   const X = x2.map(v=>v.concat(1))
   const Xt = matrix.transpose(X) 
@@ -73,7 +72,7 @@ export const polynominalRegression = (x, y, degree)=>{
   const Xty = matrix.mulMatVec(Xt,y)
   const w = solve.linEqGauss(XtX, Xty) 
 
-  const f = (x) => polyFunc(x).reduce((p,c,i)=>p+c*w[i],0)+w[w.length-1] 
+  const f = (x0) => makePolyList(x0, degree).reduce((p,c,i)=>p+c*w[i],0)+w[w.length-1] 
   const obj = {
     predict: f,
     parameters: {
@@ -87,9 +86,8 @@ export const polynominalRegression = (x, y, degree)=>{
 export const polynominalRegressionLoad = (parameters)=>{
   const degree = parameters.degree
   const w = parameters.weight
-  const polyFunc = polynominalize(degree)
 
-  const f = (x) => polyFunc(x).reduce((p,c,i)=>p+c*w[i],0)+w[w.length-1] 
+  const f = (x0) => makePolyList(x0,degree).reduce((p,c,i)=>p+c*w[i],0)+w[w.length-1] 
 
   return f 
 }
