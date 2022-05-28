@@ -29,7 +29,7 @@ export const polyline = (x, y)=>{
     const xS = x.slice(i0+1,i1+1)
     const yS = y.slice(i0+1,i1+1)
     const xS2 = [x0, ...xS, x1]
-    const yS2 = [x0, ...xS, x1]
+    const yS2 = [y0, ...yS, y1]
 
     let sum = 0
     const n = xS2.length
