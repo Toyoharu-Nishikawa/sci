@@ -1,8 +1,9 @@
 {
   "name": "sci",
-  "version": "6.4.0",
+  "version": "7.0.0",
+  "type": "module",
   "description": "science library",
-  "main": "index.mjs",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
