@@ -1606,6 +1606,18 @@ calculate correlation coefficient for variable of x and y
 * x : type of array
 * y : type of array
 
+#### `statistics.correlationAnalysis(x, y)`
+
+returns `type of double array`
+
+calculate correlation coefficient for variable of x and y 
+* x : type of double array
+* y : type of array
+
+if cor is defined as the return of this function, then
+  cor[0][0] is empty 
+  cor[0][1] is the correlation coefficient of x[i][0] and x[i][1]
+  cor[2][3] is the correlation coefficient of x[i][2] and x[i][3]
 
 
 ### funcs
