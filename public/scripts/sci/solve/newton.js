@@ -9,7 +9,7 @@ export const newtonMethod = (x0, f, invJ, maxIteration,torelance)=>{
   
   let count=0
   while(count<maxIteration){
-    dx =mulScalarVec(-1,matrix.mulMatVec(invJ(x), y))
+    dx =matrix.mulScalarVec(-1,matrix.mulMatVec(invJ(x), y))
     x = matrix.addVec(x,dx)
     y =  f(x) 
     const rem = matrix.absVec(y)
@@ -34,7 +34,7 @@ export const asyncNewtonMethod = async (x0, f, invJ, maxIteration,torelance)=>{
   
   let count=0
   while(count<maxIteration){
-    dx =mulScalarVec(-1,matrix.mulMatVec(invJ(x), y))
+    dx =matrix.mulScalarVec(-1,matrix.mulMatVec(invJ(x), y))
     x = matrix.addVec(x,dx)
     y = await f(x) 
     const rem = matrix.absVec(y)

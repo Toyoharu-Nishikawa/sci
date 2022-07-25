@@ -1,6 +1,8 @@
 "strict"
 
 import {checkCross, getCrossPoint} from "./line.js"
+import {invMat} from "../matrix/matrix.js"
+import {newtonMethod} from "../solve/newton.js"
 
 const dist = (p1, p2)=> Math.sqrt((p1[0]-p2[0])**2+(p1[1]-p2[1])**2)
 
@@ -144,4 +146,66 @@ export const getStrictSelfCrossPoints = (curveFunc, N=100, maxIteration=10, tole
   return strictT
 }
  
+
+export const calcExtremumOfDistanceBetweenTwoCurves = (fSpline, gSpline, s0, t0,
+  maxIteration, tolerance)=>{
+
+  const makeInvJ = u => {
+    const s = u[0]
+    const t = u[1]
+
+    const fX = fSpline.X(s)
+    const fY = fSpline.Y(s)
+    const dfdsX = fSpline.DX(s)
+    const dfdsY = fSpline.DY(s)
+    const d2fds2X = fSpline.D2X(s)
+    const d2fds2Y = fSpline.D2Y(s)
+
+    const gX = gSpline.X(t)
+    const gY = gSpline.Y(t)
+    const dgdtX = gSpline.DX(t)
+    const dgdtY = gSpline.DY(t)
+    const d2gdt2X = gSpline.D2X(t)
+    const d2gdt2Y = gSpline.D2Y(t)
+
+    const d2Lds2 = 2*dfdsX**2 + 2*(fX-gX)*d2fds2X
+                  +2*dfdsY**2 + 2*(fY-gY)*d2fds2Y
+
+    const d2Ldsdt = -2*(dfdsX*dgdtX+dfdsY*dgdtY)
+
+    const d2Ldt2 = 2*dgdtX**2 - 2*(fX-gX)*d2gdt2X
+                  +2*dgdtY**2 - 2*(fY-gY)*d2gdt2Y
+
+    const J = [
+      [d2Lds2,d2Ldsdt ],
+      [d2Ldsdt,d2Ldt2 ],
+    ]
+
+    const invJ = invMat(J)
+    return invJ
+  }
+
+  const err = u => {
+    const s = u[0]
+    const t = u[1]
+
+    const fX = fSpline.X(s)
+    const fY = fSpline.Y(s)
+    const gX = gSpline.X(t)
+    const gY = gSpline.Y(t)
+    const dfdsX = fSpline.DX(s)
+    const dfdsY = fSpline.DY(s)
+    const dgdtX = gSpline.DX(t)
+    const dgdtY = gSpline.DY(t)
+
+    const dLds =  2*(fX-gX)*dfdsX+2*(fY-gY)*dfdsY
+    const dLdt = -2*(fX-gX)*dgdtX-2*(fY-gY)*dgdtY
+    const e = [dLds, dLdt]
+    return e
+  }
+
+  const u0 = [s0, t0]
+  const res = newtonMethod(u0, err, makeInvJ, maxIteration, tolerance)
+  return res
+}
 
