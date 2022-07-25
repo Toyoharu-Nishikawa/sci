@@ -483,6 +483,19 @@ get the mimimum or maximum value on the spline curve made from list points
 * maxIteration: type of integer, // max iteration to find the minimum or maximum value
 * tolerance : type of float, // tolerance of iteration to find the minimum or maximum value
 
+### `geometry.calcExtremum(pSpline, sSpline,s0,t0, maxIteration, tolerance)`
+
+returns `object` // is equal to the return of solve.newton  
+
+
+calc the extremum between two curves near initial position by newton method  
+* pSpline :  type of object ,  // normalizedSpline, refer to interpolate.normalizedCubicspline
+* sSpline :  type of object ,  // normalizedSpline, refer to interpolate.normalizedCubicspline
+* s0: type of double, // normalized initial value of pSpline  for the iteration of newton method 
+* t0: type of double, // normalized initial value of sSpline  for the iteration of newton method 
+* maxIteration: type of integer, // max iteration of newton method 
+* tolerance : type of float, // tolerance of iteration for newton method
+
 
 ### `geometry.bspline(points, degree=3, knots)`
 
@@ -892,9 +905,9 @@ returns `object of functions`
 {
   F:  "function",// (x0, x1) => I,  integrate from x0 to x1
   f:  "function", // (x0) => y,  interpolate from x0 to y0
-  df:  "function", // (x0) => dy/dx,  return first derivative from x0 
-  d2f:  "function", // (x0) => d2y/dx2,  return second derivative from 
-  d3f:  "function", // (x0) => d3y/dx3,  return third derivative from x0 
+  df:  "function", // (x0) => dy/dx,  return first derivative at x0 
+  d2f:  "function", // (x0) => d2y/dx2,  return second derivative at x0
+  d3f:  "function", // (x0) => d3y/dx3,  return third derivative at x0 
   M: "array of float", // spline parameter,
   h: "array of float", // x directive distance of each points,
 }
@@ -926,6 +939,10 @@ returns `object`
     Y: "function", // (t) => y coordinate            //0<= t <=1
     DX: "function", //(t) => x component of tangent  //0<= t <=1
     DY: "function", //(t) => y component of tangent  //0<= t <=1
+    D2X:  "function", // (t) => d2x/dt2,  return second derivative at t
+    D2Y:  "function", // (t) => d2y/dt2,  return second derivative at t 
+    D3X:  "function", // (t) => d3x/dt3,  return third derivative at t
+    D3Y:  "function", // (t) => d3y/dt3,  return third derivative at t 
 }
 ```
 
@@ -1606,13 +1623,12 @@ calculate correlation coefficient for variable of x and y
 * x : type of array
 * y : type of array
 
-#### `statistics.correlationAnalysis(x, y)`
+#### `statistics.correlationAnalysis(x)`
 
 returns `type of double array`
 
 calculate correlation coefficient for variable of x and y 
 * x : type of double array
-* y : type of array
 
 if cor is defined as the return of this function, then
   cor[0][0] is empty 
