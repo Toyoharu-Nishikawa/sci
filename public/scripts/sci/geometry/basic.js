@@ -220,7 +220,7 @@ export const minDistanceFromPointToCurve = (P, sSpline, N=10,
 
   const sTemps = [...Array(N+1)].map((v,i)=>i/N)
   const calcDistance = makeCalcDistanceFunc(P, sSpline)
-  const distances = sTemps.map(v=>calcDistance) 
+  const distances = sTemps.map(v=>calcDistance(v)) 
   const min = Math.min(...distances)
   const index = distances.indexOf(min)
   const x0 = index/N
