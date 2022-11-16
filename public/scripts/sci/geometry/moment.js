@@ -43,16 +43,33 @@ export const getCentroid = points => {
   return centroid
 }
 
-const calcMomentOfInteriaOfAreaOfTriangle = (P1, P2) => {
+/**
+  *calculate moment of inertial for traingle by using Green's theorem
+  *@param {Array}
+  *@param {Array}
+  *@return {Object}
+  */
+const calcMomentOfInertiaOfAreaOfTriangle = (P1, P2) => {
   const x1 = P1[0]  
   const y1 = P1[1]  
   const x2 = P2[0]  
   const y2 = P2[1]  
-  
+
+  const Sx = 1/3 * x1 * y1**2
+    - 1/3 * x2 * y2**2
+    + 1/3 * (y2**2 + y2*y1 + y1**2) * (x2 - x1) 
+    - 1/2 * (y2 + y1) * (y1*x2 - y2*x1)
+
+  const Sy = -1/3 * x1**2 * y1
+    + 1/3 * x2**2 * y2
+    - 1/3 * (x2**2 + x2*x1 + x1**2) * (y2 - y1) 
+    + 1/2 * (x2 + x1) * (x1*y2 - x2*y1)
+ 
+
   const Ix = 1/4 * x1 * y1**3  
     - 1/4 * x2 * y2**3
     + 1/4 * (y2**2 + y1**2) * (y2 + y1) * (x2 - x1) 
-    + 1/3 * (y2**2 + y2*y1 + y1**2) * (x1*y2 - x2*y1) 
+    - 1/3 * (y2**2 + y2*y1 + y1**2) * (y1*x2 - y2*x1) 
  
   const Iy = -1/4 * x1**3 * y1  
     + 1/4 * x2**3 * y2
@@ -64,69 +81,102 @@ const calcMomentOfInteriaOfAreaOfTriangle = (P1, P2) => {
       + 2* x1 * x2 * (y2**2 - y1**2)
       - 2* y1 * y2 * (x2**2 - x1**2)
     )    
+
+  const Ixx = 1/5 * x1 * y1**4 
+    - 1/5 * x2 * y2**4
+    + 1/5 * (y2**4 + y2**3*y1 + y2**2*y1**2 + y2*y1**3 + y1**4) * (x2 - x1) 
+    - 1/4 * (y2**2 + y1**2) * (y2 + y1) * (y1*x2 - y2*x1) 
+ 
+   const Iyy = -1/5 * x1**4 * y1 
+    + 1/5 * x2**4 * y2
+    - 1/5 * (x2**4 + x2**3*x1 + x2**2*x1**2 + x2*x1**3 + x1**4) * (y2 - y1) 
+    + 1/4 * (x2**2 + x1**2) * (x2 + x1) * (x1*y2 - x2*y1) 
     
-  const momentOfInteriaOfArea = {
+  const momentOfInertiaOfArea = {
+    Sx: Sx,
+    Sy: Sy,
     Ix: Ix,
     Iy: Iy,
     Ixy: Ixy,
+    Ixx: Ixx,
+    Iyy: Iyy,
   }
-  return momentOfInteriaOfArea
+  return momentOfInertiaOfArea
 } 
 
-export const calcMomentOfInteriaOfArea = points => {
-  const centroid = getCentroid(points)
-  const relativePoints = points.map(v=>[v[0]-centroid[0], v[1]-centroid[1] ])
-  
-  const momentOfInteriaOfAreaOfTriangles = relativePoints.map((v,i,arr)=>{
+const calcMomentOfInertiaOfArea = points => {
+  const momentOfInertiaOfAreaOfTriangles = points.map((v,i,arr)=>{
     const P1 = i>0? arr[i-1]: arr[arr.length-1]
     const P2 = v 
-    const momentOfInteriaOfArea = calcMomentOfInteriaOfAreaOfTriangle(P1, P2)
-    return momentOfInteriaOfArea
+    const momentOfInertiaOfArea = calcMomentOfInertiaOfAreaOfTriangle(P1, P2)
+    return momentOfInertiaOfArea
   })
   
-  const Ixi = momentOfInteriaOfAreaOfTriangles.map(v=>v.Ix)
-  const Iyi = momentOfInteriaOfAreaOfTriangles.map(v=>v.Iy)
-  const Ixyi = momentOfInteriaOfAreaOfTriangles.map(v=>v.Ixy)
+  const Sxi  = momentOfInertiaOfAreaOfTriangles.map(v=>v.Sx)
+  const Syi  = momentOfInertiaOfAreaOfTriangles.map(v=>v.Sy)
+  const Ixi  = momentOfInertiaOfAreaOfTriangles.map(v=>v.Ix)
+  const Iyi  = momentOfInertiaOfAreaOfTriangles.map(v=>v.Iy)
+  const Ixyi = momentOfInertiaOfAreaOfTriangles.map(v=>v.Ixy)
+  const Ixxi = momentOfInertiaOfAreaOfTriangles.map(v=>v.Ixx)
+  const Iyyi = momentOfInertiaOfAreaOfTriangles.map(v=>v.Iyy)
   
+  
+  const Sx  = Sxi.reduce((p,c)=>p+c,0)
+  const Sy  = Syi.reduce((p,c)=>p+c,0)
   const Ix  = Ixi.reduce((p,c)=>p+c,0)
   const Iy  = Iyi.reduce((p,c)=>p+c,0)
   const Ixy  = Ixyi.reduce((p,c)=>p+c,0)
+  const Ixx  = Ixxi.reduce((p,c)=>p+c,0)
+  const Iyy  = Iyyi.reduce((p,c)=>p+c,0)
  
-  const momentOfInteriaOfArea = {
-    centroid: centroid,
-    Ix: Ix,
-    Iy: Iy,
+  const momentOfInertiaOfArea = {
+    Sx : Sx,
+    Sy : Sy,
+    Ix : Ix,
+    Iy : Iy,
     Ixy: Ixy,
+    Ixx: Ixx,
+    Iyy: Iyy,
   }
-  return momentOfInteriaOfArea
+  return momentOfInertiaOfArea
 }
 
-export const calcPrincipalMomentOfInteriaOfArea =(Ix, Iy, Ixy) => {
+const calcPrincipalMomentOfInertiaOfArea =(Ix, Iy, Ixy) => {
   const alpha = Math.atan2(-2*Ixy, Ix - Iy)/2
 
   const Ixm = 1/2 * (Ix + Iy) + 1/2 * Math.sqrt((Ix - Iy)**2 + 4 * Ixy**2)
   const Iym = 1/2 * (Ix + Iy) - 1/2 * Math.sqrt((Ix - Iy)**2 + 4 * Ixy**2)
   
-  const principalMomentOfInteriaOfArea = {
+  const principalMomentOfInertiaOfArea = {
     alpha: alpha,    
     Ipx: Ixm,    
     Ipy: Iym,    
   }
   
-  return principalMomentOfInteriaOfArea
+  return principalMomentOfInertiaOfArea
 } 
 
 export const calcSpecOfPolygon = points => {
   const area = calcAreaOfPolygon(points)
-  const momentOfInteriaOfArea = calcMomentOfInteriaOfArea(points)
-  const {centroid, Ix, Iy, Ixy} = momentOfInteriaOfArea 
+  const centroid = getCentroid(points)
+  const momentOfInertiaOfArea = calcMomentOfInertiaOfArea(points)
+  const Sx = momentOfInertiaOfArea.Sx
+  const Sy = momentOfInertiaOfArea.Sy
+  const Imx = momentOfInertiaOfArea.Ix
+  const Imy = momentOfInertiaOfArea.Iy
+  const Imxy = momentOfInertiaOfArea.Ixy
+  const Imxx = momentOfInertiaOfArea.Ixx
+  const Imyy = momentOfInertiaOfArea.Iyy
+
   const [cx, cy] = centroid
-  const Imx = Ix + cy**2 * area 
-  const Imy = Iy + cx**2 * area 
-  const Imxy = Ixy + cx * cy * area 
+  const Ix = Imx - cy**2 * area 
+  const Iy = Imy - cx**2 * area 
+  const Ixy = Imxy - cx * cy * area 
+  const Ixx = Imxx -(cy**3 * area + 3*cy*Ix) 
+  const Iyy = Imyy -(cx**3 * area + 3*cx*Iy) 
   
-  const principalMomentOfInteriaOfArea = calcPrincipalMomentOfInteriaOfArea(Ix, Iy, Ixy)
-  const {alpha,Ipx, Ipy } = principalMomentOfInteriaOfArea
+  const principalMomentOfInertiaOfArea = calcPrincipalMomentOfInertiaOfArea(Ix, Iy, Ixy)
+  const {alpha,Ipx, Ipy } = principalMomentOfInertiaOfArea
   
   const rotAlpha = makeRotFunc(alpha)
   const xaxis = [1, 0]
@@ -138,12 +188,18 @@ export const calcSpecOfPolygon = points => {
   const spec = {
     area: area,
     centroid: centroid,
+    Sx: Sx,
+    Sy: Sy,
     Ix: Ix,
     Iy: Iy,
     Ixy: Ixy,
+    Ixx: Ixx,
+    Iyy: Iyy,
     Imx: Imx,
     Imy: Imy,
     Imxy: Imxy,
+    Imxx: Imxx,
+    Imyy: Imyy,
     Ipx: Ipx,
     Ipy: Ipy,
     alpha: alpha,
