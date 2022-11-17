@@ -208,3 +208,93 @@ export const calcSpecOfPolygon = points => {
   }
   return spec
 }
+
+
+const calcMomentOfInertiaOfSolidOfRevolution = (P1, P2) => {
+  const x1 = P1[0]  
+  const y1 = P1[1]  
+  const x2 = P2[0]  
+  const y2 = P2[1]  
+
+
+  const IxxTmp = 1/5 * x1 * y1**4 
+    - 1/5 * x2 * y2**4
+    + 1/5 * (y2**4 + y2**3*y1 + y2**2*y1**2 + y2*y1**3 + y1**4) * (x2 - x1) 
+    - 1/4 * (y2**2 + y1**2) * (y2 + y1) * (y1*x2 - y2*x1) 
+ 
+  const IyyTmp1 =  -1/10 * x1**3 * y1**2
+    + 1/10 * x2**3 * y2**2
+    - 1/60 * (y1**2 + 3*y1*y2 + 6*y2**2) * (x2 - x1)**3
+    - 1/12 * (y1**2 + 2*y1*y2 + 3*y2**2) * (x2 - x1)**2 * x1
+    - 1/6  * (y1**2 +   y1*y2 +   y2**2) * (x2 - x1)    * x1**2
+
+  const IyyTmp2 = 1/5 * x1 * y1**4 
+    - 1/5 * x2 * y2**4
+    + 1/5 * (y2**4 + y2**3*y1 + y2**2*y1**2 + y2*y1**3 + y1**4) * (x2 - x1) 
+    - 1/4 * (y2**2 + y1**2) * (y2 + y1) * (y1*x2 - y2*x1) 
+ 
+  const Ixx = 2*Math.PI * IxxTmp
+  const Iyy = 2*Math.PI * IyyTmp1 + Math.PI * IyyTmp2
+
+  const obj = {Ixx, Iyy}
+  return obj
+}
+
+const calcMomentOfInertiaOfAxisymmetricBody = points => {
+  const properties = points.map((v,i,arr)=>{
+    const P1 = i>0? arr[i-1]: arr[arr.length-1]
+    const P2 = v 
+    const momentOfInertiaOfBody = calcMomentOfInertiaOfSolidOfRevolution(P1, P2)
+    return momentOfInertiaOfBody 
+  })
+  
+  const Ixxi = properties.map(v=>v.Ixx)
+  const Iyyi = properties.map(v=>v.Iyy)
+  
+  const Ixx  = Ixxi.reduce((p,c)=>p+c,0)
+  const Iyy  = Iyyi.reduce((p,c)=>p+c,0)
+
+  const obj = {Ixx, Iyy}
+  return obj
+}
+ 
+export const calcSpecOfAxisymmetricBody = (points) => {
+  const sectionArea = calcAreaOfPolygon(points)
+  const centroidOfSection = getCentroid(points)
+
+  const sectionProperty = calcMomentOfInertiaOfArea(points)
+
+  const cxS = centroidOfSection[0]
+  const cyS = centroidOfSection[1]
+
+
+  const centroidOfCrossSection = [cxS, cyS]
+  const areaOfCrossSection = sectionArea
+
+  const volume = 2*Math.PI * cyS * sectionArea
+  const cxB = sectionProperty.Ixy /(cyS * sectionArea)
+  const centroid = [cxB, 0, 0]
+
+  const property = calcMomentOfInertiaOfAxisymmetricBody(points)
+  const Imxx = property.Ixx
+  const Imyy = property.Iyy
+  const Imzz = Imyy
+
+  const Ixx = Imxx
+  const Iyy = Imyy - cxB**2 * volume 
+  const Izz = Iyy
+
+  const obj = {
+    centroidOfCrossSection,
+    areaOfCrossSection ,
+    centroid,
+    volume,
+    Ixx,
+    Iyy,
+    Izz,
+    Imxx,
+    Imyy,
+    Imzz,
+  }
+  return obj
+}

@@ -656,6 +656,30 @@ calcuate specification of polygon
 
 * points :  type of double array of float ,  // [[x0, y0], [x1, y1], ... ]
 
+### `geometry.calcSpecOfAxisymmetricBody(crossSectionPoints)`
+
+return `Object` // centroid, volume, moment of inertia 
+
+```javascript
+{
+    centroidOfCrossSection: "array", //centroid of cross section. [x, r]
+    areaOfCrossSection: "array" , //area of cross section
+    centroid: "array", // centroid of body. [x, y, z]
+    volume : "float",  // volume of body
+    Ixx : "float", // moment of inertia around x axis
+    Iyy : "float", // moment of inertia around y axis passing through the centroid
+    Izz : "float", // moment of inertia around z axis passing through the centroid (is equal to Iyy)
+    Imxx : "float", // moment of inertia around x axis (is equal to Ixx)
+    Imyy : "float", // moment of inertia around y axis passing through the origin  
+    Imzz : "float", // moment of inertia around z axis passing through the origin (is equal to Imyy)
+}
+```
+
+calcuate specification of axisymmetric body
+
+* points :  type of double array of float ,  // [[x0, r0], [x1, r1], ... ], x is axisymmetric axis
+
+
 ### `geometry.calcPolyhedronSpecFromSurfaces(surfaceVertices)`
 
 return `Object` // volume, , centroid
