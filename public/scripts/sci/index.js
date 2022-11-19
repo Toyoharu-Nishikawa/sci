@@ -8,8 +8,10 @@ import  * as classification from "./classification/index.js"
 import  * as funcs from "./funcs/index.js"
 import  * as geometry from "./geometry/index.js"
 import  * as quaternion from "./quaternion/index.js"
+import  * as complex from "./complex/index.js"
 import  {version} from "./version.js"
 
 export {interpolate, solve, matrix, optimize,statistics,
-  regression, classification,funcs, geometry, quaternion,version}
+  regression, classification,funcs, geometry, quaternion,
+  complex, version}
 
