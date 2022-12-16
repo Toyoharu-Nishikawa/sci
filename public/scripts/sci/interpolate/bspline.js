@@ -85,7 +85,6 @@ export const makeNmatrix = (knots, degree, x) => {
     }
     Ntensor.push(NpMatrix)      
   }
-  
 
   const Nmatrix = Ntensor[Ntensor.length-1]
 
@@ -96,7 +95,6 @@ export const makeNmatrix = (knots, degree, x) => {
     const list = [].concat(prefix, v, suffix)
     return list
   }) 
-
   return N
 }
 
