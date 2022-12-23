@@ -1,44 +1,100 @@
 import * as complex from "../complex/index.js"
 
-export const solveCubicEquation = (b,c,d) => {
-  const f = x  => x**3 + b*x**2 + c*x + d
-  const D = b**2 - 3*c
-
-  if(D>0){
-    const x21 = -b - Math.sqrt(D)
-    const x22 = -b + Math.sqrt(D)
-    const y21 = f(x21)
-    const y22 = f(x22)
-    const d = y21*y22
-    if(d>0){
-      const ans = solveCubicEquationSimplely(1,b,c,d)
-    }
-    else if(d<0){
-      const ans = solveCubicEquationSimplely(1,b,c,d)
-    }
-    else{
-      if(y21===0){
-        const x0 = -2*x21-b
-      }
-      else{
-        const x0 = -2*x22-b
-      }
-    }
+const get_cubic_root = (x) => {
+  if (x >= 0.0) {
+    return Math.cbrt(x)
   }
-  else if(D<0){
-    const ans = solveCubicEquationSimplely(1,b,c,d)
+  else {
+    return -Math.cbrt(-x)
   }
-  else{
-    if(y21===0){
-      const x0 = x21 
-    }
-    else{
-    }
-  }
-
-
 }
 
+export const solveCubicEquation = (a,b,c,d) => {
+  if(a==0){
+    return null
+  }
+
+  const a1 = b / (3 * a)
+  const a2 = c / a
+  const a3 = d / a
+  const p = a1**2 - a2 / 3
+  const q = (a1 * (a2 - 2 * a1**2) - a3) / 2
+  const dis = p**3 - q**2
+
+  if (Math.abs(dis) <=Number.EPSILON) {
+    const r = get_cubic_root(q)
+    const x0 = 2 * r - a1
+    if(Math.abs(r)<=Number.EPSILON){
+      const x1 = x0
+      const x2 = x0
+
+      const x = [x0,x1,x2]
+      const ans = {
+        message: "one triple solution",
+        discriminantValue: dis,
+        numberOfRealSolution: 1,
+        numberOfImaginarySolution: 0,
+        solutions:x,
+      }
+      return ans
+    }
+    else{
+      const x1 = -r - a1
+      const x2 = x1
+      const x = [x0,x1,x2]
+      const ans = {
+        message: "one real solution and one double solution",
+        discriminantValue: dis,
+        numberOfRealSolution: 2,
+        numberOfImaginarySolution: 0,
+        solutions:x,
+      }
+      return ans
+    }
+  }
+  else if (dis < 0.0) {
+    const qq = q >= 0.0 ? get_cubic_root(q + Math.sqrt(-dis)):
+                          get_cubic_root(q - Math.sqrt(-dis))
+
+    const pp = p / qq
+    const re = -(qq + pp) / 2 - a1
+    const im = (Math.abs(qq - pp) * Math.sqrt(3.0)) / 2
+
+
+    const x0 = qq + pp - a1
+    const x1 = complex.set(re, im)
+    const x2 = complex.set(re, -im)
+    const x = [x0,x1,x2]
+
+    const ans = {
+      message: "one real solution and two imaginary solutions",
+      discriminantValue: dis,
+      numberOfRealSolution: 1,
+      numberOfImaginarySolution: 2,
+      solutions:x,
+    }
+    return ans
+  }
+  else {
+    const r = Math.sqrt(p)
+    const t = Math.acos(q / (p * r))
+    const r2 = 2*r
+    const PI = Math.PI
+    const x0 = r2 * Math.cos(t / 3) - a1
+    const x1 = r2 * Math.cos((t + 2 * PI) / 3) - a1
+    const x2 = r2 * Math.cos((t + 4 * PI) / 3) - a1
+
+    const x = [x0,x1,x2]
+    const ans = {
+      message: "three real solutions",
+      discriminantValue: dis,
+      numberOfRealSolution: 3,
+      numberOfImaginarySolution: 0,
+      solutions:x,
+    }
+    return ans
+  }
+}
 
 const solveCubicEquationSimplely = (a,b,c,d) => {
   const p = (-1*b**2+3*a*c)/(9*a**2)
