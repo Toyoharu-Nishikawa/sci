@@ -17,9 +17,14 @@ export const subVec = (x0,x1)=>{
 }
 
 export const normalizeVec = a => {
+  const isZeroVec = a.every(v=>v==0)
+  if(isZeroVec){
+    const n = a.fill(0)  
+    return n
+  }
   const l2 = a.reduce((p,c)=>p+c**2,0)
   const l = Math.sqrt(l2)
-  const n = a.map(v=>v/l)
+  const n = a.map(v=>v/l) 
   return n
 }
 

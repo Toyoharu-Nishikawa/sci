@@ -1,6 +1,46 @@
 import * as complex from "../complex/index.js"
 
-export const solveCubicEquation = (a,b,c,d) => {
+export const solveCubicEquation = (b,c,d) => {
+  const f = x  => x**3 + b*x**2 + c*x + d
+  const D = b**2 - 3*c
+
+  if(D>0){
+    const x21 = -b - Math.sqrt(D)
+    const x22 = -b + Math.sqrt(D)
+    const y21 = f(x21)
+    const y22 = f(x22)
+    const d = y21*y22
+    if(d>0){
+      const ans = solveCubicEquationSimplely(1,b,c,d)
+    }
+    else if(d<0){
+      const ans = solveCubicEquationSimplely(1,b,c,d)
+    }
+    else{
+      if(y21===0){
+        const x0 = -2*x21-b
+      }
+      else{
+        const x0 = -2*x22-b
+      }
+    }
+  }
+  else if(D<0){
+    const ans = solveCubicEquationSimplely(1,b,c,d)
+  }
+  else{
+    if(y21===0){
+      const x0 = x21 
+    }
+    else{
+    }
+  }
+
+
+}
+
+
+const solveCubicEquationSimplely = (a,b,c,d) => {
   const p = (-1*b**2+3*a*c)/(9*a**2)
   const q = (2*b**3-9*a*b*c+27*a**2*d)/(54*a**3)
   
