@@ -158,7 +158,7 @@ const makeMatNWithBoundaryConstraints = (num, degree, parameters, knots, bNmatri
 
 // @points: nurbs curve fit points
 // @type   : uniform, chord or sqrt 
-export const getBoundaryConstraintedNurbsParameters = (points, e1, e2, parameterType="chord", knotType="natural", unitVectorFlag=true) => {
+export const getBoundaryConstrainedNurbsParameters = (points, e1, e2, parameterType="chord", knotType="natural", unitVectorFlag=true) => {
   const degree = 3
   const num = points.length 
   const order = degree + 1
