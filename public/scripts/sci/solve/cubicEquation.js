@@ -10,7 +10,7 @@ const get_cubic_root = (x) => {
 }
 
 export const solveCubicEquation = (a,b,c,d) => {
-  if(a==0){
+  if(Math.abs(a) <=Number.EPSILON){
     return null
   }
 
@@ -29,11 +29,13 @@ export const solveCubicEquation = (a,b,c,d) => {
       const x2 = x0
 
       const x = [x0,x1,x2]
+      const multiplicities = [3,3,3]
       const ans = {
         message: "one triple solution",
         discriminantValue: dis,
-        numberOfRealSolution: 1,
-        numberOfImaginarySolution: 0,
+        numberOfRealSolutions: 1,
+        numberOfImaginarySolutions: 0,
+        multiplicities: multiplicities,
         solutions:x,
       }
       return ans
@@ -41,12 +43,14 @@ export const solveCubicEquation = (a,b,c,d) => {
     else{
       const x1 = -r - a1
       const x2 = x1
-      const x = [x0,x1,x2]
+      const x = x0<x1 ? [x0,x1,x2] : [x1,x2,x0]
+      const multiplicities = x0<x1 ? [1,2,2] :[2,2,1]
       const ans = {
         message: "one real solution and one double solution",
         discriminantValue: dis,
-        numberOfRealSolution: 2,
-        numberOfImaginarySolution: 0,
+        numberOfRealSolutions: 2,
+        numberOfImaginarySolutions: 0,
+        multiplicities: multiplicities,
         solutions:x,
       }
       return ans
@@ -65,12 +69,14 @@ export const solveCubicEquation = (a,b,c,d) => {
     const x1 = complex.set(re, im)
     const x2 = complex.set(re, -im)
     const x = [x0,x1,x2]
+    const multiplicities = [1,1,1]
 
     const ans = {
       message: "one real solution and two imaginary solutions",
       discriminantValue: dis,
-      numberOfRealSolution: 1,
-      numberOfImaginarySolution: 2,
+      numberOfRealSolutions: 1,
+      numberOfImaginarySolutions: 2,
+      multiplicities: multiplicities,
       solutions:x,
     }
     return ans
@@ -84,12 +90,14 @@ export const solveCubicEquation = (a,b,c,d) => {
     const x1 = r2 * Math.cos((t + 2 * PI) / 3) - a1
     const x2 = r2 * Math.cos((t + 4 * PI) / 3) - a1
 
-    const x = [x0,x1,x2]
+    const x = [x0,x1,x2].sort()
+    const multiplicities = [1,1,1]
     const ans = {
       message: "three real solutions",
       discriminantValue: dis,
-      numberOfRealSolution: 3,
-      numberOfImaginarySolution: 0,
+      numberOfRealSolutions: 3,
+      numberOfImaginarySolutions: 0,
+      multiplicities: multiplicities,
       solutions:x,
     }
     return ans

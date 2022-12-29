@@ -1,5 +1,6 @@
 import {calcSpecOfPolygon} from "./moment.js"
-import {normalizeVec,innerProductVec, vectorProduct, addVec, subVec, mulScalarVec,mulMatMat, absVec} from "../matrix/index.js"
+import {normalizeVec,innerProductVec, vectorProduct, addVec, subVec, mulScalarVec,mulMatMat, mulMatVec, absVec} from "../matrix/index.js"
+import {solveEigenvalue3D} from "../matrix/eigenvalue.js"
 import {makeQuaternionFromVectors,invQuaternion, 
   createRotationFuncFromQuaternion, quaternionToRotationMatrix} from "../quaternion/index.js"
 
@@ -72,10 +73,15 @@ const calcSpecOfBasicPyramid = (basePoints, apex) => {
 const calcSpecOfGeneraizedPyramid = (basePoints)=> {
   const baseProperty = calcAreaSpec(basePoints)
   const baseCentroid = baseProperty.centroid
+  const centroid = baseCentroid.map(v=>v*3/4)
   const baseAreaVec = baseProperty.areaVec
   const zAxis = [0,0,-1]
 
   const volume = innerProductVec(baseCentroid, baseAreaVec)/3
+  if(volume==0){
+    const property = {Ixx:0, Iyy:0, Izz:0, Ixy:0, Iyz:0, Izx:0, centroid, volume}
+    return property
+  }
 
   const q = makeQuaternionFromVectors(zAxis, baseAreaVec)
   const invQ = invQuaternion(q)
@@ -112,7 +118,6 @@ const calcSpecOfGeneraizedPyramid = (basePoints)=> {
 
   const [cx,cy,cz] = baseCentroid
 
-  const centroid = baseCentroid.map(v=>v*3/4)
   const Ixx = transferedI[0][0] + 1/2*(cy**2+cz**2)*volume
   const Iyy = transferedI[1][1] + 1/2*(cx**2+cz**2)*volume
   const Izz = transferedI[2][2] + 1/2*(cx**2+cy**2)*volume
@@ -148,6 +153,21 @@ export const calcPolyhedronSpecFromSurfaces = surfaceVertices => {
   const Ixy = Imxy + cx*cy*volume
   const Iyz = Imyz + cy*cz*volume
   const Izx = Imzx + cz*cx*volume
+
+  const A = [
+    [Ixx, Ixy, Izx],
+    [Ixy, Iyy, Iyz],
+    [Izx, Iyz, Izz],
+  ]
+  const {P, D,eigenvectors,eigenvalues} = solveEigenvalue3D(A)
+  const [IXX,IYY,IZZ] = eigenvalues
+  const [X,Y,Z] = eigenvectors
+  const coordinateTransformFunc = u => {
+    const v = subVec(u,centroid)
+    const w = mulMatVec(P,v)
+    return w
+  }
+
   
   const obj = {
     volume,
@@ -158,24 +178,33 @@ export const calcPolyhedronSpecFromSurfaces = surfaceVertices => {
     Ixy,
     Iyz,
     Izx, 
+    Imxx,
+    Imyy,
+    Imzz,
+    Imxy,
+    Imyz,
+    Imzx,
+    IXX,IYY,IZZ,
+    X,Y,Z,
+    coordinateTransformFunc
   }
   return obj 
 }
 
-export const calcPolyhedronSpecFromSurfaces2 = surfaceVertices => {
-  const surfaceArea = surfaceVertices.map(v=>calcAreaSpec(v)) 
-  const partialVolume = surfaceArea.map(v=>innerProductVec(v.centroid, v.areaVec)/3)
-  const volume = partialVolume.reduce((p,c)=>p+c,0)
-  const centroidList = surfaceArea.map((v,i)=>mulScalarVec(partialVolume[i]*3/4, v.centroid))
-  const centroidTmp = centroidList.reduce((p,c) => addVec(p, c), [0,0,0])
-  const centroid = mulScalarVec(1/volume, centroidTmp)
-  
-  const obj = {
-    volume: volume,
-    centroid: centroid,
-  }
-  return obj 
-}
+//export const calcPolyhedronSpecFromSurfaces2 = surfaceVertices => {
+//  const surfaceArea = surfaceVertices.map(v=>calcAreaSpec(v)) 
+//  const partialVolume = surfaceArea.map(v=>innerProductVec(v.centroid, v.areaVec)/3)
+//  const volume = partialVolume.reduce((p,c)=>p+c,0)
+//  const centroidList = surfaceArea.map((v,i)=>mulScalarVec(partialVolume[i]*3/4, v.centroid))
+//  const centroidTmp = centroidList.reduce((p,c) => addVec(p, c), [0,0,0])
+//  const centroid = mulScalarVec(1/volume, centroidTmp)
+//  
+//  const obj = {
+//    volume: volume,
+//    centroid: centroid,
+//  }
+//  return obj 
+//}
 
 
 export const calcTetrahedronSpecFromVertices = (vertices) => {
