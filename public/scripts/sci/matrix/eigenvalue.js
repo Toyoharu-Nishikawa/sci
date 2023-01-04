@@ -87,6 +87,48 @@ export const solveEigenvalue2D = (A) => {
 }
 
 export const solveEigenvalue3D = (A) => {
+  const isDiagonalMatrix =  Math.abs(A[0][1])<Number.EPSILON 
+                         && Math.abs(A[0][2])<Number.EPSILON
+                         && Math.abs(A[1][0])<Number.EPSILON
+                         && Math.abs(A[1][2])<Number.EPSILON
+                         && Math.abs(A[2][0])<Number.EPSILON
+                         && Math.abs(A[2][1])<Number.EPSILON
+
+  const isOrthogonalMatrix =  A[0][1] == A[1][0]
+                           && A[0][2] == A[2][0]
+                           && A[1][2] == A[2][1]
+
+
+  if(isDiagonalMatrix){
+    const eigenvalues = [A[0][0],A[1][1],A[2][2]]
+    const eigenvectors = [
+      [1, 0, 0],
+      [0, 1, 0],
+      [0, 0, 1],
+    ]
+    const P = [
+      [1, 0, 0],
+      [0, 1, 0],
+      [0, 0, 1],
+    ]
+    const D = [
+      [A[0][0],        0,       0],
+      [0       , A[1][1],       0],
+      [0       ,       0, A[2][2]],
+    ]
+
+    const diagonalizable = true
+    const isRealNumberEigenvalue = true
+    const ans = {
+      eigenvalues,
+      eigenvectors,
+      P,D,
+      diagonalizable,
+      isRealNumberEigenvalue,
+    }
+    return ans
+  }
+
   const a = 1
   const b = -(A[0][0]+A[1][1]+A[2][2])  
   const c = (A[0][0]*A[1][1]-A[0][1]*A[1][0])  
@@ -100,6 +142,7 @@ export const solveEigenvalue3D = (A) => {
             +A[0][0]*A[1][2]*A[2][1]
 
   const ans = solveCubicEquation(a,b,c,d)
+
   const eigenvalues = ans.solutions
 
   const numberOfRealSolutions = ans.numberOfRealSolutions
@@ -163,12 +206,9 @@ export const solveEigenvalue3D = (A) => {
     return ans
   }
   else if(numberOfRealSolutions==1&&numberOfImaginarySolutions==0){
-    const diagonalizable =  A[0][1] == 0 && A[0][2] == 0
-                         && A[1][0] == 0 && A[1][2] == 0
-                         && A[2][0] == 0 && A[2][1] == 0
-
+    const diagonalizable = isOrthogonalMatrix 
     const isRealNumberEigenvalue = true
-    if(diagonalizable){
+    if(isOrthogonalMatrix){
       const eigenvectors = [
         [1,0,0],
         [0,1,0],
@@ -203,14 +243,46 @@ export const solveEigenvalue3D = (A) => {
     }
   }
   else{
-    const diagonalizable = true
-    const isRealNumberEigenvalue = false
-    const ans = {
-      eigenvalues,
-      diagonalizable,
-      isRealNumberEigenvalue,
+    if(isOrthogonalMatrix){
+      //deal with numerical error
+      const absEigenvalue = eigenvalues[1].abs
+      const u0 = getEigenvectorForSingleSolution(eigenvalues[0], A)
+      const [u1,u2] = getEigenvectorsForDoubleSolution(absEigenvalue, A)
+      const eigenvectors = [u0,u1,u2]
+
+      const P = [
+        [eigenvectors[0][0], eigenvectors[1][0], eigenvectors[2][0]],
+        [eigenvectors[0][1], eigenvectors[1][1], eigenvectors[2][1]],
+        [eigenvectors[0][2], eigenvectors[1][2], eigenvectors[2][2]],
+      ] 
+      const D = [
+        [eigenvalues[0], 0            ,             0],
+        [0,              absEigenvalue,             0],
+        [0,                          0, absEigenvalue],
+      ]
+  
+      const eigenvaluesCorrected = [eigenvalues[0],absEigenvalue,absEigenvalue]
+      const diagonalizable = true
+      const isRealNumberEigenvalue = true
+      const ans = {
+        eigenvalues: eigenvaluesCorrected,
+        eigenvectors,
+        P,D,
+        diagonalizable,
+        isRealNumberEigenvalue,
+      }
+      return ans
     }
-    return ans
+    else{
+      const diagonalizable = true
+      const isRealNumberEigenvalue = false
+      const ans = {
+        eigenvalues,
+        diagonalizable,
+        isRealNumberEigenvalue,
+      }
+      return ans
+    }
   }
 }
 
