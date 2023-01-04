@@ -185,7 +185,6 @@ export const calcPolyhedronSpecFromSurfaces = (surfaceVertices, config={}) => {
   const Y = eigenvectors[1]
   const Z = eigenvectors[2]
 
-//  const invP = invMat(P)
   const coordinateTransformFunc = u => {
     const v = subVec(u,centroid)
     const w = mulMatVec(P,v)
@@ -215,20 +214,20 @@ export const calcPolyhedronSpecFromSurfaces = (surfaceVertices, config={}) => {
   return obj 
 }
 
-export const calcPolyhedronSpecFromSurfaces2 = surfaceVertices => {
-  const surfaceArea = surfaceVertices.map(v=>calcAreaSpec(v)) 
-  const partialVolume = surfaceArea.map(v=>innerProductVec(v.centroid, v.areaVec)/3)
-  const volume = partialVolume.reduce((p,c)=>p+c,0)
-  const centroidList = surfaceArea.map((v,i)=>mulScalarVec(partialVolume[i]*3/4, v.centroid))
-  const centroidTmp = centroidList.reduce((p,c) => addVec(p, c), [0,0,0])
-  const centroid = mulScalarVec(1/volume, centroidTmp)
-  
-  const obj = {
-    volume: volume,
-    centroid: centroid,
-  }
-  return obj 
-}
+//export const calcPolyhedronSpecFromSurfaces2 = surfaceVertices => {
+//  const surfaceArea = surfaceVertices.map(v=>calcAreaSpec(v)) 
+//  const partialVolume = surfaceArea.map(v=>innerProductVec(v.centroid, v.areaVec)/3)
+//  const volume = partialVolume.reduce((p,c)=>p+c,0)
+//  const centroidList = surfaceArea.map((v,i)=>mulScalarVec(partialVolume[i]*3/4, v.centroid))
+//  const centroidTmp = centroidList.reduce((p,c) => addVec(p, c), [0,0,0])
+//  const centroid = mulScalarVec(1/volume, centroidTmp)
+//  
+//  const obj = {
+//    volume: volume,
+//    centroid: centroid,
+//  }
+//  return obj 
+//}
 
 
 export const calcTetrahedronSpecFromVertices = (vertices) => {
