@@ -1,1 +1,2 @@
-export {makeQuaternion, invQuaternion, mulQQ} from "./quaternion.js"
+export {makeQuaternionFromVectors, makeQuaternion, invQuaternion, mulQQ,createRotationFuncFromQuaternion,
+ calcRotationAxisAndAngleFromVectors, quaternionToRotationMatrix} from "./quaternion.js"

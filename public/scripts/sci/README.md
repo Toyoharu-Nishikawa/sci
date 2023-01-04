@@ -143,6 +143,42 @@ multipulation of matrix and column vector, Av
 * A : type of double array , matrix 
 * v : type of double array , column vector 
 
+#### `matrix.solveEigenvalue2D(A)`
+
+returns `Object`
+
+```
+{
+    eigenvalues: "array", // eigenvalues sorted in ascending order
+    eigenvectors: "double array", // eigenvectors for each eigenvalues
+    diagonalizable: "boolean", // diagonalizable or not
+    P: "double array", // matrix for diagonalization D = P^-1AP
+    D: "double array", //diagonalized matrix
+    isRealNumberEigenvalue:"boolean", // all eigenvalues are real numbber or not
+}
+```
+
+solve 2D eigenvalue equation and return eigenvalues and eigenvectors
+* A : type of double array , 2D matrix 
+
+#### `matrix.solveEigenvalue3D(A)`
+
+returns `Object`
+
+```
+{
+    eigenvalues: "array", // eigenvalues sorted in ascending order
+    eigenvectors: "double array", // eigenvectors for each eigenvalues
+    diagonalizable: "boolean", // diagonalizable or not
+    P: "double array", // matrix for diagonalization D = P^-1AP
+    D: "double array", //diagonalized matrix
+    isRealNumberEigenvalue:"boolean", // all eigenvalues are real numbber or not
+}
+```
+
+solve 3D eigenvalue equation and return eigenvalues and eigenvectors
+* A : type of double array , 3D matrix 
+
 
 ### quaternion
 ------
@@ -155,13 +191,29 @@ makes quaternion from 3D vector and rotational angle [rad]
 * v: type of array , [x, y, z]
 * theta: type of float // radian
 
-#### `quaternion.makeQuaternion(v, theta)`
+#### `quaternion.makeQuaternionFromVectors(v1, v2)`
 
-return `array` // [v[0]*sin(theta/2), v[1]*sin(theta/2), v[2]*sin(theta/2), cos(theta/2)]
+return `array` // quaternion
 
-makes quaternion from 3D vector and rotational angle [rad]
-* v: type of array , [x, y, z]
-* theta: type of float // radian
+makes quaternion from two vectors
+* v1: type of array , [x, y, z]
+* v2: type of array , [x, y, z]
+
+#### `quaternion.calcRotationAxisAndAngleFromVectors(v1, v2)`
+
+return `Object`
+
+```
+{
+    axis: "array", //rotational axis [x,y,z]
+    angle: "float", //rotational angle [radian]
+}
+```
+
+calculate rotational axis and angle from two vectors
+* v1: type of array , [x, y, z]
+* v2: type of array , [x, y, z]
+
 
 #### `quaternion.invQuaternion(q)`
 
@@ -176,6 +228,21 @@ return `array` // quaternion
 
 multiplies quaternions in order  
 * qlist: type of array , list of quaternion
+
+#### `quaternion.createRotationFuncFromQuaternion(q)`
+
+return `function` //rotation function
+
+create rotation function from quaternion  
+* q: type of array , source quaternion
+
+
+#### `quaternion.quaternionToRotationMatrix(q)`
+
+return `double array` //rotation matrix
+
+create rotation matrix from quaternion  
+* q: type of array , source quaternion
 
 
 ### geometry
@@ -688,6 +755,26 @@ return `Object` // volume, , centroid
 {
     volume: "float", // volume of polyhedron
     centroid: "array", // centroid of polygon. [x, y, y]
+    Ixx: "float", // moment of inertia around x axis passing through the centroid,
+    Iyy: "float", // moment of inertia around y axis passing through the centroid,
+    Izz: "float", // moment of inertia around z axis passing through the centroid,
+    Ixy: "float", // product of inertia around z axis passing through the centroid,
+    Iyz: "float", // product of inertia around x axis passing through the centroid,
+    Izx: "float", // product of inertia around y axis passing through the centroid,
+    Imxx: "float", // moment of inertia around x axis passing through the origin,
+    Imyy: "float", // moment of inertia around y axis passing through the origin,
+    Imzz: "float", // moment of inertia around z axis passing through the origin,
+    Imxy: "float", // product of inertia around z axis passing through the origin,
+    Imyz: "float", // product of inertia around x axis passing through the origin,
+    Imzx: "float", // product of inertia around y axis passing through the origin,
+    IXX: "float", // pricipal moment of inertia around x axis passing through the centroid,
+    IYY: "float", // pricipal moment of inertia around y axis passing through the centroid,
+    IZZ: "float", // pricipal moment of inertia around z axis passing through the centroid,,
+    X: "float", // pricipal axis corresponding x axis passing through the centroid,
+    Y: "float", // pricipal axis corresponding y axis passing through the centroid,
+    Z: "float", // pricipal axis corresponding z axis passing through the centroid,
+    coordinateTransformFunc: "function", // function for transform from xyz coordinate to XYZ coordinate
+
 }
 ```
 
@@ -1676,3 +1763,4 @@ zukofsky wing
 return function is
 function(p)
 * p: type of float, 0<= p <= 2pi
+

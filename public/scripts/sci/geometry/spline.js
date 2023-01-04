@@ -1,4 +1,4 @@
-import {makeN, makeNmatrix} from "../interpolate/bspline.js"
+import {makeNmatrix} from "../interpolate/bspline.js"
 import {linEqGauss} from "../solve/linearEquation.js"
 
 const checkSchoenbergWhitneyCondition = (pointsLength, knotsLength, order) => {
@@ -42,8 +42,8 @@ export const bsplineBasis = (knots, degree=3,  normalizedFlag=true) => {
 
   // default knot vector is open uniform
   const order = degree+1
-  const min = knots[0]
-  const max = knots[knots.length-1]
+  const min = knots[degree]
+  const max = knots[knots.length-1-degree]
   if(normalizedFlag){
     return (t)=>{  // 0 <= t <=1
       const s = min + t * (max - min)
