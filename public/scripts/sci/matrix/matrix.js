@@ -147,6 +147,50 @@ export const invMat = (A)=>{
   return minv
 }
 
+
+export const determinant = (A)=> {
+  const tmp =  A.map(a=>[].concat(a))
+  const N = A.length
+  // make pivots non-zero numbers
+  for(let i = 0; i < N; i++) {
+    if (tmp[i][i] != 0){
+        continue;
+    }
+    let k
+    for (k = 0; k < N; k++){
+      if (tmp[k][i] != 0){
+          break
+      }
+    }
+    if(k == N){          // all numbers in a column is zero
+      return 0
+    }
+    for(let j = 0; j < N; j++){
+      tmp[i][j] += tmp[k][j]
+    }
+  }
+
+  // make a triangular matrix
+  for (let i = 0; i < N; i++) {
+    for (let j = i+1; j < N; j++) {
+      if(tmp[i][i]==0){
+        return 0
+      }
+      const c = tmp[j][i] / tmp[i][i]
+      for (let k = i; k < N; k++){
+        tmp[j][k] -=  c * tmp[i][k]
+      }
+    }
+  }
+
+  let det = 1
+  for(let i = 0; i < N; i++){
+    det *= tmp[i][i]
+  }
+
+  return det
+}
+
 //matrix and vector
 export const mulMatVec = (A,u)=>{
   const v = A.map(column=>column.reduce((pre,current,i)=>pre+current*u[i],0))

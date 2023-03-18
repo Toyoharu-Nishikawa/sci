@@ -135,6 +135,14 @@ returns `double array`
 inverse matrix, invA
 * A : type of double array , matrix 
 
+#### `matrix.determinant(A)`
+
+returns `double array`
+
+calculate deteminant of A
+* A : type of double array , matrix 
+
+
 #### `matrix.mulMatVec(A, u)`
 
 returns `array`
