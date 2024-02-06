@@ -207,7 +207,10 @@ export const cloughTocher2DInterpolator = points => {
   } 
   const dfs = estimateGradients2DGlobal(DT, data, maxIteration , tolerance)
   return point => {
-   const triId = DT.findTriangle(point)
+    const triId = DT.findTriangle(point)
+    if(triId==undefined){
+      return null
+    }
     const b = DT.getBarycentricCoord(triId, point)
     const triVid = DT.triangles[triId]
     const f = [

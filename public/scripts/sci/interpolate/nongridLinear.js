@@ -27,6 +27,9 @@ export const nongridLinear = points=> {
   const DT = new DelaunayTriangulation(points)
   return point => {
     const triId = DT.findTriangle(point)  
+    if(triId==undefined){
+      return null
+    }
     const t = DT.triangles[triId]
     const triCoord = [
       points[t[0]],
