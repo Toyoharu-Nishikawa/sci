@@ -1,4 +1,4 @@
-import Delaunator from '../node_modules/delaunator/index.js'
+import Delaunator from '../modules/delaunator/index.js'
 
 export const innerTriangle = (triangle, point) => {
   const p1 = triangle[0]
