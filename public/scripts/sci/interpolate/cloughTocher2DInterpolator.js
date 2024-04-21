@@ -17,7 +17,6 @@ const estimateGradients2DGlobal = (DT, data, maxIteration , tolerance) => {
       const neighborPoints = DT.neighborPoints[ipoint]
       for(let jpoint2=0;jpoint2<neighborPoints.length;jpoint2++) {
         const ipoint2 = neighborPoints[jpoint2]
-        
         const ex = points[ipoint2][0] - points[ipoint][0] 
         const ey = points[ipoint2][1] - points[ipoint][1] 
         const L = Math.sqrt(ex**2 + ey**2)
@@ -43,7 +42,6 @@ const estimateGradients2DGlobal = (DT, data, maxIteration , tolerance) => {
         ( Q[3]*s[0] - Q[1]*s[1])/det,
         (-Q[2]*s[0] + Q[0]*s[1])/det,
       ] 
-      
       let change = Math.max(Math.abs(y[ipoint][0] +r[0]),Math.abs(y[ipoint][1] +r[1]) )
       y[ipoint][0] = -r[0]
       y[ipoint][1] = -r[1]
@@ -86,6 +84,21 @@ const cloughTocher2DSingle = (DT, triangleId, b, f, df) => {
   const f2 = f[1]
   const f3 = f[2]
 
+  //console.log("f1",f1)
+  //console.log("f2",f2)
+  //console.log("f3",f3)
+
+  //console.log("df00",df[0][0])
+  //console.log("df01",df[0][1])
+  //console.log("df10",df[1][0])
+  //console.log("df11",df[1][1])
+  //console.log("df20",df[2][0])
+  //console.log("df21",df[2][1])
+
+  //console.log("b0",b[0])
+  //console.log("b1",b[1])
+  //console.log("b2",b[2])
+
   const df12 = +(df[0][0]*e12x + df[0][1]*e12y)
   const df21 = -(df[1][0]*e12x + df[1][1]*e12y)
   const df23 = +(df[1][0]*e23x + df[1][1]*e23y)
@@ -123,6 +136,8 @@ const cloughTocher2DSingle = (DT, triangleId, b, f, df) => {
     ]
 
     const c = DT.getBarycentricCoord(triangleId, y)
+    //console.log(`k:${i},y0:${y[0]},y1:${y[1]}`)
+    //console.log(`k:${i},c0:${c[0]},c1:${c[1]},c2:${c[2]}`)
     if(i===0){
       g[i] = (2*c[2] + c[1] -1)/(2 - 3*c[2] - 3*c[1])
     }
@@ -160,37 +175,41 @@ const cloughTocher2DSingle = (DT, triangleId, b, f, df) => {
   const b2 = b[1] - minval
   const b3 = b[2] - minval
   const b4 = 3*minval
-  const w = (b1**3*c3000 + 3*b1**2*b2*c2100 + 3*b1**2*b3*c2010 +
+  const w = (
+    b1**3*c3000 + 3*b1**2*b2*c2100 + 3*b1**2*b3*c2010 +
     3*b1**2*b4*c2001 + 3*b1*b2**2*c1200 +
     6*b1*b2*b4*c1101 + 3*b1*b3**2*c1020 + 6*b1*b3*b4*c1011 +
     3*b1*b4**2*c1002 + b2**3*c0300 + 3*b2**2*b3*c0210 +
     3*b2**2*b4*c0201 + 3*b2*b3**2*c0120 + 6*b2*b3*b4*c0111 +
     3*b2*b4**2*c0102 + b3**3*c0030 + 3*b3**2*b4*c0021 +
-    3*b3*b4**2*c0012 + b4**3*c0003)
+    3*b3*b4**2*c0012 + b4**3*c0003
+  )
   
-//   console.log( "g",      g) 
-//   console.log( "b1",     b1) 
-//   console.log( "b2",     b2)
-//   console.log( "b3",     b3)
-//   console.log( "b4",     b4)
-//   console.log( "c3000",  c3000)
-//   console.log( "c2100",  c2100)
-//   console.log( "c2010",  c2010)
-//   console.log( "c1200",  c1200)
-//   console.log( "c1101",  c1101)
-//   console.log( "c1020",  c1020)
-//   console.log( "c1011",  c1011)
-//   console.log( "c1002",  c1002)
-//   console.log( "c0300",  c0300)
-//   console.log( "c0210",  c0210)
-//   console.log( "c0201",  c0201)
-//   console.log( "c0120",  c0120)
-//   console.log( "c0111",  c0111)
-//   console.log( "c0102",  c0102)
-//   console.log( "c0030",  c0030)
-//   console.log( "c0021",  c0021)
-//   console.log( "c0012",  c0012)
-//   console.log( "c0003",  c0003)
+   //console.log( "g1",   g[0]) 
+   //console.log( "g2",   g[1]) 
+   //console.log( "g3",   g[2]) 
+   //console.log( "b1",     b1) 
+   //console.log( "b2",     b2)
+   //console.log( "b3",     b3)
+   //console.log( "b4",     b4)
+   //console.log( "c3000",  c3000)
+   //console.log( "c2100",  c2100)
+   //console.log( "c2010",  c2010)
+   //console.log( "c1200",  c1200)
+   //console.log( "c1101",  c1101)
+   //console.log( "c1020",  c1020)
+   //console.log( "c1011",  c1011)
+   //console.log( "c1002",  c1002)
+   //console.log( "c0300",  c0300)
+   //console.log( "c0210",  c0210)
+   //console.log( "c0201",  c0201)
+   //console.log( "c0120",  c0120)
+   //console.log( "c0111",  c0111)
+   //console.log( "c0102",  c0102)
+   //console.log( "c0030",  c0030)
+   //console.log( "c0021",  c0021)
+   //console.log( "c0012",  c0012)
+   //console.log( "c0003",  c0003)
   
 
   return w
@@ -199,8 +218,8 @@ const cloughTocher2DSingle = (DT, triangleId, b, f, df) => {
 export const cloughTocher2DInterpolator = points => {
   const maxIteration = 400
   const tolerance = 1E-6
- 
-  const DT = new DelaunayTriangulation(points)
+  const points2D = points.map(v=>[v[0],v[1]]) 
+  const DT = new DelaunayTriangulation(points2D)
   const data = []
   for(let i=0;i<points.length;i++){
     data[i] = points[i][2]
