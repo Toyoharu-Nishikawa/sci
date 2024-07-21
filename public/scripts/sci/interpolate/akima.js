@@ -3,11 +3,10 @@ const calcQ = (m0,m1,m2,m3,m4,method) => {
                                   Math.abs(m1-m0)
   const w1_b = method=="makima" ? Math.abs(m3-m2)+Math.abs(m3+m2)/2 :
                                   Math.abs(m3-m2)                    
-  const w2_b = method=="makima" ? Math.abs(m2-m1)+Math.abs(m2+m1)/2 :
-                                  Math.abs(m2-m1)
   const w2_t = method=="makima" ? Math.abs(m4-m3)+Math.abs(m4+m3)/2 :
                                   Math.abs(m4-m3)                    
-
+  const w2_b = method=="makima" ? Math.abs(m2-m1)+Math.abs(m2+m1)/2 :
+                                  Math.abs(m2-m1)
   let q1
   if(w1_t==w1_b){
     q1=(m1-m2)/2
@@ -40,11 +39,11 @@ export const akima = (x,y,method="akima") => {
   const N = x.length
    
   const newX_L2 =   x[0]+x[1]-x[2]
-  const newX_L1 = 2*x[0]-x[2]
+  const newX_L1 =  -x[2]+2*x[0]
   const m0 = (y[1]-y[0])/(x[1]-x[0])
   const m1 = (y[2]-y[1])/(x[2]-x[1])
-  const newY_L1 = y[0]-(x[0]-newX_L2)*(-m1+2*m0)
-  const newY_L2 = newY_L1-(newX_L2-newX_L1)*(-2*m1+3*m0)
+  const newY_L2 = y[0]-(x[0]-newX_L2)*(-m1+2*m0)
+  const newY_L1 = newY_L2-(newX_L2-newX_L1)*(-2*m1+3*m0)
   
   const newX_R1 = -x[N-3]+  x[N-2]+x[N-1]
   const newX_R2 = -x[N-3]+2*x[N-1]
