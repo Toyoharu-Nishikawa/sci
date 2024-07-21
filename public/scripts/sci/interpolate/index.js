@@ -1,6 +1,7 @@
 export * from "./bspline.js"
 export * from "./linear.js"
 export * from "./cubicspline.js"
+export * from "./akima.js"
 export * from "./bicubicspline.js"
 export * from "./nongridLinear.js"
 export * from "./cloughTocher2DInterpolator.js"
