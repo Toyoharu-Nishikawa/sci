@@ -943,6 +943,23 @@ str means side of step. Ex. left means left side of step and right means right s
 * x : type of array , coordinate of x 
 * y : type of array , coordinate of y
 
+#### `interpolate.akima(x, y [,method="akima")`
+
+returns `object of functions`
+
+```javascript
+{
+  f:  "function", // (x0) => y,  interpolate from x0 to y0
+  df:  "function", // (x0) => dy/dx,  return first derivative from x0 
+
+}
+```
+interpolates coordinate of y0 from coordinate of x0 by akima method or modified akima method
+
+* x : type of array , coordinate of x 
+* y : type of array , coordinate of y
+* method : type of string , "akima" or "makima", default value is "akima"
+
 #### `interpolate.cubicspline(x, y [,a0=0, an=0, method="M")`
 
 returns `object of functions`
